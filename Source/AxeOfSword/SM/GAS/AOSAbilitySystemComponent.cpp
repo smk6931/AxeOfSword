@@ -19,10 +19,9 @@ void UAOSAbilitySystemComponent::Initialize()
 		for (TSubclassOf<UBaseInputAbility> Ability : InitialData->GetDefaultGameplayAbilities())
 		{
 			UBaseInputAbility* InputAbility = Ability->GetDefaultObject<UBaseInputAbility>();
-
 			GiveAbility(FGameplayAbilitySpec(
 				Ability, InputAbility->GetAbilityLevel()
-				, static_cast<uint32>(InputAbility->GetInputId()), this));
+				, static_cast<uint8>(InputAbility->GetInputId()), this));
 		}
 	}
 

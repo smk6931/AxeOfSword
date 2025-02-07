@@ -1,8 +1,10 @@
 ﻿#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -21,6 +23,15 @@ APlayerCharacter::APlayerCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = 280;
 	GetCharacterMovement()->BrakingDecelerationWalking = 2000.f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 1500.0f;
+	
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
+	SpringArm->SetupAttachment(GetMesh());
+	SpringArm->SetRelativeLocation({0, 0, 120});
+	SpringArm->SetRelativeRotation({0, 90, 0});
+	
+	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CameraComponent->SetupAttachment(SpringArm);
+	CameraComponent->SetRelativeLocation({120, 0, 0});
 }
 
 void APlayerCharacter::BeginPlay()
@@ -46,7 +57,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered
-																			, this, &ThisClass::MoveTo);
+		, this, &ThisClass::MoveTo);
+		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered
+																			, this, &ThisClass::Look);
 	}
 }
 
@@ -62,4 +75,11 @@ void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 	const FVector MoveTo = ForwardVector + RightVector;
 
 	AddMovementInput(MoveTo, 1);
+}
+
+void APlayerCharacter::Look(const FInputActionValue& Value)
+{
+	const FVector2d LookToValue = Value.Get<FVector2d>();
+	AddControllerYawInput(LookToValue.X);
+	AddControllerPitchInput(LookToValue.Y);
 }

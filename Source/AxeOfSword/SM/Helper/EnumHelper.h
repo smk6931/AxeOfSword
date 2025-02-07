@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-class EnumHelper
+class FEnumHelper
 {
-public:
-	
 };
 
 UENUM()
 enum class EAbilityInputId : uint8
 {
-	Undefined
+	Undefined,
+	Attack,
 };
