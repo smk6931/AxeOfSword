@@ -1,4 +1,6 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+﻿#include "AT_HeavyAttack.h"
 
-
-#include "AT_HeavyAttack.h"
+void UAT_HeavyAttack::TickTask(float DeltaTime)
+{
+	Super::TickTask(DeltaTime);
+}
