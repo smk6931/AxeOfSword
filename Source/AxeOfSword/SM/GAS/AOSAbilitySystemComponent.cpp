@@ -1,5 +1,5 @@
 ﻿#include "AOSAbilitySystemComponent.h"
-#include "AxeOfSword/SM/GAS/Ability/BaseInputAbility.h"
+#include "AxeOfSword/SM/GAS/Ability/Utility/BaseInputAbility.h"
 #include "AOSAbilitySystemInitializeData.h"
 
 UAOSAbilitySystemComponent::UAOSAbilitySystemComponent()
