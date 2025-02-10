@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class UEquipComponent;
 
 UCLASS()
 class AXEOFSWORD_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -25,4 +26,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAOSAbilitySystemComponent> AbilitySystemComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UEquipComponent> EquipComponent;
 };

@@ -9,4 +9,7 @@ UCLASS()
 class AXEOFSWORD_API AAOSPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void BeginPlay() override;
 };
