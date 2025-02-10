@@ -22,6 +22,8 @@ protected:
 		const FGameplayAbilityActivationInfo ActivationInfo) override;
 
 private:
+	bool IsAlreadyAttack = false;
+	
 	FDateTime StartAttackTime;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
@@ -29,4 +31,7 @@ private:
 
 	UPROPERTY()
 	UPlayMontageWithEvent* AT_ComboAttackAnim;
+
+	UFUNCTION()
+	void OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 };

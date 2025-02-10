@@ -16,7 +16,7 @@ void UAOSAbilitySystemComponent::Initialize()
 
 	if (!InitialData->GetDefaultGameplayAbilities().IsEmpty())
 	{
-		for (TSubclassOf<UBaseInputAbility> Ability : InitialData->GetDefaultGameplayAbilities())
+		for (auto Ability : InitialData->GetDefaultGameplayAbilities())
 		{
 			UBaseInputAbility* InputAbility = Ability->GetDefaultObject<UBaseInputAbility>();
 			GiveAbility(FGameplayAbilitySpec(

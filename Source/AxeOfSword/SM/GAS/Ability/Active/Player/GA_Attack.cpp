@@ -10,18 +10,41 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                  const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+	if (IsAlreadyAttack)
+	{
+		return;
+	}
+	IsAlreadyAttack = true;
 	StartAttackTime = FDateTime::Now();
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
+	
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
-		this, "",
+		this, NAME_None,
 		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
 		FGameplayTagContainer()
 		);
+	AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
+	
+	AT_ComboAttackAnim->ReadyForActivation();
+}
+
+void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
+{
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+	
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->SetNextCombo();
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false
+			   , false);
 }
 
 void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
@@ -42,5 +65,5 @@ void UGA_Attack::InputReleased(const FGameplayAbilitySpecHandle Handle,
 		UE_LOG(LogTemp, Display, TEXT("일반공격"))
 	}
 
-	EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
+	IsAlreadyAttack = false;
 }

@@ -31,10 +31,10 @@ private:
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveInputAction;
+	TObjectPtr<UInputAction> MoveInputAction;
 	
 	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "true"))
-	UInputAction* LookInputAction;
+	TObjectPtr<UInputAction> LookInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<USpringArmComponent> SpringArm;

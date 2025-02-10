@@ -26,12 +26,14 @@ APlayerCharacter::APlayerCharacter()
 	
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("Spring Arm");
 	SpringArm->SetupAttachment(GetMesh());
-	SpringArm->SetRelativeLocation({0, 0, 120});
+	SpringArm->SetRelativeLocation({-60, -30, 140});
 	SpringArm->SetRelativeRotation({0, 90, 0});
+	SpringArm->bUsePawnControlRotation = true;
 	
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(SpringArm);
-	CameraComponent->SetRelativeLocation({120, 0, 0});
+	CameraComponent->SetRelativeLocation({60, 0, 0});
+	CameraComponent->bUsePawnControlRotation = true;
 }
 
 void APlayerCharacter::BeginPlay()
