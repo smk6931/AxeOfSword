@@ -29,3 +29,13 @@ void UEquipComponent::BeginPlay()
 		MainWeapon->SetHidden(true);
 	}
 }
+
+void UEquipComponent::SetNextCombo()
+{
+	if (ComboIndex == MainWeapon->GetComboAttackAnim().Num() - 1)
+	{
+		ComboIndex = 0;
+		return;
+	}
+	ComboIndex += 1;
+}

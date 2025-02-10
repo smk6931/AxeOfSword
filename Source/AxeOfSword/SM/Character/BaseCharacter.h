@@ -21,6 +21,8 @@ public:
 		return AbilitySystemComponent;
 	}
 
+	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
+
 protected:
 	virtual void BeginPlay() override;
 

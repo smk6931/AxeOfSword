@@ -4,6 +4,8 @@
 #include "AxeOfSword/SM/GAS/Ability/Utility/BaseInputAbility.h"
 #include "GA_Attack.generated.h"
 
+class UPlayMontageWithEvent;
+
 UCLASS()
 class AXEOFSWORD_API UGA_Attack : public UBaseInputAbility
 {
@@ -24,4 +26,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	float HeavyAttackHoldTime = 1.f;
+
+	UPROPERTY()
+	UPlayMontageWithEvent* AT_ComboAttackAnim;
 };

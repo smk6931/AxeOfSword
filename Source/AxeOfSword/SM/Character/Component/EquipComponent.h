@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "AxeOfSword/SM/Helper/UtilHelper.h"
 #include "Components/ActorComponent.h"
 #include "EquipComponent.generated.h"
 
@@ -13,6 +14,10 @@ class AXEOFSWORD_API UEquipComponent : public UActorComponent
 
 public:
 	UEquipComponent();
+
+	GETTER(uint8, ComboIndex)
+	GETTER(TObjectPtr<ABaseWeapon>, MainWeapon)
+	void SetNextCombo();
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,4 +37,6 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<ABaseWeapon> SubWeapon;
+
+	uint8 ComboIndex = 0;
 };

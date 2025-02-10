@@ -1,11 +1,27 @@
 ﻿#include "GA_Attack.h"
 
+#include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
+#include "AxeOfSword/SM/Weapon/BaseWeapon.h"
+
 void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
-	const FGameplayEventData* TriggerEventData)
+                                 const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+                                 const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	StartAttackTime = FDateTime::Now();
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
+		this, "",
+		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
+		FGameplayTagContainer()
+		);
 }
 
 void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
