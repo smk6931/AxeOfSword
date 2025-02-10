@@ -17,21 +17,28 @@ protected:
 
 	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
-
+	
 	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo) override;
 
 private:
-	bool IsAlreadyAttack = false;
+	bool IsHoldEnd = false;
+	bool IsAttackEnd = false;
 	
-	FDateTime StartAttackTime;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
-	float HeavyAttackHoldTime = 1.f;
+	float ComboEndDelayTime = 2.f;
 
 	UPROPERTY()
 	UPlayMontageWithEvent* AT_ComboAttackAnim;
 
 	UFUNCTION()
+	void OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
+	UFUNCTION()
 	void OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+
+	FTimerHandle EndDefaultAttackHandle;
+
+	UFUNCTION()
+	void OnEndCombo();
 };

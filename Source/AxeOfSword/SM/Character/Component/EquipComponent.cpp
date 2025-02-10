@@ -39,3 +39,9 @@ void UEquipComponent::SetNextCombo()
 	}
 	ComboIndex += 1;
 }
+
+void UEquipComponent::ClearCombo()
+{
+	ComboIndex = 0;
+}
+

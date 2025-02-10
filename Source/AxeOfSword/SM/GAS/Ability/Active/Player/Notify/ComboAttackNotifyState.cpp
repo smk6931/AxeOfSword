@@ -1,9 +1,9 @@
-﻿#include "ComboAttackNotify.h"
+#include "ComboAttackNotifyState.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 
-void UComboAttackNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)
+void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
 	if (!IsValid(BaseCharacter))
@@ -12,5 +12,5 @@ void UComboAttackNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceB
 	}
 	
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
-	EquipComponent->SetNextCombo();
+	EquipComponent->SetCanAttackNext(true);
 }
