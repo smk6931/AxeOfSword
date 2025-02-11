@@ -47,4 +47,7 @@ namespace AOSGameplayTags
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State, "State", "State 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Attack, "State.Attack", "현재 공격 상태가 진행 중 임을 의미함");
+	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Launch, "GameplayCue.Character.Launch", "플레이어 캐릭터를 Launch를 하게 만듬");
 }

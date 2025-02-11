@@ -16,4 +16,4 @@ void UComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->SetNextCombo();
 	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(), AOSGameplayTags::State_Attack, 0);
-}
+} 

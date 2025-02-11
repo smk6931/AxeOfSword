@@ -22,4 +22,8 @@ namespace AOSGameplayTags
 	// 현재 플레이어의 상태 관련으로 단 하나만 들어갈 수 있는 Root 상태
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Attack)
+
+	// GameplayCue 관련 태그
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Launch)
 }
