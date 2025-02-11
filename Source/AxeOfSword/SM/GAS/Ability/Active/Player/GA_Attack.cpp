@@ -39,6 +39,10 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	// 지금이 홀딩 상태임을 의미
 	IsHoldEnd = false;
+	
+	// 기존의 콤보 초기화 관련 Timer는 초기화 시켜준다.
+	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
+	
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
@@ -75,7 +79,25 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 	// 실행시킴으로써 강공격을 계속해서 진행시킬 수 있도록 한다.
 	if (!IsHoldEnd)
 	{
-		UE_LOG(LogTemp, Display, TEXT("강공 상태 돌입"))
+		if (AT_ComboAttackAnim)
+		{
+			AT_ComboAttackAnim->EndTask();
+		}
+		
+		ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
+		if (!IsValid(BaseCharacter))
+		{
+			return;
+		}
+
+		UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+		
+		AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
+        	this, NAME_None,
+        	EquipComponent->GetMainWeapon()->GetHeavyAttackAnim(),
+        	FGameplayTagContainer()
+        	);
+        AT_ComboAttackAnim->ReadyForActivation();
 	} else
 	{
 		// 홀딩이 끝난 경우에 대해서는 다시한번 Ability를 재실행 해준다.
@@ -95,7 +117,6 @@ void UGA_Attack::InputReleased(const FGameplayAbilitySpecHandle Handle,
 		EndAbility(CurrentSpecHandle, CurrentActorInfo,
 			CurrentActivationInfo, false, false);
 	}
-	UE_LOG(LogTemp, Display, TEXT("Released"))
 }
 
 void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
@@ -107,7 +128,6 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 
 void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	UE_LOG(LogTemp, Display, TEXT("공격 캔슬"))
 	if (IsHoldEnd)
 	{
 		EndAbility(CurrentSpecHandle, CurrentActorInfo,
@@ -142,6 +162,7 @@ void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData
 
 void UGA_Attack::OnEndCombo()
 {
+	UE_LOG(LogTemp, Display, TEXT("콤보 클리어"))
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{

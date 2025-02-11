@@ -18,6 +18,7 @@ public:
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
 
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
+	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,5 +33,8 @@ private:
 	// TODO: 임시용으로 무기에 장착하지만 DataTable과 EquipComponent에서 무기를 감지하고
 	// 그에 맞는 애니메이션 리스트를 부과해주는 것이 맞다.
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
-	TArray<TObjectPtr<UAnimMontage>> ComboAttackAnim; 
+	TArray<TObjectPtr<UAnimMontage>> ComboAttackAnim;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> HeavyAttackAnim;
 };

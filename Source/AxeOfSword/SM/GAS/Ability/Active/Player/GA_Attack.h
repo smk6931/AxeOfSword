@@ -36,7 +36,7 @@ private:
 	bool IsHoldEnd = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
-	float ComboEndDelayTime = 2.f;
+	float ComboEndDelayTime = 3.f;
 
 	UPROPERTY()
 	UPlayMontageWithEvent* AT_ComboAttackAnim;
