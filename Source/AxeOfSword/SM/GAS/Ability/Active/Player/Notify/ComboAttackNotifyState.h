@@ -6,9 +6,6 @@
 #include "Animation/AnimNotifies/AnimNotifyState.h"
 #include "ComboAttackNotifyState.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class AXEOFSWORD_API UComboAttackNotifyState : public UAnimNotifyState
 {

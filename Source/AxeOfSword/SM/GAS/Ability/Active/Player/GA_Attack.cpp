@@ -3,7 +3,32 @@
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
+
+bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
+	FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	// 이미 Ability_Attack 태그가 존재한다는 것은 해당 Ability가 실행 중이라는 것이기 때문에
+	// Block 처리를 진행한다.
+	return !IsAvatarDoingAttack();
+}
+
+void UGA_Attack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
+{
+	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
+	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
+	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Ability_Attack, 1);
+}
 
 void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                  const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
@@ -12,6 +37,8 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	// 최초 실행
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
+	// 지금이 홀딩 상태임을 의미
+	IsHoldEnd = false;
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
@@ -19,9 +46,9 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
-
-	// 지금이 홀딩 상태임을 의미
-	IsHoldEnd = false;
+	
+	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Attack, 1);
 	
 	// 최초 실행 시 첫번째 Montage를 실행시킨다.
 	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
@@ -29,36 +56,77 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
 		FGameplayTagContainer()
 		);
+	AT_ComboAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnCancelAttack);
 	AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
 	AT_ComboAttackAnim->ReadyForActivation();
 }
 
-void UGA_Attack::InputReleased(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo)
 {
+	// 이미 공격 중인 상태 태그가 존재하는 경우 처리하면 안된다.
+	if (IsAvatarDoingAttack())
+	{
+		return;
+	}
+	
+	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
+	// 일반 공격이 종료된 상태임에도 홀딩이 유지되고 있는 경우 강공격 전용 AnimMontage Task를
+	// 실행시킴으로써 강공격을 계속해서 진행시킬 수 있도록 한다.
+	if (!IsHoldEnd)
+	{
+		UE_LOG(LogTemp, Display, TEXT("강공 상태 돌입"))
+	} else
+	{
+		// 홀딩이 끝난 경우에 대해서는 다시한번 Ability를 재실행 해준다.
+		ActivateAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, &CurrentEventData);
+	}
+}
+
+void UGA_Attack::InputReleased(const FGameplayAbilitySpecHandle Handle,
+                               const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo)
+{
+	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
+	
 	IsHoldEnd = true;
-	IsAttackEnd = false;
-	UE_LOG(LogTemp, Display, TEXT("Released"))
-	EndAbility(CurrentSpecHandle, CurrentActorInfo,
+	// 더이상 공격 상태가 아닌 경우: 공격 콤보가 끝난 경우가 이에 해당될 수 있다.
+	if (!IsAvatarDoingAttack())
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo,
 			CurrentActivationInfo, false, false);
+	}
+	UE_LOG(LogTemp, Display, TEXT("Released"))
 }
 
 void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo
 	, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	IsHoldEnd = true;
-	IsAttackEnd = false;
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
+	UE_LOG(LogTemp, Display, TEXT("공격 캔슬"))
+	if (IsHoldEnd)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo,
+			CurrentActivationInfo, false, false);
+	}
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
 }
 
 void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Attack, 0);
+	// 우선적으로 홀딩이 종료된 상태이면 애니메이션 끝난 뒤 자연스럽게 Ability도 종료시킨다.
+	if (IsHoldEnd)
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo,
+			CurrentActivationInfo, false, false);
+	}
+	
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{
@@ -66,9 +134,6 @@ void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData
 	}
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->SetNextCombo();
-
-	// 현재 공격이 종료되었음을 의미한다.
-	IsAttackEnd = true;
 	
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
 	GetWorld()->GetTimerManager().SetTimer(EndDefaultAttackHandle,
@@ -84,4 +149,10 @@ void UGA_Attack::OnEndCombo()
 	}
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->ClearCombo();
+}
+
+bool UGA_Attack::IsAvatarDoingAttack() const
+{
+	return GetAbilitySystemComponentFromActorInfo()->
+		HasMatchingGameplayTag(AOSGameplayTags::State_Attack);
 }

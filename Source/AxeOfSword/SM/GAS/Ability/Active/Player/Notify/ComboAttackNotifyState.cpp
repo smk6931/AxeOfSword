@@ -2,6 +2,7 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 
 void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
@@ -10,7 +11,8 @@ void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
 	{
 		return;
 	}
-	
+
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
-	EquipComponent->SetCanAttackNext(true);
+	EquipComponent->SetNextCombo();
+	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(), AOSGameplayTags::State_Attack, 0);
 }

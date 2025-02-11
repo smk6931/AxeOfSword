@@ -17,7 +17,6 @@ public:
 
 	GETTER(uint8, ComboIndex)
 	GETTER(TObjectPtr<ABaseWeapon>, MainWeapon)
-	GETTER_SETTER(bool, CanAttackNext)
 	void SetNextCombo();
 	void ClearCombo();
 
@@ -40,6 +39,5 @@ private:
 	UPROPERTY()
 	TObjectPtr<ABaseWeapon> SubWeapon;
 
-	bool CanAttackNext = false;
 	uint8 ComboIndex = 0;
 };
