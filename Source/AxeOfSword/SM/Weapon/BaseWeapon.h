@@ -26,6 +26,10 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
+	// 상황에 따라 LineTrace or Collision 세팅해도 좋지만 우선은 도끼만을 위해 Box Collision으로 처리해둔다.
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UBoxComponent> AttackCollision;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	int8 Damage;

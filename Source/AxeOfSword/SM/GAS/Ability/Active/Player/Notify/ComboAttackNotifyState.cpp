@@ -4,7 +4,8 @@
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 
-void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
+void UComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
+	UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
 	if (!IsValid(BaseCharacter))

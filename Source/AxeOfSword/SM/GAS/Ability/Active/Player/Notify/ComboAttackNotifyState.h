@@ -12,5 +12,6 @@ class AXEOFSWORD_API UComboAttackNotifyState : public UAnimNotifyState
 	GENERATED_BODY()
 
 protected:
-	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp,
+		UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 };

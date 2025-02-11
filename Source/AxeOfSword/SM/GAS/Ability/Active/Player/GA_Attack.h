@@ -46,6 +46,9 @@ private:
 	
 	UFUNCTION()
 	void OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
+	UFUNCTION()
+	void OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 
 	FTimerHandle EndDefaultAttackHandle;
 
@@ -53,4 +56,5 @@ private:
 	void OnEndCombo();
 
 	bool IsAvatarDoingAttack() const;
+	bool IsAvatarDoingHeavyAttack() const;
 };
