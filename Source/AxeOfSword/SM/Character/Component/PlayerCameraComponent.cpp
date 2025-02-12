@@ -13,10 +13,10 @@ void UPlayerCameraComponent::BeginPlay()
 	DefaultFov = FieldOfView;
 }
 
-void UPlayerCameraComponent::AddCameraOption(const FVector& MoveTo, const int8 Fov)
+void UPlayerCameraComponent::SetCameraOption(const FVector& MoveTo, const int8 Fov)
 {
-	AddLocalOffset(MoveTo);
-	FieldOfView += Fov;
+	SetRelativeLocation(MoveTo);
+	FieldOfView = Fov;
 }
 
 void UPlayerCameraComponent::RollbackToFirstCameraOption()

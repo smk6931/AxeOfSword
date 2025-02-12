@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AxeOfSword/SM/Helper/UtilHelper.h"
 #include "Camera/CameraComponent.h"
 #include "PlayerCameraComponent.generated.h"
 
@@ -14,9 +15,12 @@ class AXEOFSWORD_API UPlayerCameraComponent : public UCameraComponent
 public:
 	UPlayerCameraComponent();
 
-	void AddCameraOption(const FVector& MoveTo, const int8 Fov);
+	void SetCameraOption(const FVector& MoveTo, const int8 Fov);
 
 	void RollbackToFirstCameraOption();
+
+	GETTER(FVector, DefaultLocation)
+	GETTER(uint8, DefaultFov)
 	
 protected:
 	virtual void BeginPlay() override;

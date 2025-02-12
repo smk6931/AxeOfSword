@@ -23,16 +23,16 @@ void AGC_CameraMove::BeginPlay()
 
 bool AGC_CameraMove::OnExecute_Implementation(AActor* MyTarget, const FGameplayCueParameters& Parameters)
 {
-	if (!Super::OnExecute_Implementation(MyTarget, Parameters))
+	if (Super::OnExecute_Implementation(MyTarget, Parameters))
 	{
-		return false;
+		return true;
 	}
 
 	Target = MyTarget;
 
 	CameraMoveTimeline->PlayFromStart();
 	
-	return true;
+	return false;
 }
 
 void AGC_CameraMove::OnCameraMoveCallback(FVector Output)
@@ -42,8 +42,12 @@ void AGC_CameraMove::OnCameraMoveCallback(FVector Output)
 	{
 		return;
 	}
+
+	UPlayerCameraComponent* PlayerCameraComponent = Player->GetCameraComponent();
 	
-	Player->GetCameraComponent()->AddCameraOption(Output * CameraMoveSpeed, 0);
+	PlayerCameraComponent->SetCameraOption(
+		PlayerCameraComponent->GetDefaultLocation() + (Output * CameraMoveSpeed)
+		, PlayerCameraComponent->GetDefaultFov());
 }
  
 void AGC_CameraMove::OnCameraMoveFinish()
