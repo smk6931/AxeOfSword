@@ -27,7 +27,9 @@ void UGA_Attack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGam
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
 	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Ability_Attack_Default, 1);
+	AOSGameplayTags::Ability_Attack_Default, 1);
+	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Combat, 1);
 }
 
 void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -174,11 +176,15 @@ void UGA_Attack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData Even
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Ability_Attack_Heavy, 0);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Attack, 0);
+	AOSGameplayTags::State_Attack, 0);
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Combat, 0);
 }
 
 void UGA_Attack::OnEndCombo()
 {
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Combat, 0);
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{

@@ -46,7 +46,7 @@ void AGC_CameraMove::OnCameraMoveCallback(FVector Output)
 	UPlayerCameraComponent* PlayerCameraComponent = Player->GetCameraComponent();
 	
 	PlayerCameraComponent->SetCameraOption(
-		PlayerCameraComponent->GetDefaultLocation() + (Output * CameraMoveSpeed)
+		PlayerCameraComponent->GetCurrentLocation() + (Output * CameraMoveSpeed)
 		, PlayerCameraComponent->GetDefaultFov());
 }
  

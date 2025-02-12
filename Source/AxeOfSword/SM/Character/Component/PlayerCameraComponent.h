@@ -15,17 +15,24 @@ class AXEOFSWORD_API UPlayerCameraComponent : public UCameraComponent
 public:
 	UPlayerCameraComponent();
 
-	void SetCameraOption(const FVector& MoveTo, const int8 Fov);
+	void SetCameraOption(const FVector& MoveTo, const int8 Fov = 90);
 
 	void RollbackToFirstCameraOption();
 
-	GETTER(FVector, DefaultLocation)
+	void EnableCombatCameraMode();
+	
+	GETTER(FVector, CurrentLocation)
 	GETTER(uint8, DefaultFov)
 	
 protected:
 	virtual void BeginPlay() override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	FVector CombatRelativeLocation;
+	
+	FVector CurrentLocation;
+	
 	FVector DefaultLocation;
 
 	uint8 DefaultFov;
