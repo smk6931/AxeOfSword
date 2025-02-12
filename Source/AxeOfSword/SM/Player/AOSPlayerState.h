@@ -32,7 +32,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
 	float CombatEndCooldown = 5.f;
 	
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAOSAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()

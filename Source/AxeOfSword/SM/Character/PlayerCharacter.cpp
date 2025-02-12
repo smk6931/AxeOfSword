@@ -38,8 +38,13 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	// GetPlayerState<AAOSPlayerState>()->GetAbilitySystemComponent();
-	// AbilitySystemComponent->Initialize();
+	
+	if (AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>())
+	{
+		AbilitySystemComponent = Cast<UAOSAbilitySystemComponent>(PS->GetAbilitySystemComponent());
+		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+		AbilitySystemComponent->Initialize(InitialData);
+	}
 	
 	if (const APlayerController* PC = Cast<APlayerController>(
 		GetController()))

@@ -27,7 +27,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
+	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input"
 		, meta = (AllowPrivateAccess = "true"))

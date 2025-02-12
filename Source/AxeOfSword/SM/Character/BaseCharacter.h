@@ -25,9 +25,12 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
 
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UAOSAbilitySystemComponent> AbilitySystemComponent;
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UAOSAbilitySystemComponent* AbilitySystemComponent;
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UEquipComponent> EquipComponent;

@@ -16,13 +16,10 @@ class AXEOFSWORD_API UAOSAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	UAOSAbilitySystemComponent();
 
-	void Initialize();
+	void Initialize(const UAOSAbilitySystemInitializeData* InitialData);
 
 	GETTER_SETTER(bool, IsInitialize)
 	
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
-	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
-	
 	bool IsInitialize = false;
 };
