@@ -38,7 +38,6 @@ namespace AOSGameplayTags
 		RemoveGameplayTag(ASC, FromTag, FromTagCount, bIsReplicated);
 		AddGameplayTag(ASC, ToTag, FromTagCount, bIsReplicated);
 	}
-
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability, "Ability", "Ability 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack, "Ability.Attack", "공격 Ability 실행 상태를 의미함");
@@ -49,5 +48,10 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Attack, "State.Attack", "현재 공격 상태가 진행 중 임을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Launch, "GameplayCue.Character.Launch", "플레이어 캐릭터를 Launch를 하게 만듬");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
+	"GameplayCue.Character.Camera.Move", "플레이어 카메라 무빙에 영향을 주는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack1,
+	"GameplayCue.Character.Camera.Move.Attack1", "플레이어 카메라 무빙에 영향을 주는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Rollback,
+		"GameplayCue.Character.Camera.Rollback", "플레이어 카메라 무빙에 영향을 주는 태그");
 }

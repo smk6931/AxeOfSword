@@ -2,6 +2,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Component/PlayerCameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -30,10 +31,8 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->SetRelativeRotation({0, 90, 0});
 	SpringArm->bUsePawnControlRotation = true;
 	
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CameraComponent = CreateDefaultSubobject<UPlayerCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(SpringArm);
-	CameraComponent->SetRelativeLocation({60, 0, 0});
-	CameraComponent->bUsePawnControlRotation = true;
 }
 
 void APlayerCharacter::BeginPlay()
