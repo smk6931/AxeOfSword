@@ -27,16 +27,8 @@ void AAOSPlayerState::BeginPlay()
 
 void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 {
-	UE_LOG(LogTemp, Display, TEXT("%d"), NewCount);
-	
-	FTimerManager* TimerManager = &GetWorld()->GetTimerManager();
-	TimerManager->ClearTimer(CombatEndTimerHandle);
-	TimerManager->SetTimer(CombatEndTimerHandle,
-		FTimerDelegate::CreateUObject(this, &ThisClass::OnCombatEnd),
-		CombatEndCooldown, false);
-
 	// Tag가 추가되는 경우에 대해 Camera Combat Mode가 활성화됨
-	if (NewCount < 0 && !IsCombatMode)
+	if (NewCount > 0 && !IsCombatMode)
 	{
 		IsCombatMode = true;
 		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetPawn());
@@ -45,6 +37,12 @@ void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 			return;
 		}
 		PlayerCharacter->GetCameraComponent()->EnableCombatCameraMode();
+	} else {
+		FTimerManager* TimerManager = &GetWorld()->GetTimerManager();
+		TimerManager->ClearTimer(CombatEndTimerHandle);
+		TimerManager->SetTimer(CombatEndTimerHandle,
+			FTimerDelegate::CreateUObject(this, &ThisClass::OnCombatEnd),
+			CombatEndCooldown, false);
 	}
 }
 

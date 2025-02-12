@@ -28,5 +28,6 @@ void UPlayerCameraComponent::RollbackToFirstCameraOption()
 
 void UPlayerCameraComponent::EnableCombatCameraMode()
 {
+	CurrentLocation = DefaultLocation + CombatRelativeLocation;
 	SetRelativeLocation(DefaultLocation + CombatRelativeLocation);
 }

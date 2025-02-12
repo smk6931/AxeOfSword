@@ -22,7 +22,6 @@ public:
 	void EnableCombatCameraMode();
 	
 	GETTER(FVector, CurrentLocation)
-	GETTER(uint8, DefaultFov)
 	
 protected:
 	virtual void BeginPlay() override;
