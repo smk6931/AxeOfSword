@@ -26,17 +26,24 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float CurrentSpeed;
+	float Speed = 300.f;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	class USkeletalMeshComponent* BossMesh;
-
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	class AActor* aSword;
-
+	USkeletalMeshComponent* BossMesh;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+	TSubclassOf<class ASword> SwordFactory;
 
-	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FVector Direction;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float Hp;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TSubclassOf<class UUserWidget> BossWidgetFactory;
+
+	UPROPERTY()
+	class UUserWidget* BossHpBar;
 };
