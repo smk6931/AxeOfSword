@@ -14,7 +14,7 @@ class AXEOFSWORD_API UPlayerCameraComponent : public UCameraComponent
 public:
 	UPlayerCameraComponent();
 
-	void MoveCameraOption(const FVector& MoveTo, const uint8 Fov = 90);
+	void AddCameraOption(const FVector& MoveTo, const int8 Fov);
 
 	void RollbackToFirstCameraOption();
 	
