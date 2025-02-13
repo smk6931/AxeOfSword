@@ -16,6 +16,7 @@ public:
 	ABaseWeapon();
 
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
+	virtual void UpdateWeaponAttackable(const bool IsEnable);
 
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
@@ -29,6 +30,11 @@ protected:
 	// 상황에 따라 LineTrace or Collision 세팅해도 좋지만 우선은 도끼만을 위해 Box Collision으로 처리해둔다.
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UBoxComponent> AttackCollision;
+
+	virtual void OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep,
+		const FHitResult& SweepResult);
 
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))

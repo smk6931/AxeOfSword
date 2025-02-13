@@ -3,6 +3,8 @@
 
 #include "BaseWeapon.h"
 
+#include "Components/BoxComponent.h"
+
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -26,3 +28,24 @@ void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 }
 
+void ABaseWeapon::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == GetOwner() || OtherActor == this)
+	{
+		return;
+	}
+	UE_LOG(LogTemp, Display, TEXT("하이1: %s"), *GetOwner()->GetName());
+	UE_LOG(LogTemp, Display, TEXT("하이2: %s"), *OtherActor->GetName());
+	UE_LOG(LogTemp, Display, TEXT("하이3: %s"), *this->GetName());
+}
+
+void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
+{
+	if (AttackCollision)
+	{
+		AttackCollision->SetCollisionEnabled(IsEnable ?
+			ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
+	}
+}
