@@ -12,12 +12,12 @@ ABaseWeapon::ABaseWeapon()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
 
 	WeaponMesh->SetupAttachment(GetRootComponent());
+	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)

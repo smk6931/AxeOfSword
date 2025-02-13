@@ -53,14 +53,16 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
 	"GameplayCue.Character.Camera.Move", "플레이어 카메라 무빙에 영향을 주는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack0,
+	"GameplayCue.Character.Camera.Move.Attack0", "기본 공격 전용 Base가 되는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack1,
-	"GameplayCue.Character.Camera.Move.Attack1", "플레이어 카메라 무빙에 영향을 주는 태그");
+	"GameplayCue.Character.Camera.Move.Attack1", "기본 공격 전용 1번에서 실행하는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack2,
-	"GameplayCue.Character.Camera.Move.Attack2", "플레이어 카메라 무빙에 영향을 주는 태그");
+	"GameplayCue.Character.Camera.Move.Attack2", "기본 공격 전용 2번에서 실행하는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack3,
-	"GameplayCue.Character.Camera.Move.Attack3", "플레이어 카메라 무빙에 영향을 주는 태그");
+	"GameplayCue.Character.Camera.Move.Attack3", "기본 공격 전용 3번에서 실행하는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack4,
-	"GameplayCue.Character.Camera.Move.Attack4", "플레이어 카메라 무빙에 영향을 주는 태그");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Rollback,
-		"GameplayCue.Character.Camera.Rollback", "플레이어 카메라 무빙에 영향을 주는 태그");
+	"GameplayCue.Character.Camera.Move.Attack4", "기본 공격 전용 4번에서 실행하는 카메라 무빙");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_HeavyAttack,
+	"GameplayCue.Character.Camera.Move.HeavyAttack", "강공격 시 실행하는 카메라 무빙");
 }

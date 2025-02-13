@@ -9,7 +9,6 @@ UPlayerCameraComponent::UPlayerCameraComponent()
 void UPlayerCameraComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	CurrentLocation = GetRelativeLocation();
 	DefaultLocation = GetRelativeLocation();
 	DefaultFov = FieldOfView;
 }
@@ -24,10 +23,4 @@ void UPlayerCameraComponent::RollbackToFirstCameraOption()
 {
 	SetRelativeLocation(DefaultLocation);
 	FieldOfView = DefaultFov;
-}
-
-void UPlayerCameraComponent::EnableCombatCameraMode()
-{
-	CurrentLocation = DefaultLocation + CombatRelativeLocation;
-	SetRelativeLocation(DefaultLocation + CombatRelativeLocation);
 }

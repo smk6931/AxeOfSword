@@ -18,20 +18,13 @@ public:
 	void SetCameraOption(const FVector& MoveTo, const int8 Fov = 90);
 
 	void RollbackToFirstCameraOption();
-
-	void EnableCombatCameraMode();
 	
-	GETTER(FVector, CurrentLocation)
+	GETTER(FVector, DefaultLocation)
 	
 protected:
 	virtual void BeginPlay() override;
 	
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
-	FVector CombatRelativeLocation;
-	
-	FVector CurrentLocation;
-	
 	FVector DefaultLocation;
 
 	uint8 DefaultFov;

@@ -30,7 +30,7 @@ private:
 	bool IsCombatMode = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
-	float CombatEndCooldown = 2.5f;
+	float CombatEndCooldown = 0.5f;
 	
 	TObjectPtr<UAOSAbilitySystemComponent> AbilitySystemComponent;
 

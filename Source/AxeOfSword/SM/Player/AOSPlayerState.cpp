@@ -31,12 +31,6 @@ void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 	if (NewCount > 0 && !IsCombatMode)
 	{
 		IsCombatMode = true;
-		APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetPawn());
-		if (!IsValid(PlayerCharacter))
-		{
-			return;
-		}
-		PlayerCharacter->GetCameraComponent()->EnableCombatCameraMode();
 	} else {
 		FTimerManager* TimerManager = &GetWorld()->GetTimerManager();
 		TimerManager->ClearTimer(CombatEndTimerHandle);
@@ -49,14 +43,6 @@ void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 void AAOSPlayerState::OnCombatEnd()
 {
 	IsCombatMode = false;
-	
-	APlayerCharacter* PlayerCharacter = Cast<APlayerCharacter>(GetPawn());
-	if (!IsValid(PlayerCharacter))
-	{
-		return;
-	}
-
-	PlayerCharacter->GetCameraComponent()->RollbackToFirstCameraOption();
 }
 
 void AAOSPlayerState::OnHealthChanged(const FOnAttributeChangeData& Data)

@@ -56,7 +56,7 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::State_Attack, 1);
 	
-	// 최초 실행 시 첫번째 Montage를 실행시킨다.
+	// 최초 실행 시 첫번째 Montage를 실행시킨다. 
 	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
 		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
