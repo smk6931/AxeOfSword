@@ -20,4 +20,13 @@ protected:
 		AActor* OtherActor, UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult) override;
+
+private:
+	FTimerHandle EndHitStopTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true, ClampMin = 0))
+	float HitStopEndTime = 0.1f;
+
+	UFUNCTION()
+	void OnHitStopEnd();
 };
