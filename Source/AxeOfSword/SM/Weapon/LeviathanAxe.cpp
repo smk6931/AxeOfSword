@@ -1,5 +1,8 @@
 ﻿#include "LeviathanAxe.h"
+
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ALeviathanAxe::ALeviathanAxe()
 {
@@ -18,8 +21,27 @@ void ALeviathanAxe::BeginPlay()
 void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Super::OnOverlapWeaponCollision(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep,
-	SweepResult);
-	UE_LOG(LogTemp, Display, TEXT("하이1: %s"), *GetOwner()->GetName());
-	UE_LOG(LogTemp, Display, TEXT("하이2: %s"), *OtherActor->GetName());
+	Super::OnOverlapWeaponCollision(OverlappedComponent, OtherActor,
+		OtherComp, OtherBodyIndex, bFromSweep,SweepResult);
+	
+	if (OtherActor == GetOwner())
+	{
+		return;
+	}
+
+	const FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(
+		OtherActor->GetActorLocation(),
+		this->AttackCollision->GetComponentLocation());
+
+	UE_LOG(LogTemp, Display, TEXT("테스트 데이터: %f, %f")
+		, Rotator.Yaw, Rotator.Pitch);
+
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.25);
+	GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
+		FTimerDelegate::CreateUObject(this, &ThisClass::OnHitStopEnd), HitStopEndTime, false);
+}
+
+void ALeviathanAxe::OnHitStopEnd()
+{
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 }
