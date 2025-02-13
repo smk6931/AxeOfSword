@@ -8,18 +8,17 @@
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetMathLibrary.h"
 
-
 // Sets default values
 ABossMk::ABossMk()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	Hp = 150;
+	bIsAlive = false;
+
 	PrimaryActorTick.bCanEverTick = true;
-
-	Hp = 100.f;
-
+	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
 		TEXT("'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
-	
 	if (TempBossMesh.Object)
 	{
 		GetMesh()->SetSkeletalMesh(TempBossMesh.Object);
@@ -66,27 +65,13 @@ void ABossMk::BeginPlay()
     	}
     }
 }
-	
-	// if (BossWidgetFactory)
-	// {
-	// 	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-	// 	if (PlayerController)
-	// 	{
-	// 		BossHpBar = CreateWidget<UUserWidget>(PlayerController, BossWidgetFactory);
-	// 		if (BossHpBar)
-	// 		{
-	// 			BossHpBar->AddToViewport();
-	// 		}
-	// 	}
-	// }
-
 
 // Called every frame
 void ABossMk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-    Direction = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - this->GetActorLocation();
+	Direction = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - this->GetActorLocation();
 	Direction.Normalize();
 	
 	SetActorLocation(GetActorLocation() + DeltaTime * Speed * Direction);
@@ -94,13 +79,23 @@ void ABossMk::Tick(float DeltaTime)
 	FRotator rot = UKismetMathLibrary::MakeRotFromXZ(Direction,GetActorUpVector());
 	SetActorRotation(rot);
 
+	FString BossStatusText = bIsAlive ? TEXT("Boss is Alive") : TEXT("Boss is Dead");
+	
+	if (GEngine)
+	{
+		FString Status = bIsAlive ? TEXT("Alive") : TEXT("Dead");
+		GEngine->AddOnScreenDebugMessage(1, 0.0f, FColor::Green,
+		FString::Printf(TEXT("Boss Status: %s\n "
+					   "BossHP: %d"), *Status, Hp));
+	}
 }
-
 // Called to bind functionality to input
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-
+void ABossMk::updateHealthStatus(float DamageAmount)
+{
+}
 
