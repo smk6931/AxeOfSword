@@ -18,8 +18,6 @@ void AAOSPlayerState::BeginPlay()
 
 	if (IsValid(AbilitySystemComponent))
 	{
-		HealthChangedDelegateHandle = AbilitySystemComponent->
-			GetGameplayAttributeValueChangeDelegate(Attribute->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 		AbilitySystemComponent->RegisterGameplayTagEvent(
 			AOSGameplayTags::Status_Combat, EGameplayTagEventType::NewOrRemoved).AddUObject(this, &ThisClass::OnCombat);
 	}
@@ -57,22 +55,7 @@ void AAOSPlayerState::OnCombatEnd()
 	Player->GetSpringArm()->CameraLagSpeed = DefaultCameraLag;
 }
 
-void AAOSPlayerState::OnHealthChanged(const FOnAttributeChangeData& Data)
-{
-	// TODO : 체력 0이 되면 처리할 내용 작성
-}
-
 UAbilitySystemComponent* AAOSPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
-}
-
-UBaseAttribute* AAOSPlayerState::GetAttributeSetBase() const
-{
-	return Attribute;
-}
-
-float AAOSPlayerState::GetHealth() const
-{
-	return Attribute->GetHealth();
 }

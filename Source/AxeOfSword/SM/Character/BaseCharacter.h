@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "BaseCharacter.generated.h"
 
+class UBaseAttribute;
 class UEquipComponent;
 
 UCLASS()
@@ -22,6 +23,8 @@ public:
 	}
 
 	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
+	GETTER(TObjectPtr<UBaseAttribute>, Attribute)
+	float GetHealth() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -34,4 +37,13 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
 	TObjectPtr<UEquipComponent> EquipComponent;
+	
+	UPROPERTY()
+	TObjectPtr<UBaseAttribute> Attribute;
+	
+	FDelegateHandle HealthChangedDelegateHandle;
+	FDelegateHandle MovementSpeedChangedDelegateHandle;
+
+	void OnHealthChanged(const FOnAttributeChangeData& Data);
+	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
 };

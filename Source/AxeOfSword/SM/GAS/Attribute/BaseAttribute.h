@@ -25,6 +25,16 @@ public:
 	UPROPERTY(BlueprintReadOnly, Category="Attributes")
 	FGameplayAttributeData MaxHealth;
 	ATTRIBUTE_ACCESSORS(UBaseAttribute, MaxHealth)
+	
+	UPROPERTY(BlueprintReadOnly, Category="Attributes")
+	FGameplayAttributeData Attack;
+	ATTRIBUTE_ACCESSORS(UBaseAttribute, Attack)
+	
+	UPROPERTY(BlueprintReadOnly, Category="Attributes")
+	FGameplayAttributeData MovementSpeed;
+	ATTRIBUTE_ACCESSORS(UBaseAttribute, MovementSpeed)
+
+	void Initialize();
 
 protected:
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;

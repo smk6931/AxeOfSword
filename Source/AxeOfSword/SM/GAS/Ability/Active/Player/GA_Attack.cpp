@@ -139,6 +139,8 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Combat, 0);
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Default, 0);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Ability_Attack_Heavy, 0);
@@ -158,7 +160,7 @@ void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventD
 void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Attack, 0);
+	AOSGameplayTags::State_Attack, 0);
 	// 우선적으로 홀딩이 종료된 상태이면 애니메이션 끝난 뒤 자연스럽게 Ability도 종료시킨다.
 	if (IsHoldEnd)
 	{
@@ -174,17 +176,13 @@ void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData
 void UGA_Attack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Ability_Attack_Heavy, 0);
+	AOSGameplayTags::Ability_Attack_Heavy, 0);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::State_Attack, 0);
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Status_Combat, 0);
 }
 
 void UGA_Attack::OnEndCombo()
 {
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Status_Combat, 0);
 	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{

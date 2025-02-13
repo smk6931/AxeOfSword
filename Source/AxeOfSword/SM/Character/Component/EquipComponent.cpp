@@ -22,6 +22,7 @@ void UEquipComponent::BeginPlay()
 		{
 			return;
 		}
+		MainWeapon->SetOwner(GetOwner());
 		MainWeapon->EquipWeaponToTarget(BaseCharacter->GetMesh());
 	} else
 	{
@@ -45,3 +46,14 @@ void UEquipComponent::ClearCombo()
 	ComboIndex = 0;
 }
 
+void UEquipComponent::ToggleAttack(const bool IsAttack)
+{
+	if (MainWeapon)
+	{
+		MainWeapon->UpdateWeaponAttackable(IsAttack);
+	}
+	if (SubWeapon)
+	{
+		SubWeapon->UpdateWeaponAttackable(IsAttack);
+	}
+}

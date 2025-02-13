@@ -1,6 +1,7 @@
 ﻿#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "Component/PlayerCameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -37,13 +38,13 @@ APlayerCharacter::APlayerCharacter()
 
 void APlayerCharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	
 	if (AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>())
 	{
 		AbilitySystemComponent = Cast<UAOSAbilitySystemComponent>(PS->GetAbilitySystemComponent());
 		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
 		AbilitySystemComponent->Initialize(InitialData);
+		Attribute = PS->GetAttribute();
+		Attribute->Initialize();
 	}
 	
 	if (const APlayerController* PC = Cast<APlayerController>(
@@ -56,6 +57,7 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	Super::BeginPlay();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
