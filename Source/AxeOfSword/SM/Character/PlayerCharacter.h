@@ -22,6 +22,7 @@ public:
 	APlayerCharacter();
 
 	GETTER(TObjectPtr<UPlayerCameraComponent>, CameraComponent)
+	GETTER(TObjectPtr<USpringArmComponent>, SpringArm)
 
 protected:
 	virtual void BeginPlay() override;

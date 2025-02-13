@@ -32,6 +32,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
 	float CombatEndCooldown = 0.5f;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	float DefaultCameraLag = 11.f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	float CombatCameraLag = 3.f;
+	
 	TObjectPtr<UAOSAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()

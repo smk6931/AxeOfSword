@@ -1,10 +1,10 @@
 ﻿#include "AOSPlayerState.h"
 
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "GameFramework/SpringArmComponent.h"
 
 AAOSPlayerState::AAOSPlayerState()
 {
@@ -31,6 +31,12 @@ void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 	if (NewCount > 0 && !IsCombatMode)
 	{
 		IsCombatMode = true;
+		APlayerCharacter* Player = Cast<APlayerCharacter>(GetPawn());
+		if (!Player)
+		{
+			return;
+		}
+		Player->GetSpringArm()->CameraLagSpeed = CombatCameraLag;
 	} else {
 		FTimerManager* TimerManager = &GetWorld()->GetTimerManager();
 		TimerManager->ClearTimer(CombatEndTimerHandle);
@@ -43,6 +49,12 @@ void AAOSPlayerState::OnCombat(const FGameplayTag CallbackTag, int32 NewCount)
 void AAOSPlayerState::OnCombatEnd()
 {
 	IsCombatMode = false;
+	APlayerCharacter* Player = Cast<APlayerCharacter>(GetPawn());
+	if (!Player)
+	{
+		return;
+	}
+	Player->GetSpringArm()->CameraLagSpeed = DefaultCameraLag;
 }
 
 void AAOSPlayerState::OnHealthChanged(const FOnAttributeChangeData& Data)
