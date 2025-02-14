@@ -2,7 +2,6 @@
 
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/KismetMathLibrary.h"
 
 ALeviathanAxe::ALeviathanAxe()
 {
@@ -29,12 +28,16 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 		return;
 	}
 
-	const FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(
-		OtherActor->GetActorLocation(),
-		this->AttackCollision->GetComponentLocation());
+	// const FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(
+	// 	OtherActor->GetActorLocation(),
+	// 	this->AttackCollision->GetComponentLocation());
+	//
+	// UE_LOG(LogTemp, Display, TEXT("테스트 데이터: %f, %f")
+	// 	, Rotator.Yaw, Rotator.Pitch);
 
-	UE_LOG(LogTemp, Display, TEXT("테스트 데이터: %f, %f")
-		, Rotator.Yaw, Rotator.Pitch);
+	UGameplayStatics::ApplyDamage(OtherActor,
+		Damage, GetOwner()->GetInstigatorController(),
+		GetOwner(), UDamageType::StaticClass());
 
 	// 데미지에 따른 공격력 수치 조정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),
