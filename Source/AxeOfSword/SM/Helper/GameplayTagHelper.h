@@ -26,6 +26,7 @@ namespace AOSGameplayTags
 	// 플레이어 상태 값을 넣는 곳으로 여러개가 들어갈 수 있는 부가적인 상태
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Combat)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Hold)
 
 	// GameplayCue 관련 태그
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue)
@@ -36,4 +37,7 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_Attack3)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_Attack4)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_HeavyAttack)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomIn)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomOut)
 }

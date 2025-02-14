@@ -65,4 +65,10 @@ namespace AOSGameplayTags
 	"GameplayCue.Character.Camera.Move.Attack4", "기본 공격 전용 4번에서 실행하는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_HeavyAttack,
 	"GameplayCue.Character.Camera.Move.HeavyAttack", "강공격 시 실행하는 카메라 무빙");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov,
+	"GameplayCue.Character.Camera.Fov", "카메라 줌 자체를 관리하기 위한 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov_ZoomIn,
+	"GameplayCue.Character.Camera.Fov.ZoomIn", "카메라 줌 인 기능");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov_ZoomOut,
+	"GameplayCue.Character.Camera.Fov.ZoomOut", "카메라 줌 아웃 기능");
 }

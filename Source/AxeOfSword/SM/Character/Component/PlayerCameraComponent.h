@@ -20,6 +20,7 @@ public:
 	void RollbackToFirstCameraOption();
 	
 	GETTER(FVector, DefaultLocation)
+	GETTER(uint8, DefaultFov)
 	
 protected:
 	virtual void BeginPlay() override;

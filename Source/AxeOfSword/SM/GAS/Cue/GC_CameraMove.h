@@ -22,16 +22,27 @@ private:
 	UPROPERTY()
 	AActor* Target;
 	
-	UPROPERTY(EditAnywhere, Category = "Option", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Camera|Move", meta = (AllowPrivateAccess = true))
+	uint8 IsEnabledCameraMove:1 = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Camera|Fov", meta = (AllowPrivateAccess = true))
+	uint8 IsEnabledCameraFov:1 = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	uint8 IsRollback:1 = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Camera|Move", meta = (AllowPrivateAccess = true
+		, ClampMin = 0, EditCondition = "IsEnabledCameraMove"))
 	float CameraMoveSpeed = 0;
 	
-	UPROPERTY(EditAnywhere, Category = "Option", meta = (AllowPrivateAccess = true, ClampMax = 180))
-	uint8 CameraFovSpeed = 0;
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Camera|Fov", meta = (AllowPrivateAccess = true
+		, ClampMin = 0, ClampMax = 180, EditCondition = "IsEnabledCameraFov"))
+	float CameraFovSpeed = 0;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UTimelineComponent> CameraMoveTimeline;
 	
-	UPROPERTY(EditAnywhere, Category="Option", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category="Option|Camera|Move", meta = (AllowPrivateAccess = true, EditCondition = "IsEnabledCameraMove"))
 	TObjectPtr<UCurveVector> CameraMoveTimingCurve;
 	
 	FOnTimelineVector CameraMoveCallback;
@@ -43,4 +54,20 @@ private:
 	
 	UFUNCTION()
 	void OnCameraMoveFinish();
+	
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<UTimelineComponent> FovMoveTimeline;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Option|Camera|Fov", meta = (AllowPrivateAccess = true, EditCondition = "IsEnabledCameraFov"))
+	TObjectPtr<UCurveFloat> FovMoveTimingCurve;
+	
+	FOnTimelineFloat FovMoveCallback;
+	
+	FOnTimelineEvent FovMoveFinish;
+
+	UFUNCTION()
+	void OnFovMoveCallback(float Output);
+	
+	UFUNCTION()
+	void OnFovMoveFinish();
 };
