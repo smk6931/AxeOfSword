@@ -3,11 +3,13 @@
 
 #include "BossMk.h"
 
+#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/KismetMathLibrary.h"
 
+class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
@@ -32,11 +34,7 @@ ABossMk::ABossMk()
 		GetMesh()->SetAnimInstanceClass(TempABP.Class);
 	}
 
-	ConstructorHelpers::FClassFinder<UUserWidget> TempBossHpBar(TEXT("'/Game/Boss_MK/UI/WBP_BossHp.WBP_BossHp_c'"));
-	if (TempBossHpBar.Succeeded())
-	{
-		BossWidgetFactory = TempBossHpBar.Class;
-	}
+	Fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("Fsm"));
 }
 
 // Called when the game starts or when spawned
@@ -55,47 +53,15 @@ void ABossMk::BeginPlay()
 		SpawnedSword->AttachToComponent(GetMesh(), AttachmentRules, TEXT("hand_rSocket"));
 		// 부착 성공 여부를 디버그 메시지로 출력
 	}
-	APlayerController* PlayerController = GetWorld()->GetFirstPlayerController();
-    if (BossWidgetFactory)
-    {
-    	if (PlayerController)
-    	{
-    		BossHpBar = CreateWidget<UUserWidget>(PlayerController, BossWidgetFactory);
-    		BossHpBar->AddToViewport();
-    	}
-    }
 }
 
 // Called every frame
 void ABossMk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	Direction = GetWorld()->GetFirstPlayerController()->GetPawn()->GetActorLocation() - this->GetActorLocation();
-	Direction.Normalize();
-	
-	SetActorLocation(GetActorLocation() + DeltaTime * Speed * Direction);
-
-	FRotator rot = UKismetMathLibrary::MakeRotFromXZ(Direction,GetActorUpVector());
-	SetActorRotation(rot);
-
-	FString BossStatusText = bIsAlive ? TEXT("Boss is Alive") : TEXT("Boss is Dead");
-	
-	if (GEngine)
-	{
-		FString Status = bIsAlive ? TEXT("Alive") : TEXT("Dead");
-		GEngine->AddOnScreenDebugMessage(1, 0.0f, FColor::Green,
-		FString::Printf(TEXT("Boss Status: %s\n "
-					   "BossHP: %d"), *Status, Hp));
-	}
 }
 // Called to bind functionality to input
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
-void ABossMk::updateHealthStatus(float DamageAmount)
-{
-}
-

@@ -39,10 +39,20 @@ public:
 	UPROPERTY(EditAnywhere, Category=FSM)
 	float IdleDelayTime = 2;
 	float CurrentTime = 0;
+	float AttackRange = 150;
 
-	void IdelState();
+	void IdleState();
 	void MoveState();
 	void AttackState();
+	void RgAttackState();
 	void DamageState();
-	void Die();
+	void DieState();
+
+
+public:
+	UPROPERTY(EditAnywhere, Category = FSM)
+	class ABossMk* Boss;
+	
+	UPROPERTY(EditAnywhere, Category = FSM)
+	class APlayerCharacter* Player;
 };

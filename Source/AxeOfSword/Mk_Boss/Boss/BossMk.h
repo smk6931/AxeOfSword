@@ -38,18 +38,16 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	FVector Direction;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	TSubclassOf<class UUserWidget> BossWidgetFactory;
-
-	UPROPERTY()
-	class UUserWidget* BossHpBar;
-
 public:
     UPROPERTY()
 	bool bIsAlive;
 
+    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Boss")
+	float BossHp = 1.0f;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	int Hp;
-	
-	void updateHealthStatus(float DamageAmount);
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
+	class UEnemyFSM* Fsm;
 };
