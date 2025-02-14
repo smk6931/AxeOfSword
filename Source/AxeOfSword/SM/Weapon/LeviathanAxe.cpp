@@ -38,12 +38,12 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 
 	// 데미지에 따른 공격력 수치 조정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),
-		FMath::Clamp(Damage / 250, 0.05, 0.2));
+		FMath::Clamp(Damage / 250, 0.05, 0.1));
 
 	// 주의사항: GlobalTimeDilation에 따라 Timeout의 시간도 늘어난다.
 	GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnHitStopEnd),
-		FMath::Clamp(Damage / 10000, 0.002, 0.1), false);
+		FMath::Clamp(Damage / 10000, 0.005, 0.5), false);
 }
 
 void ALeviathanAxe::OnHitStopEnd()
