@@ -20,6 +20,8 @@ public:
 	void SetNextCombo();
 	void ClearCombo();
 
+	void ToggleAttack(const bool IsAttack);
+
 protected:
 	virtual void BeginPlay() override;
 

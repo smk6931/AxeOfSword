@@ -5,6 +5,7 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+class UPlayerCameraComponent;
 class USpringArmComponent;
 class UCameraComponent;
 class UPlayerAttributeSet;
@@ -20,11 +21,14 @@ class AXEOFSWORD_API APlayerCharacter : public ABaseCharacter
 public:
 	APlayerCharacter();
 
+	GETTER(TObjectPtr<UPlayerCameraComponent>, CameraComponent)
+	GETTER(TObjectPtr<USpringArmComponent>, SpringArm)
+
 protected:
 	virtual void BeginPlay() override;
-
+	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
+	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input"
 		, meta = (AllowPrivateAccess = "true"))
@@ -40,7 +44,7 @@ private:
 	TObjectPtr<USpringArmComponent> SpringArm;
 	
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<UCameraComponent> CameraComponent;
+	TObjectPtr<UPlayerCameraComponent> CameraComponent;
 
 	UFUNCTION()
 	void MoveTo(const FInputActionValue& Value);

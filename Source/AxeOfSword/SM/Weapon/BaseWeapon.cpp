@@ -3,6 +3,8 @@
 
 #include "BaseWeapon.h"
 
+#include "Components/BoxComponent.h"
+
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -12,12 +14,12 @@ ABaseWeapon::ABaseWeapon()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
 
 	WeaponMesh->SetupAttachment(GetRootComponent());
+	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)
@@ -26,3 +28,17 @@ void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 }
 
+void ABaseWeapon::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,
+	AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
+{
+	if (AttackCollision)
+	{
+		AttackCollision->SetCollisionEnabled(IsEnable ?
+			ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
+	}
+}
