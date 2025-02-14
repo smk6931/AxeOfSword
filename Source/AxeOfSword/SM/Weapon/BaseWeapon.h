@@ -16,6 +16,7 @@ public:
 	ABaseWeapon();
 
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
+	virtual void UpdateWeaponAttackable(const bool IsEnable);
 
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
@@ -30,10 +31,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UBoxComponent> AttackCollision;
 
-private:
+	virtual void OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep,
+		const FHitResult& SweepResult);
+
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	int8 Damage;
-
+	
+	FTimerHandle EndHitStopTimerHandle;
+	
+private:
 	// TODO: 임시용으로 무기에 장착하지만 DataTable과 EquipComponent에서 무기를 감지하고
 	// 그에 맞는 애니메이션 리스트를 부과해주는 것이 맞다.
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))

@@ -4,27 +4,28 @@
 
 UAOSAbilitySystemComponent::UAOSAbilitySystemComponent()
 {
-	
+	ReplicationMode = EGameplayEffectReplicationMode::Mixed;
+	SetIsReplicatedByDefault(true);
 }
 
-void UAOSAbilitySystemComponent::Initialize()
+void UAOSAbilitySystemComponent::Initialize(const UAOSAbilitySystemInitializeData* InitialData)
 {
 	if (GetIsInitialize())
 	{
 		return;
 	}
-
+	
 	if (!InitialData->GetDefaultGameplayAbilities().IsEmpty())
 	{
 		for (auto Ability : InitialData->GetDefaultGameplayAbilities())
 		{
-			UBaseInputAbility* InputAbility = Ability->GetDefaultObject<UBaseInputAbility>();
+			const UBaseInputAbility* InputAbility = Ability->GetDefaultObject<UBaseInputAbility>();
 			GiveAbility(FGameplayAbilitySpec(
 				Ability, InputAbility->GetAbilityLevel()
 				, static_cast<uint8>(InputAbility->GetInputId()), this));
 		}
 	}
-
+	
 	if (!InitialData->GetDefaultGameplayTags().IsEmpty())
 	{
 		AddLooseGameplayTags(InitialData->GetDefaultGameplayTags());

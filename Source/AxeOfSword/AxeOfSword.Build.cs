@@ -9,7 +9,7 @@ public class AxeOfSword : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
-			"UMG", "GameplayAbilities", "GameplayTags", "GameplayTasks" });
+			"UMG", "GameplayAbilities", "GameplayTags", "GameplayTasks", "EngineCameras" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 	}

@@ -1,7 +1,9 @@
 ﻿#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
-#include "Camera/CameraComponent.h"
+#include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/Player/AOSPlayerState.h"
+#include "Component/PlayerCameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -30,15 +32,20 @@ APlayerCharacter::APlayerCharacter()
 	SpringArm->SetRelativeRotation({0, 90, 0});
 	SpringArm->bUsePawnControlRotation = true;
 	
-	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
+	CameraComponent = CreateDefaultSubobject<UPlayerCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(SpringArm);
-	CameraComponent->SetRelativeLocation({60, 0, 0});
-	CameraComponent->bUsePawnControlRotation = true;
 }
 
 void APlayerCharacter::BeginPlay()
 {
-	Super::BeginPlay();
+	if (AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>())
+	{
+		AbilitySystemComponent = Cast<UAOSAbilitySystemComponent>(PS->GetAbilitySystemComponent());
+		AbilitySystemComponent->InitAbilityActorInfo(PS, this);
+		AbilitySystemComponent->Initialize(InitialData);
+		Attribute = PS->GetAttribute();
+		Attribute->Initialize();
+	}
 	
 	if (const APlayerController* PC = Cast<APlayerController>(
 		GetController()))
@@ -50,6 +57,7 @@ void APlayerCharacter::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+	Super::BeginPlay();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
