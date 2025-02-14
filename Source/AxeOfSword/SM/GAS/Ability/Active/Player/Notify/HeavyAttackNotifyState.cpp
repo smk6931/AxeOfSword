@@ -4,10 +4,26 @@
 #include "HeavyAttackNotifyState.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 
+void UHeavyAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+	float TotalDuration, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+	
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->ToggleAttack(true);
+}
+
 void UHeavyAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
-	UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+                                        UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 	
