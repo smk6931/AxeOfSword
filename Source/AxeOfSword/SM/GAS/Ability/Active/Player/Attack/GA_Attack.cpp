@@ -44,27 +44,30 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	// 기존의 콤보 초기화 관련 Timer는 초기화 시켜준다.
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
-	
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
-	if (!IsValid(BaseCharacter))
-	{
-		return;
-	}
 
-	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	if (true)
+	{
+		ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(ActorInfo->AvatarActor);
+		if (!IsValid(BaseCharacter))
+		{
+			return;
+		}
+ 
+		UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	
-	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Attack, 1);
+		AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+			AOSGameplayTags::State_Attack, 1);
 	
-	// 최초 실행 시 첫번째 Montage를 실행시킨다. 
-	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
-		this, NAME_None,
-		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
-		FGameplayTagContainer()
-		);
-	AT_ComboAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnCancelAttack);
-	AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
-	AT_ComboAttackAnim->ReadyForActivation();
+		// 최초 실행 시 첫번째 Montage를 실행시킨다. 
+		AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
+			this, NAME_None,
+			EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
+			FGameplayTagContainer()
+			);
+		AT_ComboAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnCancelAttack);
+		AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
+		AT_ComboAttackAnim->ReadyForActivation();
+	}
 }
 
 void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
