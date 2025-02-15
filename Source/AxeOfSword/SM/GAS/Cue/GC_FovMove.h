@@ -1,18 +1,18 @@
-﻿#pragma once
+#pragma once
 
 #include "CoreMinimal.h"
 #include "GameplayCueNotify_Actor.h"
 #include "Components/TimelineComponent.h"
-#include "GC_CameraMove.generated.h"
+#include "GC_FovMove.generated.h"
 
 UCLASS()
-class AXEOFSWORD_API AGC_CameraMove : public AGameplayCueNotify_Actor
+class AXEOFSWORD_API AGC_FovMove : public AGameplayCueNotify_Actor
 {
 	GENERATED_BODY()
 
 public:
-	AGC_CameraMove();
-	
+	AGC_FovMove();
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -26,21 +26,23 @@ private:
 	uint8 IsRollback:1 = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true, ClampMin = 0))
-	float CameraMoveSpeed = 0;
+	float FovMoveSpeed = 0;
+
+	bool IsReverse;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UTimelineComponent> CameraMoveTimeline;
+	TObjectPtr<UTimelineComponent> FovMoveTimeline;
 	
-	UPROPERTY(EditDefaultsOnly, Category="Option", meta = (AllowPrivateAccess = true))
-	TObjectPtr<UCurveVector> CameraMoveTimingCurve;
+	UPROPERTY(EditDefaultsOnly, Category="Option|Camera|Fov", meta = (AllowPrivateAccess = true, EditCondition = "IsEnabledCameraFov"))
+	TObjectPtr<UCurveFloat> FovMoveTimingCurve;
 	
-	FOnTimelineVector CameraMoveCallback;
+	FOnTimelineFloat FovMoveCallback;
 	
-	FOnTimelineEvent CameraMoveFinish;
+	FOnTimelineEvent FovMoveFinish;
 
 	UFUNCTION()
-	void OnCameraMoveCallback(FVector Output);
+	void OnFovMoveCallback(float Output);
 	
 	UFUNCTION()
-	void OnCameraMoveFinish();
+	void OnFovMoveFinish();
 };

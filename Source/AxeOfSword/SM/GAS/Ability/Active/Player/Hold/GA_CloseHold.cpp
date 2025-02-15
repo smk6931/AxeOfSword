@@ -64,11 +64,11 @@ void UGA_CloseHold::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	FGameplayCueParameters Param;
-	Param.AbilityLevel = 1;
+	Param.AbilityLevel = 2;
 	Param.EffectCauser = GetAvatarActorFromActorInfo();
 	
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(
-		AOSGameplayTags::GameplayCue_Character_Camera_Fov_ZoomOut, Param);
+		AOSGameplayTags::GameplayCue_Character_Camera_Fov_ZoomIn, Param);
 
 	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 	
@@ -80,7 +80,6 @@ void UGA_CloseHold::InputReleased(const FGameplayAbilitySpecHandle Handle
 	, const FGameplayAbilityActivationInfo ActivationInfo)
 {
 	Super::InputReleased(Handle, ActorInfo, ActivationInfo);
-	UE_LOG(LogTemp, Display, TEXT("하이"))
 	
 	EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
 }

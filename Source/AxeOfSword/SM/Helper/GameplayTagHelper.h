@@ -41,5 +41,4 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_HeavyAttack)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomIn)
-	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomOut)
 }

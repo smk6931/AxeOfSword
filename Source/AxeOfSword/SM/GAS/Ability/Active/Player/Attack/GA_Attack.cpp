@@ -26,6 +26,13 @@ void UGA_Attack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGam
 	FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
+
+	// 기본 상태가 아니라면 굳이 세팅할 필요가 없다.
+	if (!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Idle))
+	{
+		return;
+	}
+	
 	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
 	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Default, 1);
