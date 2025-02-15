@@ -8,6 +8,8 @@ ALeviathanAxe::ALeviathanAxe()
 	AttackCollision = CreateDefaultSubobject<UBoxComponent>("Attack Collision");
 	AttackCollision->SetupAttachment(WeaponMesh);
 	AttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void ALeviathanAxe::BeginPlay()
@@ -17,8 +19,35 @@ void ALeviathanAxe::BeginPlay()
 		this, &ThisClass::OnOverlapWeaponCollision);
 }
 
+void ALeviathanAxe::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (IsThrow)
+	{
+		FRotator NewRotator = FRotator::ZeroRotator;
+		NewRotator.Pitch += ThrowRotatePower * DeltaSeconds;
+		
+		const FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
+	
+		AddActorWorldOffset(ForwardVector);
+		AddActorWorldRotation(NewRotator);
+	}
+}
+
+void ALeviathanAxe::Throw(const FThrowParameter& ThrowParameter)
+{
+	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	SetActorRotation(ThrowParameter.ThrowRotate);
+	IsThrow = true;
+
+	ThrowMovePower = ThrowParameter.ThrowMovePower;
+	ThrowRotatePower = ThrowParameter.ThrowRotatePower;
+	ThrowRotate = ThrowParameter.ThrowRotate;
+}
+
 void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+											UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	Super::OnOverlapWeaponCollision(OverlappedComponent, OtherActor,
 		OtherComp, OtherBodyIndex, bFromSweep,SweepResult);

@@ -6,10 +6,11 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
+#include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 
 bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
-	FGameplayTagContainer* OptionalRelevantTags) const
+									const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
+									FGameplayTagContainer* OptionalRelevantTags) const
 {
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 	{
