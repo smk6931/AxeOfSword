@@ -44,6 +44,8 @@ void ABossMk::BeginPlay()
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
 	// Sword를 스폰함
 	ASword* SpawnedSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
+	
+	SpawnedSword = SetActorEnableCollision()
     
 	if (SpawnedSword)
 	{

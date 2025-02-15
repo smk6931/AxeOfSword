@@ -5,8 +5,6 @@
 
 #include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "CharacterMovementComponent.generated.h"
-#include "Kismet/KismetMathLibrary.h"
 
 
 // Sets default values for this component's properties
