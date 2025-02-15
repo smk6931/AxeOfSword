@@ -15,12 +15,11 @@ ABossMk::ABossMk()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	Hp = 150;
-	bIsAlive = false;
 
 	PrimaryActorTick.bCanEverTick = true;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
-		TEXT("'/Game/Characters/Mannequins/Meshes/SKM_Manny.SKM_Manny'"));
+		TEXT("'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
 	if (TempBossMesh.Object)
 	{
 		GetMesh()->SetSkeletalMesh(TempBossMesh.Object);
@@ -28,7 +27,7 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 	
-	ConstructorHelpers::FClassFinder<UAnimInstance> TempABP(TEXT("'/Game/Boss_MK/Animation/Abp_Boss.ABP_Boss_c'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> TempABP(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
 	if (TempABP.Succeeded())
 	{
 		GetMesh()->SetAnimInstanceClass(TempABP.Class);

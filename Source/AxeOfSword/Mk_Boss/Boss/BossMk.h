@@ -39,9 +39,6 @@ public:
 	FVector Direction;
 
 public:
-    UPROPERTY()
-	bool bIsAlive;
-
     UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Boss")
 	float BossHp = 1.0f;
 	
