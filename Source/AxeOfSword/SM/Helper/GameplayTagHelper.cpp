@@ -47,6 +47,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack, "Ability.Attack", "공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Default, "Ability.Attack.Default", "일반 공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Heavy, "Ability.Attack.Heavy", "강공격 Ability 실행 상태를 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Throw, "Ability.Attack.Throw", "강공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_CloseHold, "Ability.CloseHold", "무기 조준 스킬을 사용하고 있음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State, "State", "State 관련 최상위 트리 태그");

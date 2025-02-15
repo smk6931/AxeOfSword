@@ -2,7 +2,6 @@
 
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
-#include "GameFramework/SpringArmComponent.h"
 
 
 AGC_FovMove::AGC_FovMove()
@@ -47,8 +46,6 @@ void AGC_FovMove::OnFovMoveCallback(float Output)
 	{
 		return;
 	}
-
-	UE_LOG(LogTemp, Display, TEXT("하이: %f"), Output * (IsReverse ? -1 : 1));
 	
 	UPlayerCameraComponent* PlayerCameraComponent = Player->GetCameraComponent();
 

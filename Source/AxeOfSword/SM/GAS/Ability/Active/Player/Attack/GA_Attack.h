@@ -34,12 +34,24 @@ protected:
 
 private:
 	bool IsHoldEnd = false;
+
+	bool IsHoldToThrow = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	float ComboEndDelayTime = 3.f;
 
 	UPROPERTY()
 	UPlayMontageWithEvent* AT_ComboAttackAnim;
+	UPROPERTY()
+	UPlayMontageWithEvent* AT_HeavyAttackAnim;
+	UPROPERTY()
+	UPlayMontageWithEvent* AT_ThrowAttackAnim;
+
+	void DoComboAttack();
+	
+	void DoHeavyAttack();
+	
+	void DoThrowAttack();
 
 	UFUNCTION()
 	void OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData);
@@ -49,6 +61,9 @@ private:
 	
 	UFUNCTION()
 	void OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
+	UFUNCTION()
+	void OnEndThrowAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 
 	FTimerHandle EndDefaultAttackHandle;
 
