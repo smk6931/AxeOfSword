@@ -16,11 +16,15 @@ namespace AOSGameplayTags
 
 	void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated)
 	{
+		// Count가 -1 즉 기본 값으로 설정되어 있다면, 전부 없애기 위해 0으로 설정하고
+		// 그게 아니라면 현재 갯수에서 N개만 빼게 설정한다.
+		const int32 NewCount = Count == -1 ? 0 : ASC->GetGameplayTagCount(Tag) - Count;
+		
 		if (bIsReplicated)
 		{
-			ASC->SetReplicatedLooseGameplayTagCount(Tag, Count);
+			ASC->SetReplicatedLooseGameplayTagCount(Tag, NewCount);
 		}
-		ASC->SetLooseGameplayTagCount(Tag, Count);
+		ASC->SetLooseGameplayTagCount(Tag, NewCount);
 	}
 
 	void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated)
@@ -43,12 +47,15 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack, "Ability.Attack", "공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Default, "Ability.Attack.Default", "일반 공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Heavy, "Ability.Attack.Heavy", "강공격 Ability 실행 상태를 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_CloseHold, "Ability.CloseHold", "무기 조준 스킬을 사용하고 있음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State, "State", "State 관련 최상위 트리 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Idle, "State.Idle", "현재 아무 상태도 아닌 기본 상태임을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Attack, "State.Attack", "현재 공격 상태가 진행 중 임을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status, "Status", "Status 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Combat, "Status.Combat", "현재 전투 모드로 들어갔음을 의미하는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_CloseHold, "Status.CloseHold", "현재 조준하고 있음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
