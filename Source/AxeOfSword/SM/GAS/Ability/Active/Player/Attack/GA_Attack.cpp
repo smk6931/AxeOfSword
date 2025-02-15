@@ -3,6 +3,7 @@
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
@@ -55,8 +56,8 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
  
 		UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	
-		AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-			AOSGameplayTags::State_Attack, 1);
+		AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+			AOSGameplayTags::State_Idle, AOSGameplayTags::State_Attack);
 	
 		// 최초 실행 시 첫번째 Montage를 실행시킨다. 
 		AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
@@ -105,8 +106,7 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 		AOSGameplayTags::Ability_Attack_Default);
 		AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Ability_Attack_Heavy, 1);
-		AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-			AOSGameplayTags::State_Attack, 1);
+		UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 		
 		UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 		AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
@@ -162,8 +162,7 @@ void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventD
 
 void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::State_Attack);
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 	// 우선적으로 홀딩이 종료된 상태이면 애니메이션 끝난 뒤 자연스럽게 Ability도 종료시킨다.
 	if (IsHoldEnd)
 	{
@@ -180,8 +179,7 @@ void UGA_Attack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData Even
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Heavy);
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::State_Attack);
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 }
 
 void UGA_Attack::OnEndCombo()

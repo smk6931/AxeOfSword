@@ -3,7 +3,7 @@
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
-#include "AxeOfSword/SM/Helper/FStateHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 
 bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -15,9 +15,21 @@ bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		return false;
 	}
 
-	return FStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo());
+	return UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo());
 }
 
+void UGA_CloseHold::PreActivate(const FGameplayAbilitySpecHandle Handle
+	, const FGameplayAbilityActorInfo* ActorInfo
+	, const FGameplayAbilityActivationInfo ActivationInfo
+	, FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate
+	, const FGameplayEventData* TriggerEventData)
+{
+	Super::PreActivate(Handle, ActorInfo, ActivationInfo
+	, OnGameplayAbilityEndedDelegate, TriggerEventData);
+
+	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Idle,AOSGameplayTags::State_CloseHold);
+}
 
 void UGA_CloseHold::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 									, const FGameplayAbilityActorInfo* ActorInfo
@@ -31,7 +43,7 @@ void UGA_CloseHold::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	{
 		return;
 	}
-
+	
 	if (!IsValid(AT_AttackZoomAnim))
 	{
 		const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
@@ -57,6 +69,8 @@ void UGA_CloseHold::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(
 		AOSGameplayTags::GameplayCue_Character_Camera_Fov_ZoomOut, Param);
+
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
