@@ -9,4 +9,5 @@ enum class EAbilityInputId : uint8
 {
 	Undefined,
 	Attack,
+	CloseHold,
 };

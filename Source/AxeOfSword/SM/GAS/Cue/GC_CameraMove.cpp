@@ -44,7 +44,15 @@ bool AGC_CameraMove::OnExecute_Implementation(AActor* MyTarget, const FGameplayC
 
 	Target = MyTarget;
 
-	CameraMoveTimeline->PlayFromStart();
+	if (IsEnabledCameraMove)
+	{
+		CameraMoveTimeline->PlayFromStart();
+	}
+	
+	if (IsEnabledCameraFov)
+	{
+		FovMoveTimeline->PlayFromStart();
+	}
 	
 	return false;
 }

@@ -17,6 +17,8 @@ public:
 
 	GETTER(uint8, ComboIndex)
 	GETTER(TObjectPtr<ABaseWeapon>, MainWeapon)
+	GETTER(TObjectPtr<UAnimMontage>, ZoomMontage)
+	
 	void SetNextCombo();
 	void ClearCombo();
 
@@ -29,10 +31,10 @@ private:
 	// TODO: 웬만해서는 처음에 장비하는 시스템이지만 확장성을 위해 처리함
 	bool IsFirstEquip = true;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
 	TSubclassOf<ABaseWeapon> MainWeaponClass;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
 	TSubclassOf<ABaseWeapon> SubWeaponClass;
 	
 	UPROPERTY()
@@ -40,6 +42,9 @@ private:
 
 	UPROPERTY()
 	TObjectPtr<ABaseWeapon> SubWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Animation", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> ZoomMontage;
 
 	uint8 ComboIndex = 0;
 };
