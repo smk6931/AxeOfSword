@@ -22,6 +22,7 @@ ASword::ASword()
 		SwordMesh->SetStaticMesh(tempSword.Object);
 		SwordMesh->SetRelativeLocation(FVector(10,-15,-140));
 		SwordMesh->SetRelativeScale3D(FVector(0.4,0.4,0.4));
+		SwordMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 }
 

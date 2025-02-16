@@ -6,8 +6,7 @@
 #include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Blueprint/UserWidget.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -44,9 +43,12 @@ void ABossMk::BeginPlay()
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
 	// Sword를 스폰함
 	ASword* SpawnedSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
-	
-	SpawnedSword = SetActorEnableCollision()
-    
+	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(SpawnedSword->GetRootComponent());
+	if (SwordRoot != nullptr)
+	{
+		SwordRoot->IgnoreActorWhenMoving(this,true);
+	}
+	// SwordRoot->SetCollisionProfileName(TEXT("NoCollision"));  
 	if (SpawnedSword)
 	{
 		// Sword를 손 소켓에 부착함
