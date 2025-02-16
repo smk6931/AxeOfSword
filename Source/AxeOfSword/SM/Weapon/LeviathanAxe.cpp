@@ -1,14 +1,9 @@
 ﻿#include "LeviathanAxe.h"
 
-#include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 ALeviathanAxe::ALeviathanAxe()
 {
-	AttackCollision = CreateDefaultSubobject<UBoxComponent>("Attack Collision");
-	AttackCollision->SetupAttachment(WeaponMesh);
-	AttackCollision->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-
 	TurnBackTimeline = CreateDefaultSubobject<UTimelineComponent>("TurnBack Timeline");
 	
 	PrimaryActorTick.bCanEverTick = true;
@@ -17,7 +12,7 @@ ALeviathanAxe::ALeviathanAxe()
 void ALeviathanAxe::BeginPlay()
 {
 	Super::BeginPlay();
-	AttackCollision->OnComponentBeginOverlap.AddDynamic(
+	WeaponMesh->OnComponentBeginOverlap.AddDynamic(
 		this, &ThisClass::OnOverlapWeaponCollision);
 	
 	TurnBackCallback.BindDynamic(this, &ThisClass::OnTurnBackCallback);
@@ -57,6 +52,7 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 void ALeviathanAxe::Throw()
 {
+	UpdateWeaponAttackable(true);
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	if (const APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
@@ -72,6 +68,11 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 	if (AxeStatus == ELeviathanAxeStatus::Return)
 	{
 		return;
+	}
+	
+	if (const APawn* Pawn = Cast<APawn>(NewOwner))
+	{
+		ThrowRotate = Pawn->GetController()->GetControlRotation();
 	}
 	
 	SetOwner(NewOwner);
@@ -94,19 +95,32 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 
 	if (AxeStatus == ELeviathanAxeStatus::Throw)
 	{
-		OnHitThrown(OtherActor);
+		OnHitThrown(SweepResult);
 		return;
 	}
 	
 	OnHitDamage(OtherActor);
 }
 
-void ALeviathanAxe::OnHitThrown(AActor* TargetActor)
+void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
 	AxeStatus = ELeviathanAxeStatus::Idle;
-	AttachToActor(TargetActor, FAttachmentTransformRules::KeepWorldTransform);
-	SetOwner(TargetActor);
-	SetActorRelativeRotation({-70,GetActorRotation().Yaw,GetActorRotation().Roll});
+	UpdateWeaponAttackable(false);
+	SetOwner(HitResult.GetActor());
+	AttachToActor(HitResult.GetActor(), FAttachmentTransformRules::KeepWorldTransform);
+	
+	// 위치 초기화 (액터는 던진 방향을 기점으로 Rotate를 설정)
+	SetActorRotation(ThrowRotate);
+	FRotator NewRotator = HitResult.GetActor()->GetActorUpVector().Rotation();
+	NewRotator.Yaw = 1;
+	NewRotator.Roll = 1;
+	NewRotator.Pitch -= 120;
+	WeaponMesh->SetRelativeLocation(FVector(-45, 0, -22));
+	WeaponMesh->SetRelativeRotation(NewRotator);
+
+	const FVector AdjustLocation = GetActorLocation() - WeaponMesh->GetRelativeLocation();
+
+	SetActorLocation(AdjustLocation);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
@@ -132,17 +146,13 @@ void ALeviathanAxe::OnHitStopEnd()
 
 void ALeviathanAxe::OnTurnBackCallback(float Output)
 {
-	if (const APawn* Pawn = Cast<APawn>(GetOwner()))
-	{
-		SetActorRotation(Pawn->GetController()->GetControlRotation());
-	}
-	const FRotator MoveToRotator = GetActorRotation() * -1;
-	const FVector ResultLocation = GetActorRightVector() * Output
-			+ FRotationMatrix(MoveToRotator).GetUnitAxis(EAxis::X);
+	const FRotator MoveToRotator = ThrowRotate;
+	const FVector ResultLocation = GetActorRightVector() * Output * 3
+			+ MoveToRotator.Vector();
 	
 	UE_LOG(LogTemp, Display, TEXT("gkdl: %s"), *ResultLocation.ToString())
 	
-	AddActorLocalOffset(ResultLocation);
+	SetActorLocation(GetActorLocation() + ResultLocation);
 }
 
 void ALeviathanAxe::OnTurnBackFinish()

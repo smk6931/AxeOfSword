@@ -63,7 +63,7 @@ private:
 	
 	FOnTimelineEvent TurnBackFinish;
 
-	void OnHitThrown(AActor* TargetActor);
+	void OnHitThrown(const FHitResult& HitResult);
 	void OnHitDamage(AActor* TargetActor);
 	
 	UFUNCTION()
