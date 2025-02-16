@@ -8,8 +8,8 @@
 
 ABaseWeapon::ABaseWeapon()
 {
-	RootComponent = CreateDefaultSubobject<USceneComponent>("Root");
-	SetRootComponent(RootComponent);
+	Root = CreateDefaultSubobject<USceneComponent>("Root");
+	SetRootComponent(Root);
 
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
 

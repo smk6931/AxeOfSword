@@ -21,11 +21,6 @@ void UThrowAttackNotify::Notify(USkeletalMeshComponent* MeshComp
 	{
 		return;
 	}
-
-	FThrowParameter ThrowParameter;
-	ThrowParameter.ThrowRotate = BaseCharacter->GetController()->GetControlRotation();
-	ThrowParameter.ThrowMovePower = 1000;
-	ThrowParameter.ThrowRotatePower = 1440;
 	
-	Axe->Throw(ThrowParameter);
+	Axe->Throw();
 }
