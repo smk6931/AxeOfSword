@@ -60,6 +60,7 @@ void ALeviathanAxe::Throw()
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	if (const APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
+		ThrowRotate = Pawn->GetController()->GetControlRotation();
 		SetActorRotation(Pawn->GetController()->GetControlRotation());
 	}
 	

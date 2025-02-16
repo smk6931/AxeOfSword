@@ -37,7 +37,7 @@ private:
 	ELeviathanAxeStatus AxeStatus = ELeviathanAxeStatus::Idle;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan", meta = (AllowPrivateAccess = true))
-	float GravityScale = 490.f;
+	float GravityScale = 720.f;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
 		meta = (AllowPrivateAccess = true))
