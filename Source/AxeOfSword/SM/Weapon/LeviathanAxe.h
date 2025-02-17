@@ -63,9 +63,9 @@ private:
 	TObjectPtr<UTimelineComponent> TurnBackTimeline;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Option|Leviathan", meta = (AllowPrivateAccess = true, EditCondition = "IsEnabledCameraFov"))
-	TObjectPtr<UCurveFloat> TurnBackTimingCurve;
+	TObjectPtr<UCurveVector> TurnBackTimingCurve;
 	
-	FOnTimelineFloat TurnBackCallback;
+	FOnTimelineVector TurnBackCallback;
 	
 	FOnTimelineEvent TurnBackFinish;
 
@@ -76,7 +76,7 @@ private:
 	void OnHitStopEnd();
 
 	UFUNCTION()
-	void OnTurnBackCallback(float Output);
+	void OnTurnBackCallback(FVector Output);
 	
 	UFUNCTION()
 	void OnTurnBackFinish();

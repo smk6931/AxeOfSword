@@ -26,7 +26,7 @@ void ALeviathanAxe::BeginPlay()
 	TurnBackFinish.BindDynamic(this, &ThisClass::OnTurnBackFinish);
 	
 	TurnBackTimeline->SetLooping(false);
-	TurnBackTimeline->AddInterpFloat(TurnBackTimingCurve, TurnBackCallback);
+	TurnBackTimeline->AddInterpVector(TurnBackTimingCurve, TurnBackCallback);
 	TurnBackTimeline->SetTimelineFinishedFunc(TurnBackFinish);
 }
 
@@ -110,8 +110,7 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 	// TODO: 원래는 Timeline or Tick 종료 시 실행되는 로직
 	SetAxeStatus(ELeviathanAxeStatus::Idle);
 	
-	TurnBackStartLocation = GetActorLocation();
-	// TurnBackTimeline->PlayFromStart();
+	TurnBackTimeline->PlayFromStart();
 }
 
 void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -178,15 +177,11 @@ void ALeviathanAxe::OnHitStopEnd()
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
 }
 
-void ALeviathanAxe::OnTurnBackCallback(float Output)
+void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 {
-	const FRotator MoveToRotator = ThrowRotate;
-	const FVector ResultLocation = GetActorRightVector() * Output * 3
-			+ MoveToRotator.Vector();
-	
-	UE_LOG(LogTemp, Display, TEXT("gkdl: %s"), *ResultLocation.ToString())
-	
-	SetActorLocation(GetActorLocation() + ResultLocation);
+	FVector NewLocation = GetActorLocation();
+	NewLocation.Y += Output.Y * 30;
+	SetActorLocation(NewLocation);
 }
 
 void ALeviathanAxe::OnTurnBackFinish()
