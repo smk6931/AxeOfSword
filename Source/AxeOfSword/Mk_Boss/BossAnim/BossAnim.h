@@ -18,4 +18,19 @@ class AXEOFSWORD_API UBossAnim : public UAnimInstance
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
+	bool bJumpAttack = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
+	bool bRgAttack = false;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
+	bool bTrippleAttack = false;
+
+
+	UFUNCTION()
+	void AnimNotify_JumpAttackEnd();
+	UFUNCTION()
+	void AnimNotify_RgAttackEnd();
+	UFUNCTION()
+	void AnimNotify_TrippleAttackEnd();
 };

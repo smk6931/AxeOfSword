@@ -4,6 +4,7 @@
 #include "EnemyFSM.h"
 
 #include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
+#include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 
 
@@ -25,6 +26,8 @@ void UEnemyFSM::BeginPlay()
 
 	Boss = Cast<ABossMk>(GetOwner());
 	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
+
+	Anim = Cast<UBossAnim>(Boss->GetMesh()->GetAnimInstance());
 }
 
 
@@ -36,12 +39,12 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// 현재 상태값 출력
 	if (GEngine)
 	{
-		float BossHp = Boss->Hp;
-		FString stateStr = UEnum::GetValueAsString(mState); 
+		int32 BossHp = Boss->Hp;
+		FString stateStr = UEnum::GetValueAsString(mState);
 		GEngine->AddOnScreenDebugMessage(1, 0.0f, 
 			FColor::Green,FString::Printf(
 				TEXT("Boss Status: %s\n"
-				"HP: %f"), *stateStr, BossHp));
+				"HP: %d"), *stateStr, BossHp));
 	}
 
 	
@@ -53,6 +56,17 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EEnemyState::Move:
 		MoveState();
 		break;
+		
+	case EEnemyState::JumpAttack:
+		JumpAttack();
+		break;
+	case EEnemyState::RgAttack:
+		MoveState();
+		break;
+	case EEnemyState::DashAttack:
+		MoveState();
+		break;
+		
 	case EEnemyState::Damage:
 		DamageState();
 		break;
@@ -74,6 +88,7 @@ void UEnemyFSM::IdleState()
 	{
 		mState = EEnemyState::Move;
 		CurrentTime = 0;
+		Anim->animState=mState;
 	}
 }
 
@@ -84,36 +99,51 @@ void UEnemyFSM::MoveState()
 	Direction.Normalize();
 
 	Boss->AddMovementInput(Direction);
+	Boss->SetActorRotation(Direction.Rotation());
 	
 	if (AttackRange>Distance)
 	{
 		mState = EEnemyState::Attack;
+		Anim->animState = mState;
 	}
+	
 }
 
 void UEnemyFSM::AttackState()
 {
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	float Distance = FVector::Dist(Boss->GetActorLocation(), Player->GetActorLocation());
+	
 	if (AttackRange < Distance)
 	{
 		mState = EEnemyState::Move;
 	}
 	Direction.Normalize();
-	
-	Boss->SetActorRotation(Direction.Rotation());
 }
 
-void UEnemyFSM::RgAttackState()
+void UEnemyFSM::JumpAttack()
+{
+	
+}
+
+
+void UEnemyFSM::RgAttack()
+{
+	
+}
+
+void UEnemyFSM::DashAttack()
 {
 	
 }
 
 void UEnemyFSM::DamageState()
 {
+	
 }
 
 void UEnemyFSM::DieState()
 {
+	
 }
 

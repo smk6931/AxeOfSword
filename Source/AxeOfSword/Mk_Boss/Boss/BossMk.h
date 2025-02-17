@@ -40,15 +40,15 @@ public:
 	FVector Direction;
 
 public:
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Boss")
-	float BossHp = 1.0f;
-	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int Hp;
+	int32 Hp;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
 	class UEnemyFSM* Fsm;
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
+
+	void OnMyBeginOvelap(UPrimitiveComponent* OverlapCompnent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSeep, const FHitResult& SweepResult);
 };

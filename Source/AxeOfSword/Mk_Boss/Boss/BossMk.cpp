@@ -13,7 +13,7 @@ class UBossHpWidget;
 ABossMk::ABossMk()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	Hp = 150;
+	Hp = 100;
 
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -67,4 +67,10 @@ void ABossMk::Tick(float DeltaTime)
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ABossMk::OnMyBeginOvelap(UPrimitiveComponent* OverlapCompnent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSeep, const FHitResult& SweepResult)
+{
+	
 }
