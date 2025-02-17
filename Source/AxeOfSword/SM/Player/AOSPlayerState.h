@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerState.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayEffectTypes.h"
 #include "AxeOfSword/SM/Helper/UtilHelper.h"
 #include "AOSPlayerState.generated.h"
 

@@ -11,6 +11,7 @@ enum class EAbilityInputId : uint8
 	Attack,
 	CloseHold,
 	TurnBack,
+	Damaged,
 };
 
 UENUM()

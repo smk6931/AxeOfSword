@@ -121,6 +121,24 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	IsHoldToThrow = false;
+	if (bWasCancelled)
+	{
+		UE_LOG(LogTemp, Display, TEXT("공격 캔슬"))
+		if (AT_ComboAttackAnim)
+		{
+			AT_ComboAttackAnim->EndTask();
+		}
+		if (AT_HeavyAttackAnim)
+		{
+			AT_HeavyAttackAnim->EndTask();
+		}
+		if (AT_ThrowAttackAnim)
+		{
+			AT_ThrowAttackAnim->EndTask();
+		}
+	}
+	
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_Combat);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
