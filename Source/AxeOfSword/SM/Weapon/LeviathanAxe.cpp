@@ -119,6 +119,7 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 
 void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
+	GravityStack = 0;
 	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
 	UpdateWeaponAttackable(false);
 	SetOwner(HitResult.GetActor());

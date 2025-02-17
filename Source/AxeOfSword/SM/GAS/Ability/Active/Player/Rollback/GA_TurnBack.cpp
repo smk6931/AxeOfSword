@@ -31,7 +31,6 @@ bool UGA_TurnBack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 	// 현재 도끼가 가만히 있는 상태여야 하며, 동시에 현재 Owner가
 	// BaseCharacter 가 아닌 즉 벽에 박혀있지 않는 상태인 경우 사용 가능하다.
-	UE_LOG(LogTemp, Display, TEXT("Test: %s"), *LeviathanAxe->GetOwner()->GetName())
 	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw ||
 		LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Thrown_Idle;
 }

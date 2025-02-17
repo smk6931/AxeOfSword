@@ -120,6 +120,7 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo
 	, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	IsHoldToThrow = false;
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_Combat);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
