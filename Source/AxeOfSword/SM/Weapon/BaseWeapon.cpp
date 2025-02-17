@@ -3,23 +3,24 @@
 
 #include "BaseWeapon.h"
 
-#include "Components/BoxComponent.h"
-
 
 ABaseWeapon::ABaseWeapon()
 {
-	RootComponent = CreateDefaultSubobject<USceneComponent>("Root");
-	SetRootComponent(RootComponent);
+	Root = CreateDefaultSubobject<USceneComponent>("Root");
+	SetRootComponent(Root);
 
+	GizmoPoint = CreateDefaultSubobject<USceneComponent>("Gizmo Point");
+	GizmoPoint->SetupAttachment(Root);
+	
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
-
-	WeaponMesh->SetupAttachment(GetRootComponent());
+	WeaponMesh->SetupAttachment(GizmoPoint);
 	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+	UpdateWeaponAttackable(false);
 }
 
 void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)
@@ -36,9 +37,9 @@ void ABaseWeapon::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedCompon
 
 void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
 {
-	if (AttackCollision)
+	if (WeaponMesh)
 	{
-		AttackCollision->SetCollisionEnabled(IsEnable ?
+		WeaponMesh->SetCollisionEnabled(IsEnable ?
 			ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
 	}
 }

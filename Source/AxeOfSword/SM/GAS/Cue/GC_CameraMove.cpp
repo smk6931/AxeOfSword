@@ -12,7 +12,7 @@ AGC_CameraMove::AGC_CameraMove()
 void AGC_CameraMove::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	CameraMoveCallback.BindDynamic(this, &ThisClass::OnCameraMoveCallback);
 	CameraMoveFinish.BindDynamic(this, &ThisClass::OnCameraMoveFinish);
 	
@@ -37,7 +37,7 @@ bool AGC_CameraMove::OnExecute_Implementation(AActor* MyTarget, const FGameplayC
 
 void AGC_CameraMove::OnCameraMoveCallback(FVector Output)
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(Target);
+	const APlayerCharacter* Player = Cast<APlayerCharacter>(Target);
 	if (!Player)
 	{
 		return;
@@ -51,11 +51,14 @@ void AGC_CameraMove::OnCameraMoveCallback(FVector Output)
  
 void AGC_CameraMove::OnCameraMoveFinish()
 {
-	APlayerCharacter* Player = Cast<APlayerCharacter>(Target);
+	const APlayerCharacter* Player = Cast<APlayerCharacter>(Target);
 	if (!Player)
 	{
 		return;
 	}
 	
-	Player->GetCameraComponent()->RollbackToFirstCameraOption();
+	if (IsRollback)
+	{
+		Player->GetCameraComponent()->RollbackToFirstCameraOption();
+	}
 }

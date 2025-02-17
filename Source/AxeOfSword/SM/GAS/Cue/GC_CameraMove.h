@@ -22,16 +22,16 @@ private:
 	UPROPERTY()
 	AActor* Target;
 	
-	UPROPERTY(EditAnywhere, Category = "Option", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	uint8 IsRollback:1 = false;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true, ClampMin = 0))
 	float CameraMoveSpeed = 0;
 	
-	UPROPERTY(EditAnywhere, Category = "Option", meta = (AllowPrivateAccess = true, ClampMax = 180))
-	uint8 CameraFovSpeed = 0;
-	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UTimelineComponent> CameraMoveTimeline;
 	
-	UPROPERTY(EditAnywhere, Category="Option", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category="Option", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UCurveVector> CameraMoveTimingCurve;
 	
 	FOnTimelineVector CameraMoveCallback;

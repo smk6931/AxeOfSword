@@ -8,7 +8,7 @@ class UAbilitySystemComponent;
 namespace AOSGameplayTags
 {
 	AXEOFSWORD_API void AddGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated = false);
-	AXEOFSWORD_API void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated = false);
+	AXEOFSWORD_API void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count = -1, const bool bIsReplicated = false);
 	AXEOFSWORD_API void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated = false);
 	AXEOFSWORD_API void SwapGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FromTag, const FGameplayTag ToTag
 		, const bool bIsReplicated = false);
@@ -18,10 +18,14 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Default)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Heavy)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Attack_Throw)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_CloseHold)
 
 	// 현재 플레이어의 상태 관련으로 단 하나만 들어갈 수 있는 Root 상태
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Idle)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_Attack)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(State_CloseHold)
 
 	// 플레이어 상태 값을 넣는 곳으로 여러개가 들어갈 수 있는 부가적인 상태
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status)
@@ -36,4 +40,6 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_Attack3)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_Attack4)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Move_HeavyAttack)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomIn)
 }
