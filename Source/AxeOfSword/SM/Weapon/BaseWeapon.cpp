@@ -9,8 +9,11 @@ ABaseWeapon::ABaseWeapon()
 	Root = CreateDefaultSubobject<USceneComponent>("Root");
 	SetRootComponent(Root);
 
+	GizmoPoint = CreateDefaultSubobject<USceneComponent>("Gizmo Point");
+	GizmoPoint->SetupAttachment(Root);
+	
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
-	WeaponMesh->SetupAttachment(GetRootComponent());
+	WeaponMesh->SetupAttachment(GizmoPoint);
 	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
 }
 

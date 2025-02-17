@@ -29,6 +29,9 @@ protected:
 	TObjectPtr<USceneComponent> Root;
 	
 	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USceneComponent> GizmoPoint;
+	
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UStaticMeshComponent> WeaponMesh;
 
 	virtual void OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,

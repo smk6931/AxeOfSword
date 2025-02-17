@@ -7,6 +7,12 @@ ALeviathanAxe::ALeviathanAxe()
 {
 	TurnBackTimeline = CreateDefaultSubobject<UTimelineComponent>("TurnBack Timeline");
 	
+	WeaponStart = CreateDefaultSubobject<USceneComponent>("Weapon Start");
+	WeaponStart->SetupAttachment(WeaponMesh);
+	
+	WeaponEnd = CreateDefaultSubobject<USceneComponent>("Weapon End");
+	WeaponEnd->SetupAttachment(WeaponMesh);
+	
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -32,15 +38,28 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 	{
 		case ELeviathanAxeStatus::Throw:
 		{
-			FRotator NewRotator = FRotator::ZeroRotator;
-			NewRotator.Pitch += ThrowRotatePower * DeltaSeconds;
+			const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
+			const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
+			const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaSeconds);
+			FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
+			NewMeshRotation.X = 0;
+			NewMeshRotation.Z = 0;
+			WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
 	
 			FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
 			GravityStack += DeltaSeconds * DeltaSeconds;
 			ForwardVector.Z -= GravityScale * GravityStack;
 
 			AddActorWorldOffset(ForwardVector);
-			WeaponMesh->AddRelativeRotation(NewRotator);
+
+			FHitResult HitResult;
+			TraceWeaponThrow(HitResult);
+
+			if (HitResult.bBlockingHit)
+			{
+				OnHitThrown(HitResult);
+			}
+				
 			break;
 		}
 		case ELeviathanAxeStatus::Return:
@@ -53,12 +72,11 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 void ALeviathanAxe::Throw()
 {
-	UpdateWeaponAttackable(true);
 	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	if (const APawn* Pawn = Cast<APawn>(GetOwner()))
 	{
 		ThrowRotate = Pawn->GetController()->GetControlRotation();
-		SetActorRotation(Pawn->GetController()->GetControlRotation());
+		WeaponMesh->SetRelativeRotation(Pawn->GetController()->GetControlRotation());
 	}
 	
 	AxeStatus = ELeviathanAxeStatus::Throw;
@@ -107,12 +125,6 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 	{
 		return;
 	}
-
-	if (AxeStatus == ELeviathanAxeStatus::Throw)
-	{
-		OnHitThrown(SweepResult);
-		return;
-	}
 	
 	OnHitDamage(OtherActor);
 }
@@ -121,22 +133,26 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
 	GravityStack = 0;
 	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
-	UpdateWeaponAttackable(false);
 	SetOwner(HitResult.GetActor());
 	AttachToActor(HitResult.GetActor(), FAttachmentTransformRules::KeepWorldTransform);
-	
-	// 위치 초기화 (액터는 던진 방향을 기점으로 Rotate를 설정)
-	SetActorRotation(ThrowRotate);
-	FRotator NewRotator = HitResult.GetActor()->GetActorUpVector().Rotation();
-	NewRotator.Yaw = 1;
-	NewRotator.Roll = 1;
-	NewRotator.Pitch -= 120;
-	WeaponMesh->SetRelativeLocation(FVector(-45, 0, -22));
-	WeaponMesh->SetRelativeRotation(NewRotator);
 
-	const FVector AdjustLocation = GetActorLocation() - WeaponMesh->GetRelativeLocation();
+	UE_LOG(LogTemp, Display, TEXT("Test: %s"), *HitResult.ImpactNormal.ToString());
+	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
+		GetActorRightVector()).Rotator();
+	SetActorRotation(ActorRotate);
+	SetActorLocation(HitResult.ImpactPoint);
 
-	SetActorLocation(AdjustLocation);
+	const FRotator Angle{25, 0, 0};
+	WeaponMesh->SetRelativeRotation(Angle);
+}
+
+void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
+{
+	TArray<AActor*> IgnoreActors;
+	IgnoreActors.Add(this);
+	UKismetSystemLibrary::LineTraceSingle(GetWorld(), WeaponStart->GetComponentLocation(),
+		WeaponEnd->GetComponentLocation(), TraceTypeQuery1, false, IgnoreActors,
+		EDrawDebugTrace::None, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
