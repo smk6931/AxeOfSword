@@ -13,6 +13,8 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCharacterMovement()->MaxWalkSpeed = Attribute->GetMovementSpeed();
 	
 	HealthChangedDelegateHandle = AbilitySystemComponent->
 		GetGameplayAttributeValueChangeDelegate(Attribute->GetHealthAttribute())
