@@ -61,10 +61,10 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		JumpAttack();
 		break;
 	case EEnemyState::RgAttack:
-		MoveState();
+		RgAttack();
 		break;
 	case EEnemyState::DashAttack:
-		MoveState();
+		DashAttack();
 		break;
 		
 	case EEnemyState::Damage:

@@ -25,12 +25,16 @@ public:
 	bool bRgAttack = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	bool bTrippleAttack = false;
-
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
+	bool bDash = false;
+	
+	
 	UFUNCTION()
 	void AnimNotify_JumpAttackEnd();
 	UFUNCTION()
 	void AnimNotify_RgAttackEnd();
 	UFUNCTION()
 	void AnimNotify_TrippleAttackEnd();
+	UFUNCTION()
+	void AnimNotify_DashEnd();
 };
