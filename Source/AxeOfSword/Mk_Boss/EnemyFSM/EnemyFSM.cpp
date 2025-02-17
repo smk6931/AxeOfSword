@@ -63,8 +63,11 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EEnemyState::RgAttack:
 		RgAttack();
 		break;
-	case EEnemyState::DashAttack:
-		DashAttack();
+	case EEnemyState::TrippleAttack:
+		TrippleAttack();
+		break;
+	case EEnemyState::Dash:
+		Dash();
 		break;
 		
 	case EEnemyState::Damage:
@@ -88,7 +91,7 @@ void UEnemyFSM::IdleState()
 	{
 		mState = EEnemyState::Move;
 		CurrentTime = 0;
-		Anim->animState=mState;
+		// Anim->animState=mState;
 	}
 }
 
@@ -97,16 +100,12 @@ void UEnemyFSM::MoveState()
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	float Distance = Direction.Size();
 	Direction.Normalize();
-
-	Boss->AddMovementInput(Direction);
 	Boss->SetActorRotation(Direction.Rotation());
-	
 	if (AttackRange>Distance)
 	{
 		mState = EEnemyState::Attack;
 		Anim->animState = mState;
 	}
-	
 }
 
 void UEnemyFSM::AttackState()
@@ -132,9 +131,15 @@ void UEnemyFSM::RgAttack()
 	
 }
 
-void UEnemyFSM::DashAttack()
+void UEnemyFSM::TrippleAttack()
 {
 	
+}
+
+void UEnemyFSM::Dash()
+{
+	FVector LaunchVector = Boss->GetActorRightVector() * 10000;
+	Boss->LaunchCharacter(LaunchVector, false, false);
 }
 
 void UEnemyFSM::DamageState()

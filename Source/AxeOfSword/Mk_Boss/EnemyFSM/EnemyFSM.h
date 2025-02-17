@@ -14,7 +14,8 @@ enum class EEnemyState : uint8
 	Attack,
 	JumpAttack,
 	RgAttack,
-	DashAttack,
+	TrippleAttack,
+	Dash,
 	Damage,
 	Die
 };
@@ -49,7 +50,8 @@ public:
 	
 	void JumpAttack();
 	void RgAttack();
-	void DashAttack();
+	void TrippleAttack();
+	void Dash();
 	
 	void AttackState();
 	void DamageState();

@@ -5,24 +5,28 @@
 
 void UBossAnim::AnimNotify_JumpAttackEnd()
 {
-	bRgAttack = true;
-	bJumpAttack = false;
+	// bRgAttack = true;
+	// bJumpAttack = false;
+	animState = EEnemyState::RgAttack;
 }
 
 void UBossAnim::AnimNotify_RgAttackEnd()
 {
-	bTrippleAttack = true;
-	bRgAttack = false;
+	// bTrippleAttack = true;
+	// bRgAttack = false;
+	animState = EEnemyState::TrippleAttack;
 }
 
 void UBossAnim::AnimNotify_TrippleAttackEnd()
 {
-	bDash = true;
-	bTrippleAttack = false;
+	// bDash = true;
+	// bTrippleAttack = false;
+	animState = EEnemyState::Dash;
 }
 
 void UBossAnim::AnimNotify_DashEnd()
 {
-	bJumpAttack = true;
-	bDash = false;
+	// bJumpAttack = true;
+	// bDash = false;
+	animState = EEnemyState::JumpAttack;
 }

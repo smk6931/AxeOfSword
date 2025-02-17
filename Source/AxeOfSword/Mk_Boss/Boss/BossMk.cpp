@@ -25,14 +25,12 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-	
-	ConstructorHelpers::FClassFinder<UAnimInstance> TempABP(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
-	if (TempABP.Succeeded())
-	{
-		GetMesh()->SetAnimInstanceClass(TempABP.Class);
-	}
 
-	Fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("Fsm"));
+	ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
+	if (TempAnim.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	}
 }
 
 // Called when the game starts or when spawned

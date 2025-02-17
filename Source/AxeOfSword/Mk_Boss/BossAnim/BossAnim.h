@@ -16,6 +16,9 @@ class AXEOFSWORD_API UBossAnim : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ABossMk* Boss;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
 
@@ -27,7 +30,6 @@ public:
 	bool bTrippleAttack = false;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	bool bDash = false;
-	
 	
 	UFUNCTION()
 	void AnimNotify_JumpAttackEnd();
