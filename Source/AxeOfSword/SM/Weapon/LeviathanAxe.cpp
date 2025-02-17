@@ -1,5 +1,6 @@
 ﻿#include "LeviathanAxe.h"
 
+#include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 ALeviathanAxe::ALeviathanAxe()
@@ -70,15 +71,29 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 		return;
 	}
 	
-	if (const APawn* Pawn = Cast<APawn>(NewOwner))
+	ABaseCharacter* Pawn = Cast<ABaseCharacter>(NewOwner);
+	if (!IsValid(Pawn))
 	{
-		ThrowRotate = Pawn->GetController()->GetControlRotation();
+		return;
 	}
 	
-	SetOwner(NewOwner);
+	ThrowRotate = Pawn->GetController()->GetControlRotation();
+	
 	SetAxeStatus(ELeviathanAxeStatus::Return);
+	SetOwner(NewOwner);
+	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
+
+	// Weapon 자체의 상대 좌표들을 전부 초기화해줌
+	SetActorRelativeLocation(FVector::ZeroVector);
+	WeaponMesh->SetRelativeLocation(FVector::ZeroVector);
+	WeaponMesh->SetRelativeRotation(FRotator::ZeroRotator);
+
+	// 임시 지만 위의 처리가 종료된다면 Idle로 상태 변환
+	// TODO: 원래는 Timeline or Tick 종료 시 실행되는 로직
+	SetAxeStatus(ELeviathanAxeStatus::Idle);
+	
 	TurnBackStartLocation = GetActorLocation();
-	TurnBackTimeline->PlayFromStart();
+	// TurnBackTimeline->PlayFromStart();
 }
 
 void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -104,7 +119,7 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 
 void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
-	AxeStatus = ELeviathanAxeStatus::Idle;
+	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
 	UpdateWeaponAttackable(false);
 	SetOwner(HitResult.GetActor());
 	AttachToActor(HitResult.GetActor(), FAttachmentTransformRules::KeepWorldTransform);

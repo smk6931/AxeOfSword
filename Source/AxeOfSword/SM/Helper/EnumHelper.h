@@ -19,4 +19,5 @@ enum class ELeviathanAxeStatus : uint8
 	Idle,
 	Throw,
 	Return,
+	Thrown_Idle,
 };
