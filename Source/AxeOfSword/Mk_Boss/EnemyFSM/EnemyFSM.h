@@ -12,6 +12,7 @@ enum class EEnemyState : uint8
 	idle UMETA(DisplayName = "Idlestate"),
 	Move,
 	Attack,
+	RgAttack,
 	Damage,
 	Die
 };

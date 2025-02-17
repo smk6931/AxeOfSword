@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
 #include "BossMk.generated.h"
 
 UCLASS()
@@ -47,4 +48,7 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
 	class UEnemyFSM* Fsm;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
+	EEnemyState animState;
 };
