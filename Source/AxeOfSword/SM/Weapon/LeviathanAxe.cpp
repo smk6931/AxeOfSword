@@ -8,10 +8,10 @@ ALeviathanAxe::ALeviathanAxe()
 	TurnBackTimeline = CreateDefaultSubobject<UTimelineComponent>("TurnBack Timeline");
 	
 	WeaponStart = CreateDefaultSubobject<USceneComponent>("Weapon Start");
-	WeaponStart->SetupAttachment(WeaponMesh);
+	WeaponStart->SetupAttachment(GetRootComponent());
 	
 	WeaponEnd = CreateDefaultSubobject<USceneComponent>("Weapon End");
-	WeaponEnd->SetupAttachment(WeaponMesh);
+	WeaponEnd->SetupAttachment(GetRootComponent());
 	
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -134,15 +134,17 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 	GravityStack = 0;
 	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
 	SetOwner(HitResult.GetActor());
-	AttachToActor(HitResult.GetActor(), FAttachmentTransformRules::KeepWorldTransform);
-
-	UE_LOG(LogTemp, Display, TEXT("Test: %s"), *HitResult.ImpactNormal.ToString());
+	
 	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
 		GetActorRightVector()).Rotator();
+	
 	SetActorRotation(ActorRotate);
 	SetActorLocation(HitResult.ImpactPoint);
 
-	const FRotator Angle{25, 0, 0};
+	const FVector Location{-40, 0, 30};
+	const FRotator Angle{-120, 0, 0};
+	
+	WeaponMesh->SetRelativeLocation(Location);
 	WeaponMesh->SetRelativeRotation(Angle);
 }
 
@@ -152,7 +154,7 @@ void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
 	IgnoreActors.Add(this);
 	UKismetSystemLibrary::LineTraceSingle(GetWorld(), WeaponStart->GetComponentLocation(),
 		WeaponEnd->GetComponentLocation(), TraceTypeQuery1, false, IgnoreActors,
-		EDrawDebugTrace::None, HitResult, true);
+		EDrawDebugTrace::ForDuration, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
