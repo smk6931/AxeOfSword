@@ -17,11 +17,10 @@ public:
 	ABossMk();
 
 protected:
-	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-		class AController* EventInstigator, AActor* DamageCauser) override;
+	                         class AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
 	// Called every frame
@@ -30,38 +29,40 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 300.f;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* BossMesh;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ASword> SwordFactory;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Direction;
 
 public:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Hp;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	class UEnemyFSM* Fsm;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
 	UFUNCTION(BlueprintCallable)
 	void DamageAnimation();
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAnimMontage* DamageMontage;
 
 	void DestroyBoss();
+	
+	void AttackPlayer(AActor* Target);
 
 private:
 	FTimerHandle TimerHandle;
+
+	float AttackDamage;
 };
-
-

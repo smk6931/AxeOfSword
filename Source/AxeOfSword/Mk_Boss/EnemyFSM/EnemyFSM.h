@@ -41,10 +41,11 @@ public:
 	EEnemyState mState = EEnemyState::idle;
 	
 	UPROPERTY(EditAnywhere, Category=FSM)
+	float AttackTime = 2;
 	float IdleDelayTime = 2;
 	float CurrentTime = 0;
 	float AttackRange = 150;
-
+	
 	void IdleState();
 	void MoveState();
 	

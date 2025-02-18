@@ -26,7 +26,6 @@ void UEnemyFSM::BeginPlay()
 
 	Boss = Cast<ABossMk>(GetOwner());
 	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
-
 	Anim = Cast<UBossAnim>(Boss->GetMesh()->GetAnimInstance());
 }
 
@@ -40,15 +39,12 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (GEngine)
 	{
 		int32 BossHp = Boss->Hp;
-		FString stateStr = UEnum::GetValueAsString(mState);
-		GEngine->AddOnScreenDebugMessage(1, 0.0f, 
-			FColor::Green,FString::Printf(
-				TEXT("Boss Status: %s\n"
-				"HP: %d"), *stateStr, BossHp));
+		// FString stateStr = UEnum::GetValueAsString(mState);
+		// GEngine->AddOnScreenDebugMessage(1, 0.0f, 
+		// 	FColor::Green,FString::Printf(
+		// 		TEXT("Boss Status: %s\n"
+		// 		"HP: %d"), *stateStr, BossHp));
 	}
-	
-	// FString stateStr = UEnum::GetValueAsString(mState);
-	// UE_LOG(LogTemp, Display, TEXT("텟읏틋: %s"), *stateStr)
 	
 	switch (mState)
 	{
@@ -157,9 +153,8 @@ void UEnemyFSM::TrippleAttack()
 
 void UEnemyFSM::Dash()
 {
-	FVector LaunchVector = Boss->GetActorRightVector() * 500;
-	Boss->LaunchCharacter(LaunchVector, false, false);
-	
+	// FVector LaunchVector = Boss->GetActorRightVector() * 1000;
+	// Boss->LaunchCharacter(LaunchVector, false, false);
 	mState = Anim->animState;
 }
 

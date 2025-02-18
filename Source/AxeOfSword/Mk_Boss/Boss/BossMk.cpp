@@ -2,6 +2,8 @@
 #include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "Engine/DamageEvents.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -26,6 +28,7 @@ ABossMk::ABossMk()
 	// {
 	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
 	// }
+	AttackDamage = 20.f;
 }
 
 // Called when the game starts or when spawned
@@ -81,6 +84,16 @@ void ABossMk::DestroyBoss()
 {
 	Destroy();
 }
+
+void ABossMk::AttackPlayer(AActor* Target)
+{
+	if (Target)
+	{
+		FDamageEvent DamageEvent;
+		Target->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
+	}
+}
+
 
 float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                           class AController* EventInstigator, AActor* DamageCauser)
