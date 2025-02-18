@@ -7,11 +7,8 @@ ALeviathanAxe::ALeviathanAxe()
 {
 	TurnBackTimeline = CreateDefaultSubobject<UTimelineComponent>("TurnBack Timeline");
 	
-	WeaponStart = CreateDefaultSubobject<USceneComponent>("Weapon Start");
-	WeaponStart->SetupAttachment(GetRootComponent());
-	
-	WeaponEnd = CreateDefaultSubobject<USceneComponent>("Weapon End");
-	WeaponEnd->SetupAttachment(GetRootComponent());
+	WeaponPivot = CreateDefaultSubobject<USceneComponent>("Weapon Pivot");
+	WeaponPivot->SetupAttachment(GetRootComponent());
 	
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -19,6 +16,9 @@ ALeviathanAxe::ALeviathanAxe()
 void ALeviathanAxe::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitialWeaponMeshTransform = WeaponMesh->GetRelativeTransform();
+	
 	WeaponMesh->OnComponentBeginOverlap.AddDynamic(
 		this, &ThisClass::OnOverlapWeaponCollision);
 	
@@ -94,14 +94,14 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 		return;
 	}
 	
-	ThrowRotate = Pawn->GetController()->GetControlRotation();
+	TurnBackStartLocation = GetActorLocation();
 	
 	SetAxeStatus(ELeviathanAxeStatus::Return);
 	SetOwner(NewOwner);
-	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	// Weapon 자체의 상대 좌표들을 전부 초기화해줌
 	SetActorRelativeLocation(FVector::ZeroVector);
+	SetActorRelativeRotation(FRotator::ZeroRotator);
 	WeaponMesh->SetRelativeLocation(FVector::ZeroVector);
 	WeaponMesh->SetRelativeRotation(FRotator::ZeroRotator);
 
@@ -131,7 +131,6 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
 	GravityStack = 0;
 	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
-	SetOwner(HitResult.GetActor());
 	
 	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
 		GetActorRightVector()).Rotator();
@@ -144,15 +143,17 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 	
 	WeaponMesh->SetRelativeLocation(Location);
 	WeaponMesh->SetRelativeRotation(Angle);
+	
+	SetOwner(HitResult.GetActor());
 }
 
 void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
 {
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(this);
-	UKismetSystemLibrary::LineTraceSingle(GetWorld(), WeaponStart->GetComponentLocation(),
-		WeaponEnd->GetComponentLocation(), TraceTypeQuery1, false, IgnoreActors,
-		EDrawDebugTrace::ForDuration, HitResult, true);
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), WeaponPivot->GetComponentLocation(),
+		WeaponPivot->GetComponentLocation(), 50, TraceTypeQuery1, false, IgnoreActors,
+		EDrawDebugTrace::None	, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
@@ -178,11 +179,33 @@ void ALeviathanAxe::OnHitStopEnd()
 
 void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 {
-	FVector NewLocation = GetActorLocation();
-	NewLocation.Y += Output.Y * 30;
-	SetActorLocation(NewLocation);
+	const FVector NewMoveToSet = FMath::Lerp(TurnBackStartLocation, GetOwner()->GetActorLocation(), Output.X);
+	SetActorLocation(NewMoveToSet);
+	AddActorLocalOffset({0, Output.Y * 200, 0});
+	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
+	
+	if (!IsValid(Pawn))
+	{
+		return;
+	}
+
+	const FVector MoveTo = Pawn->GetMesh()->GetSocketLocation("WeaponSocket");
+	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
+	{
+		WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
+		AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+		TurnBackTimeline->Stop();
+	}
 }
 
 void ALeviathanAxe::OnTurnBackFinish()
 {
+	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
+	if (!IsValid(Pawn))
+	{
+		return;
+	}
+	
+	WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
+	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 }

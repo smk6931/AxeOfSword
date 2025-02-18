@@ -34,10 +34,7 @@ protected:
 		const FHitResult& SweepResult) override;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<USceneComponent> WeaponStart;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<USceneComponent> WeaponEnd;
+	TObjectPtr<USceneComponent> WeaponPivot;
 
 private:
 	ELeviathanAxeStatus AxeStatus = ELeviathanAxeStatus::Idle;
@@ -58,6 +55,8 @@ private:
 	FRotator ThrowRotate;
 
 	FVector TurnBackStartLocation;
+
+	FTransform InitialWeaponMeshTransform;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UTimelineComponent> TurnBackTimeline;
