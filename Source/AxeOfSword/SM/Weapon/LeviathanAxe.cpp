@@ -1,6 +1,7 @@
 ﻿#include "LeviathanAxe.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -103,10 +104,6 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 	SetActorRelativeRotation(FRotator::ZeroRotator);
 	WeaponMesh->SetRelativeLocation(FVector::ZeroVector);
 	WeaponMesh->SetRelativeRotation(FRotator::ZeroRotator);
-
-	// 임시 지만 위의 처리가 종료된다면 Idle로 상태 변환
-	// TODO: 원래는 Timeline or Tick 종료 시 실행되는 로직
-	SetAxeStatus(ELeviathanAxeStatus::Idle);
 	
 	TurnBackTimeline->PlayFromStart();
 }
@@ -182,7 +179,7 @@ void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), NewMoveToSet);
 	SetActorLocation(NewMoveToSet);
 	AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
-	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
+	const ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
 	
 	if (!IsValid(Pawn))
 	{
@@ -193,7 +190,9 @@ void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 	
 	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
 	{
+		UStateHelper::ClearState(Pawn->GetAbilitySystemComponent());
 		WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
+		SetAxeStatus(ELeviathanAxeStatus::Idle);
 		AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 		TurnBackTimeline->Stop();
 	}
@@ -207,6 +206,8 @@ void ALeviathanAxe::OnTurnBackFinish()
 		return;
 	}
 	
+	UStateHelper::ClearState(Pawn->GetAbilitySystemComponent());
+	SetAxeStatus(ELeviathanAxeStatus::Idle);
 	WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
 	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
 }

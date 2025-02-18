@@ -13,6 +13,11 @@ protected:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
 		const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const override;
+
+	virtual void PreActivate(const FGameplayAbilitySpecHandle Handle,
+		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
+		FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate,
+		const FGameplayEventData* TriggerEventData = nullptr) override;
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
