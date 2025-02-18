@@ -48,7 +48,5 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
-
-	void OnMyBeginOvelap(UPrimitiveComponent* OverlapCompnent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSeep, const FHitResult& SweepResult);
+	
 };

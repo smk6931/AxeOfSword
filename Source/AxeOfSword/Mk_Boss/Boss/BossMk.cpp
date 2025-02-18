@@ -26,11 +26,11 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 
-	ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
-	if (TempAnim.Succeeded())
-	{
-		GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-	}
+	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
+	// if (TempAnim.Succeeded())
+	// {
+	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	// }
 }
 
 // Called when the game starts or when spawned
@@ -65,10 +65,4 @@ void ABossMk::Tick(float DeltaTime)
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
-void ABossMk::OnMyBeginOvelap(UPrimitiveComponent* OverlapCompnent, AActor* OtherActor, UPrimitiveComponent* OtherComp,
-	int32 OtherBodyIndex, bool bFromSeep, const FHitResult& SweepResult)
-{
-	
 }
