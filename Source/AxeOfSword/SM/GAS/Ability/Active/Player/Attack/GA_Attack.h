@@ -41,11 +41,11 @@ private:
 	float ComboEndDelayTime = 3.f;
 
 	UPROPERTY()
-	UPlayMontageWithEvent* AT_ComboAttackAnim;
+	TObjectPtr<UPlayMontageWithEvent> AT_ComboAttackAnim;
 	UPROPERTY()
-	UPlayMontageWithEvent* AT_HeavyAttackAnim;
+	TObjectPtr<UPlayMontageWithEvent> AT_HeavyAttackAnim;
 	UPROPERTY()
-	UPlayMontageWithEvent* AT_ThrowAttackAnim;
+	TObjectPtr<UPlayMontageWithEvent> AT_ThrowAttackAnim;
 
 	void DoComboAttack();
 	

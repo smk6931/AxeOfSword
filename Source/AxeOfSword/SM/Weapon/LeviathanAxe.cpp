@@ -59,7 +59,6 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 			{
 				OnHitThrown(HitResult);
 			}
-				
 			break;
 		}
 		case ELeviathanAxeStatus::Return:

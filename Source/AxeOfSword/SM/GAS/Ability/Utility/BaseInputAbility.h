@@ -40,11 +40,14 @@ protected:
 													, const FGameplayAbilityActivationInfo ActivationInfo
 													, bool bReplicateEndAbility
 													, bool bWasCancelled) override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true))
+	bool IsPassive;
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Input", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Input", meta = (AllowPrivateAccess = true, EditCondition = "!IsPassive"))
 	TObjectPtr<UInputAction> ActivationInputAction;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Input", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Input", meta = (AllowPrivateAccess = true, EditCondition = "!IsPassive"))
 	EAbilityInputId InputId = EAbilityInputId::Undefined;
 	
 	void OnAbilityInputPressed(const FGameplayAbilityActorInfo* ActorInfo);
