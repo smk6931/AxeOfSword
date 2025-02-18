@@ -50,6 +50,10 @@ private:
 		meta = (AllowPrivateAccess = true))
 	int32 ThrowRotatePower = 720;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
+		meta = (AllowPrivateAccess = true))
+	int32 TurnBackRightPower = 720;
+	
 	float GravityStack;
 	
 	FRotator ThrowRotate;
@@ -81,4 +85,6 @@ private:
 	void OnTurnBackFinish();
 
 	void TraceWeaponThrow(FHitResult& HitResult);
+
+	void RotateByPowerInTick(const float DeltaTime);
 };

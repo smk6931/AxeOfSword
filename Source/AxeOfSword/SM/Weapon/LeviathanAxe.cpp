@@ -2,6 +2,7 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ALeviathanAxe::ALeviathanAxe()
 {
@@ -36,15 +37,14 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 	switch (AxeStatus)
 	{
+		case ELeviathanAxeStatus::Return:
+		{
+			RotateByPowerInTick(DeltaSeconds);
+			break;
+		}
 		case ELeviathanAxeStatus::Throw:
 		{
-			const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
-			const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
-			const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaSeconds);
-			FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
-			NewMeshRotation.X = 0;
-			NewMeshRotation.Z = 0;
-			WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
+			RotateByPowerInTick(DeltaSeconds);
 	
 			FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
 			GravityStack += DeltaSeconds * DeltaSeconds;
@@ -61,7 +61,6 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 			}
 			break;
 		}
-		case ELeviathanAxeStatus::Return:
 		default:
 		{
 			break;
@@ -153,7 +152,7 @@ void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
 	IgnoreActors.Add(this);
 	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), WeaponPivot->GetComponentLocation(),
 		WeaponPivot->GetComponentLocation(), 50, TraceTypeQuery1, false, IgnoreActors,
-		EDrawDebugTrace::None	, HitResult, true);
+		EDrawDebugTrace::None, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
@@ -180,8 +179,9 @@ void ALeviathanAxe::OnHitStopEnd()
 void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 {
 	const FVector NewMoveToSet = FMath::Lerp(TurnBackStartLocation, GetOwner()->GetActorLocation(), Output.X);
+	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), NewMoveToSet);
 	SetActorLocation(NewMoveToSet);
-	AddActorLocalOffset({0, Output.Y * 200, 0});
+	AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
 	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
 	
 	if (!IsValid(Pawn))
@@ -190,6 +190,7 @@ void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 	}
 
 	const FVector MoveTo = Pawn->GetMesh()->GetSocketLocation("WeaponSocket");
+	
 	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
 	{
 		WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
@@ -208,4 +209,15 @@ void ALeviathanAxe::OnTurnBackFinish()
 	
 	WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
 	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+}
+
+void ALeviathanAxe::RotateByPowerInTick(const float DeltaTime)
+{
+	const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
+	const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
+	const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaTime);
+	FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
+	NewMeshRotation.X = 0;
+	NewMeshRotation.Z = 0;
+	WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
 }
