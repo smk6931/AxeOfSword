@@ -6,7 +6,6 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
-#include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 
 bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 									const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
@@ -35,8 +34,6 @@ void UGA_Attack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGam
 	}
 	
 	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
-	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Default, 1);
 	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_Combat, 1);
 }
@@ -139,6 +136,7 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 	
 	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_Combat);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
@@ -147,6 +145,7 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	AOSGameplayTags::Ability_Attack_Heavy);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Ability_Attack_Throw);
+	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
@@ -154,13 +153,13 @@ void UGA_Attack::DoComboAttack()
 {
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
 
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
  
-	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	
 	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Attack);
@@ -226,6 +225,10 @@ void UGA_Attack::DoThrowAttack()
 		{
 			return;
 		}
+
+		FGameplayTagContainer CancelTags;
+		CancelTags.AddTag(AOSGameplayTags::Ability_CloseHold);
+		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&CancelTags);
 		
 		const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 		AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
@@ -286,7 +289,7 @@ void UGA_Attack::OnEndThrowAttack(FGameplayTag EventTag
 
 void UGA_Attack::OnEndCombo()
 {
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{
 		return;

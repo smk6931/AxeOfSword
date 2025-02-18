@@ -1,6 +1,7 @@
 ﻿#include "BaseCharacter.h"
 
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -43,17 +44,14 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 {
 	if (Data.NewValue == 0)
 	{
-		UE_LOG(LogTemp, Display, TEXT("으앙 듀금"))
 		AbilitySystemComponent->CancelAllAbilities();
 	}
-	
-	for (FGameplayAbilitySpec& ActivateAbility : AbilitySystemComponent->GetActivatableAbilities())
+
+	if (Data.OldValue > Data.NewValue)
 	{
-		if (ActivateAbility.Ability->IsActive())
-		{
-			ActivateAbility.Ability->CancelAbility(ActivateAbility.Handle,
-			ActivateAbility.Ability->GetCurrentActorInfo(), ActivateAbility.Ability->GetCurrentActivationInfo(), false);
-		}
+		FGameplayTagContainer ActivateTag;
+		ActivateTag.AddTag(AOSGameplayTags::Passive_Damaged);
+		AbilitySystemComponent->TryActivateAbilitiesByTag(ActivateTag);
 	}
 }
 

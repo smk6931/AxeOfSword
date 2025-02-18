@@ -21,6 +21,7 @@ public:
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, ThrowAttackAnim)
+	GETTER(TObjectPtr<UAnimMontage>, DamagedAnim)
 
 protected:
 	virtual void BeginPlay() override;
@@ -55,4 +56,7 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAnimMontage> ThrowAttackAnim;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAnimMontage> DamagedAnim;
 };
