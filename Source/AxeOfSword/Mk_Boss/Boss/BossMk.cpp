@@ -1,12 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BossMk.h"
-
-#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
+#include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -66,3 +61,37 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+void ABossMk::DamageAnimation()
+{
+	if (DamageMontage && GetMesh())
+	{
+		UE_LOG(LogTemp, Display, TEXT("DamageMontage && GetMesh"));
+		
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(DamageMontage);
+			UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
+		}
+	}
+}
+
+void ABossMk::DestroyBoss()
+{
+	Destroy();
+}
+
+float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+                          class AController* EventInstigator, AActor* DamageCauser)
+{
+	Hp -= DamageAmount;
+	DamageAnimation();
+	if (Hp < 0)
+	{
+		// 1초 뒤에 DestroyBoss 함수 호출
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBoss, 1.0f, false);
+	}
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);   
+}
+

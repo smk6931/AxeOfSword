@@ -3,11 +3,22 @@
 
 #include "BossAnim.h"
 
+#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
+
 void UBossAnim::AnimNotify_JumpAttackEnd()
 {
 	// bRgAttack = true;
 	// bJumpAttack = false;
-	animState = EEnemyState::RgAttack;
+	FString stateStr = UEnum::GetValueAsString(animState);
+	UE_LOG(LogTemp, Display, TEXT("JumpAttackEnd: %s"), *stateStr)
+	if (animState == EEnemyState::JumpAttack)
+	{
+		animState = EEnemyState::RgAttack;
+	}
+	else
+	{
+		animState = EEnemyState::Move;
+	}
 }
 
 void UBossAnim::AnimNotify_RgAttackEnd()
@@ -28,5 +39,13 @@ void UBossAnim::AnimNotify_DashEnd()
 {
 	// bJumpAttack = true;
 	// bDash = false;
-	animState = EEnemyState::JumpAttack;
+	animState = EEnemyState::Attack;
+}
+
+void UBossAnim::AnimNotify_DamageEnd()
+{
+	UE_LOG(LogTemp, Display, TEXT("DamageEnd"));
+	ABossMk* BossMk = Cast<ABossMk>(GetOwningActor());
+	BossMk->Fsm->mState = EEnemyState::idle;
+	animState = EEnemyState::idle;
 }

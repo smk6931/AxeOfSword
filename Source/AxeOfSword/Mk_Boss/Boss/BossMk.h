@@ -17,8 +17,11 @@ public:
 	ABossMk();
 
 protected:
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+		class AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
 	// Called every frame
@@ -48,5 +51,17 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
+
+	UFUNCTION(BlueprintCallable)
+	void DamageAnimation();
 	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UAnimMontage* DamageMontage;
+
+	void DestroyBoss();
+
+private:
+	FTimerHandle TimerHandle;
 };
+
+

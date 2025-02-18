@@ -46,7 +46,9 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 				TEXT("Boss Status: %s\n"
 				"HP: %d"), *stateStr, BossHp));
 	}
-
+	
+	// FString stateStr = UEnum::GetValueAsString(mState);
+	// UE_LOG(LogTemp, Display, TEXT("텟읏틋: %s"), *stateStr)
 	
 	switch (mState)
 	{
@@ -82,25 +84,32 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 }
 
-
 void UEnemyFSM::IdleState()
 {
+	// 첫 Idle 상태
 	CurrentTime += GetWorld()->DeltaTimeSeconds;
-	
+	// Idle 타임이 지나면 Move 상태로 전환
 	if (CurrentTime > IdleDelayTime)
 	{
 		mState = EEnemyState::Move;
 		CurrentTime = 0;
-		// Anim->animState=mState;
+		Anim->animState = mState;
 	}
 }
 
 void UEnemyFSM::MoveState()
 {
+	//상대와 나의 방향 구하기
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
+	//적과 나의 거리를 구한다
 	float Distance = Direction.Size();
+	
 	Direction.Normalize();
 	Boss->SetActorRotation(Direction.Rotation());
+	
+	//적에게 이동한다
+	Boss->AddMovementInput(Direction);
+	//적과의 거리가 공격 거리보다 작아졌을때
 	if (AttackRange>Distance)
 	{
 		mState = EEnemyState::Attack;
@@ -110,36 +119,48 @@ void UEnemyFSM::MoveState()
 
 void UEnemyFSM::AttackState()
 {
+	// 상대방으로 향하는 보스의 방향을 구한다
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
+	Direction.Normalize();
+	
 	float Distance = FVector::Dist(Boss->GetActorLocation(), Player->GetActorLocation());
 	
+	// 거리가 공격 범위보다 커졌을때
+	// 이동 상태로 전환한다
 	if (AttackRange < Distance)
 	{
 		mState = EEnemyState::Move;
+		Anim->animState = mState;
 	}
-	Direction.Normalize();
+	else
+	{
+		mState = EEnemyState::JumpAttack;
+		Anim->animState = mState;
+	}
 }
 
 void UEnemyFSM::JumpAttack()
 {
-	
+	mState = Anim->animState;
 }
 
 
 void UEnemyFSM::RgAttack()
 {
-	
+	mState = Anim->animState;
 }
 
 void UEnemyFSM::TrippleAttack()
 {
-	
+	mState = Anim->animState;
 }
 
 void UEnemyFSM::Dash()
 {
-	FVector LaunchVector = Boss->GetActorRightVector() * 10000;
+	FVector LaunchVector = Boss->GetActorRightVector() * 500;
 	Boss->LaunchCharacter(LaunchVector, false, false);
+	
+	mState = Anim->animState;
 }
 
 void UEnemyFSM::DamageState()

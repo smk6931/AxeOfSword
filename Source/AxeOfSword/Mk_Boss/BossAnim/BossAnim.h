@@ -39,4 +39,6 @@ public:
 	void AnimNotify_TrippleAttackEnd();
 	UFUNCTION()
 	void AnimNotify_DashEnd();
+	UFUNCTION()
+	void AnimNotify_DamageEnd();
 };
