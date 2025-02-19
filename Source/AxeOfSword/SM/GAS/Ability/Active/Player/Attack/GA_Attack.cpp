@@ -84,7 +84,7 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 			return;
 		}
 		
-		DoComboAttack();
+		DoHeavyAttack();
 	} else
 	{
 		// 홀딩이 끝난 경우에 대해서는 다시한번 Ability를 재실행 해준다.
