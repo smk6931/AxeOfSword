@@ -190,26 +190,35 @@ void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 	
 	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
 	{
-		UStateHelper::ClearState(Pawn->GetAbilitySystemComponent());
-		WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
-		SetAxeStatus(ELeviathanAxeStatus::Idle);
-		AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+		OnTurnBackEnd();
 		TurnBackTimeline->Stop();
 	}
 }
 
 void ALeviathanAxe::OnTurnBackFinish()
 {
+	OnTurnBackEnd();
+}
+
+void ALeviathanAxe::OnTurnBackEnd()
+{
 	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
 	if (!IsValid(Pawn))
 	{
 		return;
 	}
-	
+
 	UStateHelper::ClearState(Pawn->GetAbilitySystemComponent());
 	SetAxeStatus(ELeviathanAxeStatus::Idle);
 	WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
 	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+
+	APlayerController* PC = Pawn->GetController<APlayerController>();
+	if (!PC)
+	{
+		return;
+	}
+	PC->PlayerCameraManager->StartCameraShake(TurnBackEndCameraShake);
 }
 
 void ALeviathanAxe::RotateByPowerInTick(const float DeltaTime)

@@ -54,6 +54,10 @@ private:
 		meta = (AllowPrivateAccess = true))
 	int32 TurnBackRightPower = 720;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
+		meta = (AllowPrivateAccess = true))
+	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
+	
 	float GravityStack;
 	
 	FRotator ThrowRotate;
@@ -74,6 +78,7 @@ private:
 
 	void OnHitThrown(const FHitResult& HitResult);
 	void OnHitDamage(AActor* TargetActor);
+	void OnTurnBackEnd();
 	
 	UFUNCTION()
 	void OnHitStopEnd();
