@@ -15,6 +15,7 @@ class AXEOFSWORD_API ABaseWeapon : public AActor
 public:
 	ABaseWeapon();
 
+	void ClearDamageStack();
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
 	virtual void UpdateWeaponAttackable(const bool IsEnable);
 
@@ -42,6 +43,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
 	int8 Damage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
+	uint8 DamageStack = 1;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
+	uint8 MaxDamageStack = 8;
 	
 	FTimerHandle EndHitStopTimerHandle;
 	

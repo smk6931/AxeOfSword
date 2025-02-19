@@ -43,3 +43,8 @@ void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
 			ECollisionEnabled::QueryAndPhysics : ECollisionEnabled::NoCollision);
 	}
 }
+
+void ABaseWeapon::ClearDamageStack()
+{
+	DamageStack = 1;
+}

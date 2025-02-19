@@ -70,6 +70,8 @@ private:
 	UFUNCTION()
 	void OnEndCombo();
 
+	void ClearAttackStackInWeapon();
+
 	bool IsAvatarDoingAttack() const;
 	bool IsAvatarDoingHeavyAttack() const;
 };

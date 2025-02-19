@@ -249,6 +249,7 @@ void UGA_Attack::DoThrowAttack()
 
 void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
+	ClearAttackStackInWeapon();
 	if (IsHoldEnd)
 	{
 		EndAbility(CurrentSpecHandle, CurrentActorInfo,
@@ -266,7 +267,7 @@ void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData
 		EndAbility(CurrentSpecHandle, CurrentActorInfo,
 			CurrentActivationInfo, false, false);
 	}
-	
+	ClearAttackStackInWeapon();
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
 	GetWorld()->GetTimerManager().SetTimer(EndDefaultAttackHandle,
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnEndCombo), ComboEndDelayTime, false);
@@ -276,6 +277,7 @@ void UGA_Attack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData Even
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Heavy);
+	ClearAttackStackInWeapon();
 	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 }
 
@@ -310,4 +312,15 @@ bool UGA_Attack::IsAvatarDoingHeavyAttack() const
 {
 	return GetAbilitySystemComponentFromActorInfo()->
 		HasMatchingGameplayTag(AOSGameplayTags::Ability_Attack_Heavy);
+}
+
+void UGA_Attack::ClearAttackStackInWeapon()
+{
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->GetMainWeapon()->ClearDamageStack();
 }
