@@ -2,7 +2,7 @@
 #include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -14,7 +14,7 @@ ABossMk::ABossMk()
 	PrimaryActorTick.bCanEverTick = true;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
-		TEXT("'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
+		TEXT("'/Game/ParagonAurora/Characters/Heroes/Aurora/Skins/GlacialEmpress/Meshes/Aurora_GlacialEmpress.Aurora_GlacialEmpress'"));
 	if (TempBossMesh.Object)
 	{
 		GetMesh()->SetSkeletalMesh(TempBossMesh.Object);
@@ -22,11 +22,11 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 
-	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
-	// if (TempAnim.Succeeded())
-	// {
-	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-	// }
+	ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/ParagonAurora/Characters/Heroes/Aurora/Aurora_AnimBlueprint.Aurora_AnimBlueprint_c'"));
+	if (TempAnim.Succeeded())
+	{
+		GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	}
 	AttackDamage = 20.f;
 }
 
