@@ -34,10 +34,7 @@ protected:
 		const FHitResult& SweepResult) override;
 	
 	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<USceneComponent> WeaponStart;
-	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<USceneComponent> WeaponEnd;
+	TObjectPtr<USceneComponent> WeaponPivot;
 
 private:
 	ELeviathanAxeStatus AxeStatus = ELeviathanAxeStatus::Idle;
@@ -53,11 +50,21 @@ private:
 		meta = (AllowPrivateAccess = true))
 	int32 ThrowRotatePower = 720;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
+		meta = (AllowPrivateAccess = true))
+	int32 TurnBackRightPower = 720;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
+		meta = (AllowPrivateAccess = true))
+	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
+	
 	float GravityStack;
 	
 	FRotator ThrowRotate;
 
 	FVector TurnBackStartLocation;
+
+	FTransform InitialWeaponMeshTransform;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UTimelineComponent> TurnBackTimeline;
@@ -71,6 +78,7 @@ private:
 
 	void OnHitThrown(const FHitResult& HitResult);
 	void OnHitDamage(AActor* TargetActor);
+	void OnTurnBackEnd();
 	
 	UFUNCTION()
 	void OnHitStopEnd();
@@ -82,4 +90,6 @@ private:
 	void OnTurnBackFinish();
 
 	void TraceWeaponThrow(FHitResult& HitResult);
+
+	void RotateByPowerInTick(const float DeltaTime);
 };

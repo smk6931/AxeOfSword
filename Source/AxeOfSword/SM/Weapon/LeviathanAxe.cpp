@@ -1,17 +1,16 @@
 ﻿#include "LeviathanAxe.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ALeviathanAxe::ALeviathanAxe()
 {
 	TurnBackTimeline = CreateDefaultSubobject<UTimelineComponent>("TurnBack Timeline");
 	
-	WeaponStart = CreateDefaultSubobject<USceneComponent>("Weapon Start");
-	WeaponStart->SetupAttachment(GetRootComponent());
-	
-	WeaponEnd = CreateDefaultSubobject<USceneComponent>("Weapon End");
-	WeaponEnd->SetupAttachment(GetRootComponent());
+	WeaponPivot = CreateDefaultSubobject<USceneComponent>("Weapon Pivot");
+	WeaponPivot->SetupAttachment(GetRootComponent());
 	
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -19,6 +18,9 @@ ALeviathanAxe::ALeviathanAxe()
 void ALeviathanAxe::BeginPlay()
 {
 	Super::BeginPlay();
+
+	InitialWeaponMeshTransform = WeaponMesh->GetRelativeTransform();
+	
 	WeaponMesh->OnComponentBeginOverlap.AddDynamic(
 		this, &ThisClass::OnOverlapWeaponCollision);
 	
@@ -36,15 +38,14 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 	switch (AxeStatus)
 	{
+		case ELeviathanAxeStatus::Return:
+		{
+			RotateByPowerInTick(DeltaSeconds);
+			break;
+		}
 		case ELeviathanAxeStatus::Throw:
 		{
-			const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
-			const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
-			const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaSeconds);
-			FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
-			NewMeshRotation.X = 0;
-			NewMeshRotation.Z = 0;
-			WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
+			RotateByPowerInTick(DeltaSeconds);
 	
 			FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
 			GravityStack += DeltaSeconds * DeltaSeconds;
@@ -61,7 +62,6 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 			}
 			break;
 		}
-		case ELeviathanAxeStatus::Return:
 		default:
 		{
 			break;
@@ -94,20 +94,16 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 		return;
 	}
 	
-	ThrowRotate = Pawn->GetController()->GetControlRotation();
+	TurnBackStartLocation = GetActorLocation();
 	
 	SetAxeStatus(ELeviathanAxeStatus::Return);
 	SetOwner(NewOwner);
-	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, "WeaponSocket");
 
 	// Weapon 자체의 상대 좌표들을 전부 초기화해줌
 	SetActorRelativeLocation(FVector::ZeroVector);
+	SetActorRelativeRotation(FRotator::ZeroRotator);
 	WeaponMesh->SetRelativeLocation(FVector::ZeroVector);
 	WeaponMesh->SetRelativeRotation(FRotator::ZeroRotator);
-
-	// 임시 지만 위의 처리가 종료된다면 Idle로 상태 변환
-	// TODO: 원래는 Timeline or Tick 종료 시 실행되는 로직
-	SetAxeStatus(ELeviathanAxeStatus::Idle);
 	
 	TurnBackTimeline->PlayFromStart();
 }
@@ -131,7 +127,6 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 {
 	GravityStack = 0;
 	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
-	SetOwner(HitResult.GetActor());
 	
 	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
 		GetActorRightVector()).Rotator();
@@ -144,15 +139,17 @@ void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
 	
 	WeaponMesh->SetRelativeLocation(Location);
 	WeaponMesh->SetRelativeRotation(Angle);
+	
+	SetOwner(HitResult.GetActor());
 }
 
 void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
 {
 	TArray<AActor*> IgnoreActors;
 	IgnoreActors.Add(this);
-	UKismetSystemLibrary::LineTraceSingle(GetWorld(), WeaponStart->GetComponentLocation(),
-		WeaponEnd->GetComponentLocation(), TraceTypeQuery1, false, IgnoreActors,
-		EDrawDebugTrace::ForDuration, HitResult, true);
+	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), WeaponPivot->GetComponentLocation(),
+		WeaponPivot->GetComponentLocation(), 50, TraceTypeQuery1, false, IgnoreActors,
+		EDrawDebugTrace::None, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
@@ -178,11 +175,59 @@ void ALeviathanAxe::OnHitStopEnd()
 
 void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 {
-	FVector NewLocation = GetActorLocation();
-	NewLocation.Y += Output.Y * 30;
-	SetActorLocation(NewLocation);
+	const FVector NewMoveToSet = FMath::Lerp(TurnBackStartLocation, GetOwner()->GetActorLocation(), Output.X);
+	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), NewMoveToSet);
+	SetActorLocation(NewMoveToSet);
+	AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
+	const ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
+	
+	if (!IsValid(Pawn))
+	{
+		return;
+	}
+
+	const FVector MoveTo = Pawn->GetMesh()->GetSocketLocation("WeaponSocket");
+	
+	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
+	{
+		OnTurnBackEnd();
+		TurnBackTimeline->Stop();
+	}
 }
 
 void ALeviathanAxe::OnTurnBackFinish()
 {
+	OnTurnBackEnd();
+}
+
+void ALeviathanAxe::OnTurnBackEnd()
+{
+	ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
+	if (!IsValid(Pawn))
+	{
+		return;
+	}
+
+	UStateHelper::ClearState(Pawn->GetAbilitySystemComponent());
+	SetAxeStatus(ELeviathanAxeStatus::Idle);
+	WeaponMesh->SetRelativeTransform(InitialWeaponMeshTransform);
+	AttachToComponent(Pawn->GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+
+	APlayerController* PC = Pawn->GetController<APlayerController>();
+	if (!PC)
+	{
+		return;
+	}
+	PC->PlayerCameraManager->StartCameraShake(TurnBackEndCameraShake);
+}
+
+void ALeviathanAxe::RotateByPowerInTick(const float DeltaTime)
+{
+	const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
+	const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
+	const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaTime);
+	FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
+	NewMeshRotation.X = 0;
+	NewMeshRotation.Z = 0;
+	WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
 }

@@ -2,6 +2,8 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 
@@ -29,16 +31,31 @@ bool UGA_TurnBack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return false;
 	}
 
+	if (!UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
+	{
+		return false;
+	}
+
 	// 현재 도끼가 가만히 있는 상태여야 하며, 동시에 현재 Owner가
 	// BaseCharacter 가 아닌 즉 벽에 박혀있지 않는 상태인 경우 사용 가능하다.
 	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw ||
 		LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Thrown_Idle;
 }
 
+void UGA_TurnBack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+	const FGameplayAbilityActivationInfo ActivationInfo,
+	FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
+{
+	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
+
+	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Idle, AOSGameplayTags::State_TurnBack);
+}
+
 void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
-									, const FGameplayAbilityActorInfo* ActorInfo
-									, const FGameplayAbilityActivationInfo ActivationInfo
-									, const FGameplayEventData* TriggerEventData)
+                                   , const FGameplayAbilityActorInfo* ActorInfo
+                                   , const FGameplayAbilityActivationInfo ActivationInfo
+                                   , const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 

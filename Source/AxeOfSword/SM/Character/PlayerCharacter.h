@@ -28,6 +28,8 @@ protected:
 	virtual void BeginPlay() override;
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	virtual void OnHealthChanged(const FOnAttributeChangeData& Data) override;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input"
