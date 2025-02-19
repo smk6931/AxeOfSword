@@ -13,6 +13,11 @@ bool UStateHelper::IsZoomIn(const UAbilitySystemComponent* ASC)
 	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_CloseHold);
 }
 
+bool UStateHelper::IsWaitForTurnBackWeapon(const UAbilitySystemComponent* ASC)
+{
+	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_TurnBack);
+}
+
 void UStateHelper::ClearState(UAbilitySystemComponent* ASC)
 {
 	FGameplayTagContainer OwnedTags;

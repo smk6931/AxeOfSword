@@ -17,5 +17,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	static bool IsZoomIn(const UAbilitySystemComponent* ASC);
 	
+	UFUNCTION(BlueprintCallable)
+	static bool IsWaitForTurnBackWeapon(const UAbilitySystemComponent* ASC);
+	
 	static void ClearState(UAbilitySystemComponent* ASC);
 };

@@ -47,6 +47,6 @@ protected:
 	FDelegateHandle HealthChangedDelegateHandle;
 	FDelegateHandle MovementSpeedChangedDelegateHandle;
 
-	void OnHealthChanged(const FOnAttributeChangeData& Data);
+	virtual void OnHealthChanged(const FOnAttributeChangeData& Data);
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
 };

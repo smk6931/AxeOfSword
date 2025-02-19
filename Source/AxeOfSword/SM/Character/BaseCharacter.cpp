@@ -45,8 +45,10 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 	if (Data.NewValue == 0)
 	{
 		AbilitySystemComponent->CancelAllAbilities();
+		return;
 	}
 
+	// NewValue가 작다는 것은 체력이 감소했음을 의미한다.
 	if (Data.OldValue > Data.NewValue)
 	{
 		FGameplayTagContainer ActivateTag;
