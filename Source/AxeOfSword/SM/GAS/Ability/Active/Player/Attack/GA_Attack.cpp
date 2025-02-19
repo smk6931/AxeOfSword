@@ -6,7 +6,7 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
-
+ 
 bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 									const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
 									FGameplayTagContainer* OptionalRelevantTags) const
@@ -45,7 +45,7 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	// 최초 실행
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	if (GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_CloseHold))
+	if (GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::Status_CloseHold))
 	{
 		IsHoldToThrow = true;
 		return;

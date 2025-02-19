@@ -15,6 +15,9 @@ public:
 	static bool IsIdle(const UAbilitySystemComponent* ASC);
 	
 	UFUNCTION(BlueprintCallable)
+	static bool IsDamaged(const UAbilitySystemComponent* ASC);
+	
+	UFUNCTION(BlueprintCallable)
 	static bool IsZoomIn(const UAbilitySystemComponent* ASC);
 	
 	UFUNCTION(BlueprintCallable)

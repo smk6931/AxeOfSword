@@ -8,9 +8,14 @@ bool UStateHelper::IsIdle(const UAbilitySystemComponent* ASC)
 	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Idle);
 }
 
+bool UStateHelper::IsDamaged(const UAbilitySystemComponent* ASC)
+{
+	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Idle);
+}
+
 bool UStateHelper::IsZoomIn(const UAbilitySystemComponent* ASC)
 {
-	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_CloseHold);
+	return ASC->HasMatchingGameplayTag(AOSGameplayTags::Status_CloseHold);
 }
 
 bool UStateHelper::IsWaitForTurnBackWeapon(const UAbilitySystemComponent* ASC)
