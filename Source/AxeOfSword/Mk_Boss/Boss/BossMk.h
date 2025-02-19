@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
 #include "BossMk.generated.h"
 
 UCLASS()
@@ -18,6 +19,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	                         class AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
 	// Called every frame
@@ -26,25 +29,41 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Speed = 300.f;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* BossMesh;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ASword> SwordFactory;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Direction;
 
-public:
-    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category="Boss")
-	float BossHp = 1.0f;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	int Hp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Hp;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category=FSM)
-	class UEnemyFSM* Fsm;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
+	UEnemyFSM* Fsm;
+
+	//스폰된 보스칼을 담아두고 싶다
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	ASword* BossSword;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
+	EEnemyState animState;
+
+	UFUNCTION(BlueprintCallable)
+	void DamageAnimation();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAnimMontage* DamageMontage;
+
+	void DestroyBoss();
+
+private:
+	FTimerHandle TimerHandle;
+
+	float AttackDamage;
 };

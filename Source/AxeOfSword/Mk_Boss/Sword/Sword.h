@@ -20,12 +20,25 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
     UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class USceneComponent* Root;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class UStaticMeshComponent* SwordMesh;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class UCapsuleComponent* SwordCapsule;
+
+	//스폰된 보스칼을 담아두고 싶다
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class ABossMk* BossMk;
+
+	float ApplyDamage = 10;
+
+	FTimerHandle TimerHandle;
+	
+	UFUNCTION()
+	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompnent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+		const FHitResult& SweepResult);
 };

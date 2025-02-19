@@ -1,19 +1,15 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "BossMk.h"
-
-#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
+#include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
+#include "Engine/DamageEvents.h"
 
 class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	Hp = 150;
+	Hp = 100;
 
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -25,14 +21,13 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-	
-	ConstructorHelpers::FClassFinder<UAnimInstance> TempABP(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
-	if (TempABP.Succeeded())
-	{
-		GetMesh()->SetAnimInstanceClass(TempABP.Class);
-	}
 
-	Fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("Fsm"));
+	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
+	// if (TempAnim.Succeeded())
+	// {
+	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	// }
+	AttackDamage = 20.f;
 }
 
 // Called when the game starts or when spawned
@@ -42,18 +37,19 @@ void ABossMk::BeginPlay()
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
 	// Sword를 스폰함
-	ASword* SpawnedSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
-	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(SpawnedSword->GetRootComponent());
+	// 스폰된 보스칼을 담아두고 싶다
+	BossSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
+	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(BossSword->GetRootComponent());
 	if (SwordRoot != nullptr)
 	{
 		SwordRoot->IgnoreActorWhenMoving(this,true);
 	}
 	// SwordRoot->SetCollisionProfileName(TEXT("NoCollision"));  
-	if (SpawnedSword)
+	if (BossSword)
 	{
 		// Sword를 손 소켓에 부착함
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		SpawnedSword->AttachToComponent(GetMesh(), AttachmentRules, TEXT("hand_rSocket"));
+		BossSword->AttachToComponent(GetMesh(), AttachmentRules, TEXT("hand_rSocket"));
 		// 부착 성공 여부를 디버그 메시지로 출력
 	}
 }
@@ -68,3 +64,37 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
+
+void ABossMk::DamageAnimation()
+{
+	if (DamageMontage && GetMesh())
+	{
+		UE_LOG(LogTemp, Display, TEXT("DamageMontage && GetMesh"));
+		
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance)
+		{
+			AnimInstance->Montage_Play(DamageMontage);
+			UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
+		}
+	}
+}
+
+void ABossMk::DestroyBoss()
+{
+	Destroy();
+}
+
+float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+                          class AController* EventInstigator, AActor* DamageCauser)
+{
+	Hp -= DamageAmount;
+	DamageAnimation();
+	if (Hp < 0)
+	{
+		// 1초 뒤에 DestroyBoss 함수 호출
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBoss, 1.0f, false);
+	}
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);   
+}
+
