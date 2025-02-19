@@ -50,7 +50,6 @@ void UValuePercentBar::SetMaxValue(const float NewValue)
 
 void UValuePercentBar::DecreaseDelayPercentBar()
 {
-
 	// 타이머를 등록해 DelayViewPercentBar 정보가 계속 줄어들게 설정
 	GetWorld()->GetTimerManager().SetTimer(SetDelayViewPercentTimerHandle, FTimerDelegate::CreateLambda([&]
 	{

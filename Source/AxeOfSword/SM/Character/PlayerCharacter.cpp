@@ -2,7 +2,9 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/Player/AOSPlayerController.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
+#include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
 #include "Component/PlayerCameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -47,7 +49,7 @@ void APlayerCharacter::BeginPlay()
 		Attribute->Initialize();
 	}
 	
-	if (const APlayerController* PC = Cast<APlayerController>(
+	if (const AAOSPlayerController* PC = Cast<AAOSPlayerController>(
 		GetController()))
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
@@ -56,6 +58,8 @@ void APlayerCharacter::BeginPlay()
 		{
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+
+		PC->GetPlayerHUD()->InitializeHUD();
 	}
 	Super::BeginPlay();
 }
@@ -71,6 +75,19 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered
 																			, this, &ThisClass::Look);
 	}
+}
+
+void APlayerCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
+{
+	Super::OnHealthChanged(Data);
+
+	AAOSPlayerController* PC = GetController<AAOSPlayerController>();
+	if (!PC)
+	{
+		return;
+	}
+
+	PC->GetPlayerHUD()->ChangeHealthValue(Data.NewValue);
 }
 
 void APlayerCharacter::MoveTo(const FInputActionValue& Value)
