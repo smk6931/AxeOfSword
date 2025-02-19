@@ -7,6 +7,7 @@
 #include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "Components/CapsuleComponent.h"
 
 
 // Sets default values for this component's properties
@@ -19,7 +20,6 @@ UEnemyFSM::UEnemyFSM()
 	// ...
 }
 
-
 // Called when the game starts
 void UEnemyFSM::BeginPlay()
 {
@@ -29,7 +29,6 @@ void UEnemyFSM::BeginPlay()
 	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	Anim = Cast<UBossAnim>(Boss->GetMesh()->GetAnimInstance());
 }
-
 
 // Called every frame
 void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -112,6 +111,7 @@ void UEnemyFSM::MoveState()
 		mState = EEnemyState::Attack;
 		Anim->animState = mState;
 	}
+	Boss->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void UEnemyFSM::AttackState()
@@ -128,6 +128,7 @@ void UEnemyFSM::AttackState()
 	{
 		mState = EEnemyState::Move;
 		Anim->animState = mState;
+		
 	}
 	else
 	{
@@ -154,8 +155,6 @@ void UEnemyFSM::TrippleAttack()
 
 void UEnemyFSM::Dash()
 {
-	// FVector LaunchVector = Boss->GetActorRightVector() * 1000;
-	// Boss->LaunchCharacter(LaunchVector, false, false);
 	mState = Anim->animState;
 }
 

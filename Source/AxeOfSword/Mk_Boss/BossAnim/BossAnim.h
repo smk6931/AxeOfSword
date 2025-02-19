@@ -4,9 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
-#include "Kismet/GameplayStatics.h"
 #include "BossAnim.generated.h"
 
 /**
@@ -16,6 +14,9 @@ UCLASS()
 class AXEOFSWORD_API UBossAnim : public UAnimInstance
 {
 	GENERATED_BODY()
+
+protected:
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	
 public:
  //    UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -23,30 +24,36 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UEnemyFSM* EnemyFsm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ABossMk* BossMk;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	bool bJumpAttack = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
-	bool bRgAttack = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
-	bool bTrippleAttack = false;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
-	bool bDash = false;
+
+	void SwordCollisiontrue();
+	void SwordCollisionfalse();
 	
 	UFUNCTION()
-	void AnimNotify_JumpAttackEnd();
+	void AnimNotify_AaFir();
+	
 	UFUNCTION()
-	void AnimNotify_RgAttackEnd();
-	UFUNCTION()
-	void AnimNotify_TrippleAttackEnd();
-	UFUNCTION()
-	void AnimNotify_DashEnd();
-	UFUNCTION()
-	void AnimNotify_DamageEnd();
+	void AnimNotify_AaEnd();
 
 	UFUNCTION()
-	void AnimNotify_OneAttack();
+	void AnimNotify_AbEnd();
+
+	UFUNCTION()
+	void AnimNotify_AcEnd();
+
+	UFUNCTION()
+	void AnimNotify_DashFir();
+	
+	UFUNCTION()
+	void AnimNotify_DashEnd();
+
+	FTimerHandle TimerHandle;
 };

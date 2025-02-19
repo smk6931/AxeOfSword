@@ -42,7 +42,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category=FSM)
 	float AttackTime = 2;
-	float IdleDelayTime = 2;
+	float IdleDelayTime = 0.6;
 	float CurrentTime = 0;
 	float AttackRange = 150;
 	

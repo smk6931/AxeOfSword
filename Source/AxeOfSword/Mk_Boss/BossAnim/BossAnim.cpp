@@ -1,18 +1,45 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "BossAnim.h"
-
+#include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "Components/CapsuleComponent.h"
 
-void UBossAnim::AnimNotify_JumpAttackEnd()
+
+void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
-	// bRgAttack = true;
-	// bJumpAttack = false;
+	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	BossMk = Cast<ABossMk>(GetOwningActor());
+}
+
+void UBossAnim::SwordCollisiontrue()
+{
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
+}
+void UBossAnim::SwordCollisionfalse()
+{
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+}
+
+void UBossAnim::AnimNotify_AaFir()
+{
+	if (BossMk->BossSword)
+	{
+		if (BossMk)
+		{
+			SwordCollisiontrue();
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UBossAnim::SwordCollisionfalse, 1.0f, false);
+			// GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
+		}
+	}
+	
+}
+
+void UBossAnim::AnimNotify_AaEnd()
+{
 	FString stateStr = UEnum::GetValueAsString(animState);
-	UE_LOG(LogTemp, Display, TEXT("JumpAttackEnd: %s"), *stateStr)
 	if (animState == EEnemyState::JumpAttack)
 	{
 		animState = EEnemyState::RgAttack;
@@ -21,47 +48,35 @@ void UBossAnim::AnimNotify_JumpAttackEnd()
 	{
 		animState = EEnemyState::Move;
 	}
-
-	ABossMk* BossMk = Cast<ABossMk>(GetOwningActor());
-	if (BossMk)
+	
+	if (BossMk->BossSword)
 	{
-		//보스Mk의 저장된 보스 스워드 - 캡슐 콜리전을 비활성화 하고 싶다
-		BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		if (BossMk)
+		{
+			SwordCollisionfalse();
+		}
 	}
 }
 
-void UBossAnim::AnimNotify_RgAttackEnd()
+void UBossAnim::AnimNotify_AbEnd()
 {
-	// bTrippleAttack = true;
-	// bRgAttack = false;
 	animState = EEnemyState::TrippleAttack;
 }
 
-void UBossAnim::AnimNotify_TrippleAttackEnd()
+void UBossAnim::AnimNotify_AcEnd()
 {
-	// bDash = true;
-	// bTrippleAttack = false;
 	animState = EEnemyState::Dash;
+}
+// 대쉬 초반 공격
+void UBossAnim::AnimNotify_DashFir()
+{
+	FVector Right = BossMk->GetActorRightVector();
+	FVector Velocity = Right * 2500;
+	BossMk->LaunchCharacter(Velocity, true,true);
 }
 
 void UBossAnim::AnimNotify_DashEnd()
 {
-	// bJumpAttack = true;
-	// bDash = false;
 	animState = EEnemyState::Attack;
-}
-
-void UBossAnim::AnimNotify_DamageEnd()
-{
-	UE_LOG(LogTemp, Display, TEXT("DamageEnd"));
-	ABossMk* BossMk = Cast<ABossMk>(GetOwningActor());
-	BossMk->Fsm->mState = EEnemyState::idle;
-	animState = EEnemyState::idle;
-}
-
-void UBossAnim::AnimNotify_OneAttack()
-{
-	//보스 헤더파일 담아둔 Boss Sword를 가지고 온다
-	ABossMk* BossMk = Cast<ABossMk>(GetOwningActor());
-	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	SwordCollisionfalse();
 }
