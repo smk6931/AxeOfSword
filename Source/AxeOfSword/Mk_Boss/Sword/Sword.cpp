@@ -61,7 +61,10 @@ void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompnent, AActor* O
 	{
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Boss Attack"));
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
+				TEXT("Boss Attack"));
+
+			OtherActor->TakeDamage();
 		}
 	}
 }

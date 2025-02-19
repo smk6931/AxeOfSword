@@ -34,6 +34,7 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class ABossMk* BossMk;
+	
 
 	UFUNCTION()
 	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompnent, AActor* OtherActor,

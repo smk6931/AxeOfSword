@@ -68,4 +68,6 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class UBossAnim* Anim;
+
+	
 };
