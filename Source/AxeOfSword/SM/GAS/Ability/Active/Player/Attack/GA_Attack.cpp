@@ -217,6 +217,8 @@ void UGA_Attack::DoThrowAttack()
 	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Throw, 1);
 	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Casting);
 	
 	if (!IsValid(AT_ThrowAttackAnim))
 	{
