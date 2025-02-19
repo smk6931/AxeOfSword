@@ -30,6 +30,5 @@ public:
 	class UStaticMeshComponent* Mesh;
  
     UFUNCTION()
-	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-		UPrimitiveComponent* OtherComp, bool bFromSweep, const FHitResult& SweepResult);
+	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

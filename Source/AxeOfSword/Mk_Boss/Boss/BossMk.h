@@ -41,12 +41,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Direction;
 
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Hp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
-	class UEnemyFSM* Fsm;
+	UEnemyFSM* Fsm;
+
+	//스폰된 보스칼을 담아두고 싶다
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	ASword* BossSword;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
@@ -58,8 +61,6 @@ public:
 	UAnimMontage* DamageMontage;
 
 	void DestroyBoss();
-	
-	void AttackPlayer(AActor* Target);
 
 private:
 	FTimerHandle TimerHandle;

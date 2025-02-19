@@ -5,23 +5,21 @@
 
 #include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ASword::ASword()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
 	Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	SetRootComponent(Root);
 
 	SwordMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SwordMesh"));
 	SwordMesh->SetupAttachment(Root);
 
-	SworldCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Sphere"));
-	SworldCapsule->SetupAttachment(Root);
+	SwordCapsule = CreateDefaultSubobject<UCapsuleComponent>(TEXT("Sphere"));
+	SwordCapsule->SetupAttachment(Root);
 
-	SworldCapsule->SetRelativeTransform(FTransform(
+	SwordCapsule->SetRelativeTransform(FTransform(
 	FRotator(0, 40, 0),
 	FVector(-50, -5, 50),
 	FVector(1.0f, 1.0f, 1.0f)));
@@ -32,40 +30,29 @@ ASword::ASword()
 		SwordMesh->SetStaticMesh(tempSword.Object);
 		SwordMesh->SetRelativeLocation(FVector(10,-15,-140));
 		SwordMesh->SetRelativeScale3D(FVector(0.4,0.4,0.4));
+		// 콜리전 비활성화한다
 		SwordMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
-	SworldCapsule->SetGenerateOverlapEvents(true);
-	SworldCapsule->SetCollisionProfileName("SworldCapsule");
+	// 스워드 캡슐 콜리전을 비활성화 한다 - 공격했을시만 활성화 시키기 위해서
+	SwordCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SwordCapsule->SetGenerateOverlapEvents(true);
 }
 
 // Called when the game starts or when spawned
 void ASword::BeginPlay()
 {
 	Super::BeginPlay();
-	SworldCapsule->OnComponentBeginOverlap.AddDynamic(this, &ASword::OnMyBeginOverlap);
+	
+	SwordCapsule->OnComponentBeginOverlap.AddDynamic(this, &ASword::OnMyBeginOverlap);
 
 	BossMk = Cast<ABossMk>(GetOwner());
-}
-
-// Called every frame
-void ASword::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
 }
 
 void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompnent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	AActor* PlayerPawn = Cast<AActor>(OtherActor);
-	if (PlayerPawn)
-	{
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-				TEXT("Boss Attack"));
-
-			OtherActor->TakeDamage();
-		}
-	}
+	UE_LOG(LogTemp, Display, TEXT("DamageApplied"));
+	UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),
+	OtherActor, nullptr);
 }
 

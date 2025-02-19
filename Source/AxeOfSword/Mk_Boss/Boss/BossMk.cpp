@@ -3,7 +3,6 @@
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Engine/DamageEvents.h"
-#include "Kismet/KismetSystemLibrary.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -38,18 +37,19 @@ void ABossMk::BeginPlay()
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
 	// Sword를 스폰함
-	ASword* SpawnedSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
-	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(SpawnedSword->GetRootComponent());
+	// 스폰된 보스칼을 담아두고 싶다
+	BossSword = GetWorld()->SpawnActor<ASword>(SwordFactory, SocketTransform);
+	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(BossSword->GetRootComponent());
 	if (SwordRoot != nullptr)
 	{
 		SwordRoot->IgnoreActorWhenMoving(this,true);
 	}
 	// SwordRoot->SetCollisionProfileName(TEXT("NoCollision"));  
-	if (SpawnedSword)
+	if (BossSword)
 	{
 		// Sword를 손 소켓에 부착함
 		FAttachmentTransformRules AttachmentRules(EAttachmentRule::SnapToTarget, true);
-		SpawnedSword->AttachToComponent(GetMesh(), AttachmentRules, TEXT("hand_rSocket"));
+		BossSword->AttachToComponent(GetMesh(), AttachmentRules, TEXT("hand_rSocket"));
 		// 부착 성공 여부를 디버그 메시지로 출력
 	}
 }
@@ -84,16 +84,6 @@ void ABossMk::DestroyBoss()
 {
 	Destroy();
 }
-
-void ABossMk::AttackPlayer(AActor* Target)
-{
-	if (Target)
-	{
-		FDamageEvent DamageEvent;
-		Target->TakeDamage(AttackDamage, DamageEvent, GetController(), this);
-	}
-}
-
 
 float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                           class AController* EventInstigator, AActor* DamageCauser)

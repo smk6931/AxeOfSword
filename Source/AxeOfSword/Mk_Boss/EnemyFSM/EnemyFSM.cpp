@@ -5,6 +5,7 @@
 
 #include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
+#include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 
 
@@ -39,11 +40,11 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (GEngine)
 	{
 		int32 BossHp = Boss->Hp;
-		// FString stateStr = UEnum::GetValueAsString(mState);
-		// GEngine->AddOnScreenDebugMessage(1, 0.0f, 
-		// 	FColor::Green,FString::Printf(
-		// 		TEXT("Boss Status: %s\n"
-		// 		"HP: %d"), *stateStr, BossHp));
+		FString stateStr = UEnum::GetValueAsString(mState);
+		GEngine->AddOnScreenDebugMessage(1, 0.0f, 
+			FColor::Green,FString::Printf(
+				TEXT("Boss Status: %s\n"
+				"HP: %d"), *stateStr, BossHp));
 	}
 	
 	switch (mState)

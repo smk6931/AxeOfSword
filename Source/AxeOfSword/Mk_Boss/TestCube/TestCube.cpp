@@ -18,14 +18,14 @@ ATestCube::ATestCube()
 	Mesh->SetupAttachment(Root);
 
 	Root->SetGenerateOverlapEvents(true);
+	Root->SetCollisionProfileName("TestCube");
 }
 
 // Called when the game starts or when spawned
 void ATestCube::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// Root->OnComponentBeginOverlap.AddDynamic(this,&ATestCube::OnMyBeginOverlap);
+	Root->OnComponentBeginOverlap.AddDynamic(this, &ATestCube::OnMyBeginOverlap);
 }
 
 // Called every frame
@@ -34,8 +34,9 @@ void ATestCube::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void ATestCube::OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompneComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, bool bFromSweep, const FHitResult& SweepResult)
+void ATestCube::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	
 }
 

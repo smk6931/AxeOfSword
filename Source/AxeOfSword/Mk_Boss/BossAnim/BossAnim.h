@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
+#include "Kismet/GameplayStatics.h"
 #include "BossAnim.generated.h"
 
 /**
@@ -16,8 +18,11 @@ class AXEOFSWORD_API UBossAnim : public UAnimInstance
 	GENERATED_BODY()
 	
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ABossMk* Boss;
+ //    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// class ABossMk* Boss;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UEnemyFSM* EnemyFsm;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
@@ -41,4 +46,7 @@ public:
 	void AnimNotify_DashEnd();
 	UFUNCTION()
 	void AnimNotify_DamageEnd();
+
+	UFUNCTION()
+	void AnimNotify_OneAttack();
 };

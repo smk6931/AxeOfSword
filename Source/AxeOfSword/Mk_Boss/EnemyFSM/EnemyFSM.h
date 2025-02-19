@@ -58,7 +58,6 @@ public:
 	void DamageState();
 	void DieState();
 
-
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	class ABossMk* Boss;
@@ -69,5 +68,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class UBossAnim* Anim;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
+	class ASword* Sword;
 };
