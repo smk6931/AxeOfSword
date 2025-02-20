@@ -200,9 +200,6 @@ void UGA_Attack::DoHeavyAttack()
 			FGameplayTagContainer()
 			);
 		AT_HeavyAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
-	} else
-	{
-		AT_HeavyAttackAnim->EndTask();
 	}
 	
 	AT_HeavyAttackAnim->ReadyForActivation();
