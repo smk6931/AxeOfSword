@@ -160,7 +160,7 @@ void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
 
 	// 데미지에 따른 공격력 수치 조정
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),
-		FMath::Clamp(Damage / 500, 0.05, 0.1));
+		FMath::Clamp(Damage / 250, 0.05, 0.1));
 
 	float HitStopValue = static_cast<float>(Damage) / 10000 - DamageStack * 0.0001;
 	
