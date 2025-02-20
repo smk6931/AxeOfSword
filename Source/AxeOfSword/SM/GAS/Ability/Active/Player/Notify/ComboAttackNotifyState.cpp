@@ -2,6 +2,7 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 
 void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
@@ -14,6 +15,8 @@ void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
 		return;
 	}
 
+	AOSGameplayTags::SwapGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
+		AOSGameplayTags::State_Attack, AOSGameplayTags::State_Attack_Ing);
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->ToggleAttack(true);
 }
@@ -26,9 +29,10 @@ void UComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 	{
 		return;
 	}
-
+	
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->ToggleAttack(false);
 	EquipComponent->SetNextCombo();
+	
 	UStateHelper::ClearState(BaseCharacter->GetAbilitySystemComponent());
 } 

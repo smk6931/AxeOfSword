@@ -63,6 +63,9 @@ private:
 	void OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 	
 	UFUNCTION()
+	void OnBlendOutHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
+	UFUNCTION()
 	void OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 	
 	UFUNCTION()
