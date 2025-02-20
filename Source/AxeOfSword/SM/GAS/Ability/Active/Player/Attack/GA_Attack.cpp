@@ -59,10 +59,8 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
 	// 일반 공격이 종료된 상태임에도 홀딩이 유지되고 있는 경우 강공격 전용 AnimMontage Task를
 	// 실행시킴으로써 강공격을 계속해서 진행시킬 수 있도록 한다.
-	
 	if (!IsHoldEnd)
 	{
-		
 		// 이미 공격 실행 상태이면 굳이 더 감지할 필요는 없다.
 		if (IsAvatarDoingHeavyAttack())
 		{
@@ -181,9 +179,16 @@ void UGA_Attack::DoComboAttack()
 
 void UGA_Attack::DoHeavyAttack()
 {
+	UE_LOG(LogTemp, Display, TEXT("하이 강공격"))
+	
 	SetCombatMode();
 	
 	ClearAttackTag();
+	
+	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Attack);
+	AOSGameplayTags::AddGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+	AOSGameplayTags::Ability_Attack_Heavy);
 	
 	if (!IsValid(AT_HeavyAttackAnim))
 	{
@@ -199,6 +204,7 @@ void UGA_Attack::DoHeavyAttack()
 			EquipComponent->GetMainWeapon()->GetHeavyAttackAnim(),
 			FGameplayTagContainer()
 			);
+		AT_HeavyAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnBlendOutHeavyAttack);
 		AT_HeavyAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
 	}
 	
@@ -277,12 +283,20 @@ void UGA_Attack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnEndCombo), ComboEndDelayTime, false);
 }
 
+void UGA_Attack::OnBlendOutHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData)
+{
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+	AOSGameplayTags::Ability_Attack_Heavy);
+	ClearAttackTag();
+	ClearAttackStackInWeapon();
+}
+
 void UGA_Attack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Heavy);
+	ClearAttackTag();
 	ClearAttackStackInWeapon();
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
 }
 
 void UGA_Attack::OnEndThrowAttack(FGameplayTag EventTag

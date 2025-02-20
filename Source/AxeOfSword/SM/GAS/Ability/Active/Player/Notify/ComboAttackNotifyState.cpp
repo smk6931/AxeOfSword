@@ -29,9 +29,6 @@ void UComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 	{
 		return;
 	}
-
-	AOSGameplayTags::SwapGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
-		AOSGameplayTags::State_Attack_Ing, AOSGameplayTags::State_Attack);
 	
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 	EquipComponent->ToggleAttack(false);
