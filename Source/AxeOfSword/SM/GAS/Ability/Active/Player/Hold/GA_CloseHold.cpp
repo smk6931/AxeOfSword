@@ -3,7 +3,6 @@
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
-#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 
 bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -15,20 +14,21 @@ bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		return false;
 	}
 
-	return UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo());
+	return !GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(
+		AOSGameplayTags::Status_Combat);
 }
 
 void UGA_CloseHold::PreActivate(const FGameplayAbilitySpecHandle Handle
-	, const FGameplayAbilityActorInfo* ActorInfo
-	, const FGameplayAbilityActivationInfo ActivationInfo
-	, FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate
-	, const FGameplayEventData* TriggerEventData)
+                                , const FGameplayAbilityActorInfo* ActorInfo
+                                , const FGameplayAbilityActivationInfo ActivationInfo
+                                , FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate
+                                , const FGameplayEventData* TriggerEventData)
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo
 	, OnGameplayAbilityEndedDelegate, TriggerEventData);
 
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle,AOSGameplayTags::State_CloseHold);
+	AOSGameplayTags::AddGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_CloseHold);
 }
 
 void UGA_CloseHold::ActivateAbility(const FGameplayAbilitySpecHandle Handle
@@ -70,7 +70,8 @@ void UGA_CloseHold::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(
 		AOSGameplayTags::GameplayCue_Character_Camera_Fov_ZoomIn, Param);
 
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_CloseHold);
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

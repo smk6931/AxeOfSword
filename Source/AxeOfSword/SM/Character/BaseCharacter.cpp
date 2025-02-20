@@ -2,6 +2,7 @@
 
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -48,6 +49,12 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 		return;
 	}
 
+	// 이미 데미지를 받은 상태인 경우 굳이 뭘 하지 않는다.
+	if (UStateHelper::IsDamaged(GetAbilitySystemComponent()))
+	{
+		return;
+	}
+	
 	// NewValue가 작다는 것은 체력이 감소했음을 의미한다.
 	if (Data.OldValue > Data.NewValue)
 	{

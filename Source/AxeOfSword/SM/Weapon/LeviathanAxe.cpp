@@ -38,11 +38,6 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 	switch (AxeStatus)
 	{
-		case ELeviathanAxeStatus::Return:
-		{
-			RotateByPowerInTick(DeltaSeconds);
-			break;
-		}
 		case ELeviathanAxeStatus::Throw:
 		{
 			RotateByPowerInTick(DeltaSeconds);
@@ -62,6 +57,7 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 			}
 			break;
 		}
+		case ELeviathanAxeStatus::Return:
 		default:
 		{
 			break;
@@ -93,15 +89,17 @@ void ALeviathanAxe::TurnBack(AActor* NewOwner)
 	{
 		return;
 	}
-	
+
+	// 처음에 방향과 회전 정보를 설정해준다.
+	const FVector MoveTo = Pawn->GetMesh()->GetSocketLocation("WeaponSocket");
+	const FRotator NewMoveToSet = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), MoveTo);
 	TurnBackStartLocation = GetActorLocation();
 	
 	SetAxeStatus(ELeviathanAxeStatus::Return);
 	SetOwner(NewOwner);
 
 	// Weapon 자체의 상대 좌표들을 전부 초기화해줌
-	SetActorRelativeLocation(FVector::ZeroVector);
-	SetActorRelativeRotation(FRotator::ZeroRotator);
+	SetActorRotation(NewMoveToSet);
 	WeaponMesh->SetRelativeLocation(FVector::ZeroVector);
 	WeaponMesh->SetRelativeRotation(FRotator::ZeroRotator);
 	
@@ -119,6 +117,8 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 	{
 		return;
 	}
+
+	DamageStack = FMath::Min<uint8>(DamageStack + 1, MaxDamageStack);
 	
 	OnHitDamage(OtherActor);
 }
@@ -163,9 +163,14 @@ void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
 		FMath::Clamp(Damage / 250, 0.05, 0.1));
 
 	// 주의사항: GlobalTimeDilation에 따라 Timeout의 시간도 늘어난다.
+	UE_LOG(LogTemp, Display, TEXT("Leviathan Axe Attack Damage Stack: %d"), DamageStack);
+	UE_LOG(LogTemp, Display, TEXT("Leviathan Axe Attack HitStopTime: %f"),
+		FMath::Clamp(Damage / 1000 - DamageStack * 0.001, 0.001, 0.02));
+	
 	GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnHitStopEnd),
-		FMath::Clamp(Damage / 10000, 0.005, 0.5), false);
+		FMath::Clamp(Damage / 1000 - DamageStack * 0.001
+			, 0.001, 0.02), false);
 }
 
 void ALeviathanAxe::OnHitStopEnd()
@@ -175,18 +180,21 @@ void ALeviathanAxe::OnHitStopEnd()
 
 void ALeviathanAxe::OnTurnBackCallback(FVector Output)
 {
-	const FVector NewMoveToSet = FMath::Lerp(TurnBackStartLocation, GetOwner()->GetActorLocation(), Output.X);
-	UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), NewMoveToSet);
-	SetActorLocation(NewMoveToSet);
-	AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
 	const ABaseCharacter* Pawn = Cast<ABaseCharacter>(GetOwner());
-	
-	if (!IsValid(Pawn))
-	{
-		return;
-	}
-
 	const FVector MoveTo = Pawn->GetMesh()->GetSocketLocation("WeaponSocket");
+	
+	// 이동하면서 회전 값과 이동 방향 값을 설정해준다.
+	const FVector NewMoveToSet = FMath::Lerp(TurnBackStartLocation, MoveTo, Output.X);
+	const FRotator NewRotateToSet = UKismetMathLibrary::FindLookAtRotation(NewMoveToSet, MoveTo);
+	SetActorLocation(NewMoveToSet);
+	SetActorRotation(NewRotateToSet);
+	
+	// LocalOffset을 설정해줌으로써 살짝 오른쪽으로 회전할 수 있도록 처리한다.
+	AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
+
+	// 회전 방향을 설정해준다.
+	const FRotator NewWeaponMeshRotate = FMath::Lerp(FRotator::ZeroRotator, FRotator(0, -90, 0), Output.X);
+	WeaponMesh->SetRelativeRotation(NewWeaponMeshRotate);
 	
 	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
 	{

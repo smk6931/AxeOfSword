@@ -15,10 +15,6 @@ protected:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr,
 		FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
-
-	virtual void PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-		const FGameplayAbilityActivationInfo ActivationInfo, FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate,
-		const FGameplayEventData* TriggerEventData = nullptr) override;
 	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 		const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
@@ -47,12 +43,19 @@ private:
 	UPROPERTY()
 	TObjectPtr<UPlayMontageWithEvent> AT_ThrowAttackAnim;
 
+	void ClearAttackTag();
+	
+	void SetCombatMode();
+	
 	void DoComboAttack();
 	
 	void DoHeavyAttack();
 	
 	void DoThrowAttack();
 
+	UFUNCTION()
+	void OnBlendOutAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
 	UFUNCTION()
 	void OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 	
@@ -69,6 +72,8 @@ private:
 
 	UFUNCTION()
 	void OnEndCombo();
+
+	void ClearAttackStackInWeapon();
 
 	bool IsAvatarDoingAttack() const;
 	bool IsAvatarDoingHeavyAttack() const;

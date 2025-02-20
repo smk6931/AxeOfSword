@@ -58,11 +58,13 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State, "State", "State 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Idle, "State.Idle", "현재 아무 상태도 아닌 기본 상태임을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Attack, "State.Attack", "현재 공격 상태가 진행 중 임을 의미함");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_CloseHold, "State.CloseHold", "현재 조준하고 있음을 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Casting, "State.Casting", "현재 스킬을 시전 중인 상태임을 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_Damaged, "State.Damaged", "현재 피격 당한 상태임을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_TurnBack, "State.TurnBack", "현재 무기 회수 단계에 돌입했음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status, "Status", "Status 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Combat, "Status.Combat", "현재 전투 모드로 들어갔음을 의미하는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_CloseHold, "Status.CloseHold", "현재 조준하고 있음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
