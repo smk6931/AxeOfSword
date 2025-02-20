@@ -102,7 +102,6 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	
 	if (Hp < 0)
 	{
-		
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
 		// 1초 뒤에 DestroyBoss 함수 호출
 		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, false);
