@@ -17,7 +17,7 @@ bool UGA_OnDamaged::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 	
 	return !UStateHelper::IsDamaged(GetAbilitySystemComponentFromActorInfo()) &&
-		!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Attack);
+		!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Attack_Ing);
 }
 
 void UGA_OnDamaged::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

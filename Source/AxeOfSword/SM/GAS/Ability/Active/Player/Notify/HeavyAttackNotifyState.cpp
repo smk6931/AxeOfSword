@@ -6,9 +6,10 @@
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 
 void UHeavyAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
-	float TotalDuration, const FAnimNotifyEventReference& EventReference)
+                                          float TotalDuration, const FAnimNotifyEventReference& EventReference)
 {
 	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
 	
@@ -19,6 +20,8 @@ void UHeavyAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
 	}
 
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	AOSGameplayTags::SwapGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
+		AOSGameplayTags::State_Attack, AOSGameplayTags::State_Attack_Ing);
 	EquipComponent->ToggleAttack(true);
 }
 
@@ -33,6 +36,7 @@ void UHeavyAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 		return;
 	}
 	
-	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(), AOSGameplayTags::Ability_Attack_Heavy, 0);
-	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(), AOSGameplayTags::State_Attack, 0);
+	UStateHelper::ClearState(BaseCharacter->GetAbilitySystemComponent());
+	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
+	AOSGameplayTags::Ability_Attack_Heavy);
 }
