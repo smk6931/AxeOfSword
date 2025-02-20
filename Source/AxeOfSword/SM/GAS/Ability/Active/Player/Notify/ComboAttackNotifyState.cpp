@@ -1,0 +1,40 @@
+#include "ComboAttackNotifyState.h"
+
+#include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
+
+void UComboAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
+										float TotalDuration, const FAnimNotifyEventReference& EventReference)
+{
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration, EventReference);
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+
+	AOSGameplayTags::SwapGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
+		AOSGameplayTags::State_Attack, AOSGameplayTags::State_Attack_Ing);
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->ToggleAttack(true);
+}
+
+void UComboAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
+                                        UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
+{
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
+	if (!IsValid(BaseCharacter))
+	{
+		return;
+	}
+	
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->ToggleAttack(false);
+	EquipComponent->SetNextCombo();
+	
+	UStateHelper::ClearState(BaseCharacter->GetAbilitySystemComponent());
+	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
+		AOSGameplayTags::Status_Combat);
+} 
