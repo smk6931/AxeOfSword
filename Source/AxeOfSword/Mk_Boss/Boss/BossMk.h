@@ -51,6 +51,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	ASword* BossSword;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	UBossAnim* BossAnim;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
@@ -61,6 +64,8 @@ public:
 	UAnimMontage* DamageMontage;
 
 	void DestroyBoss();
+
+	void DestroyBossSword();
 
 private:
 	FTimerHandle TimerHandle;

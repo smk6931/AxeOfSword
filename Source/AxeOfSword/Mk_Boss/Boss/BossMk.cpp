@@ -1,8 +1,9 @@
 #include "BossMk.h"
 #include "TimerManager.h"
+#include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Engine/DamageEvents.h"
+#include "Kismet/GameplayStatics.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -21,19 +22,21 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-
-	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin_c'"));
+	
+	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
 	// if (TempAnim.Succeeded())
 	// {
 	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
 	// }
-	AttackDamage = 20.f;
+	// AttackDamage = 20.f;
 }
 
 // Called when the game starts or when spawned
 void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
 	// Sword를 스폰함
@@ -85,16 +88,28 @@ void ABossMk::DestroyBoss()
 	Destroy();
 }
 
+void ABossMk::DestroyBossSword()
+{
+	BossSword->Destroy();
+}
+
 float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                           class AController* EventInstigator, AActor* DamageCauser)
 {
 	Hp -= DamageAmount;
 	DamageAnimation();
+	BossAnim->animState = EEnemyState::idle;
+	
 	if (Hp < 0)
 	{
 		// 1초 뒤에 DestroyBoss 함수 호출
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBoss, 1.0f, false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
+
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBoss, 2.0f, false);
 	}
-	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);   
+	
+
+	
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
