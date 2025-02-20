@@ -69,6 +69,7 @@ public:
 
 private:
 	FTimerHandle TimerHandle;
+	FTimerHandle TimerHandleB;
 
 	float AttackDamage;
 };
