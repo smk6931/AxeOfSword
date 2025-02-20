@@ -14,13 +14,16 @@ void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 	BossMk = Cast<ABossMk>(GetOwningActor());
 }
 
-void UBossAnim::SwordCollisiontrue()
+void UBossAnim::ToggleSwordCollision(bool IsEnabled)
 {
-	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
-}
-void UBossAnim::SwordCollisionfalse()
-{
-	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	if (IsEnabled)
+	{
+		BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
+	}
+	else
+	{
+		BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	}
 }
 
 void UBossAnim::AnimNotify_AaFir()
@@ -29,12 +32,10 @@ void UBossAnim::AnimNotify_AaFir()
 	{
 		if (BossMk)
 		{
-			SwordCollisiontrue();
-			GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &UBossAnim::SwordCollisionfalse, 1.0f, false);
-			// GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
+			ToggleSwordCollision(true);
 		}
+		// GetWorld()->GetTimerManager(TimerHandleA, this, &UBossAnim::ToggleSwordCollision(false), 0.5f, false);
 	}
-	
 }
 
 void UBossAnim::AnimNotify_AaEnd()
@@ -47,14 +48,6 @@ void UBossAnim::AnimNotify_AaEnd()
 	else
 	{
 		animState = EEnemyState::Move;
-	}
-	
-	if (BossMk->BossSword)
-	{
-		if (BossMk)
-		{
-			SwordCollisionfalse();
-		}
 	}
 }
 
@@ -78,5 +71,4 @@ void UBossAnim::AnimNotify_DashFir()
 void UBossAnim::AnimNotify_DashEnd()
 {
 	animState = EEnemyState::Attack;
-	SwordCollisionfalse();
 }
