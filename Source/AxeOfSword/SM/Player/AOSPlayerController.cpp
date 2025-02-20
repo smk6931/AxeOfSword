@@ -6,7 +6,7 @@
 void AAOSPlayerController::BeginPlay()
 {
 	// ConsoleCommand(TEXT("stat unit"));
-	ConsoleCommand(TEXT("showdebug abilitysystem"));
+	// ConsoleCommand(TEXT("showdebug abilitysystem"));
 
 	PlayerHUD = CreateWidget<UPlayerHUD>(this, PlayerHUDClass);
 	PlayerHUD->AddToViewport();

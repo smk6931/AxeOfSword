@@ -2,8 +2,8 @@
 
 void UBaseAttribute::Initialize()
 {
-	InitHealth(50000);
-	InitMaxHealth(50000);
+	InitHealth(100);
+	InitMaxHealth(100);
 	InitAttack(5);
 	InitMovementSpeed(280);
 }
