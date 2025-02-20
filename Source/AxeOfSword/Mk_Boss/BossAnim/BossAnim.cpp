@@ -14,33 +14,15 @@ void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 	BossMk = Cast<ABossMk>(GetOwningActor());
 }
 
-void UBossAnim::ToggleSwordCollision(bool IsEnabled)
-{
-	if (IsEnabled)
-	{
-		BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::PhysicsOnly);
-	}
-	else
-	{
-		BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
-	}
-}
-
 void UBossAnim::AnimNotify_AaFir()
 {
-	if (BossMk->BossSword)
-	{
-		if (BossMk)
-		{
-			ToggleSwordCollision(true);
-		}
-		// GetWorld()->GetTimerManager(TimerHandleA, this, &UBossAnim::ToggleSwordCollision(false), 0.5f, false);
-	}
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 }
 
 void UBossAnim::AnimNotify_AaEnd()
 {
 	FString stateStr = UEnum::GetValueAsString(animState);
+
 	if (animState == EEnemyState::JumpAttack)
 	{
 		animState = EEnemyState::RgAttack;
@@ -49,16 +31,20 @@ void UBossAnim::AnimNotify_AaEnd()
 	{
 		animState = EEnemyState::Move;
 	}
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
 void UBossAnim::AnimNotify_AbEnd()
 {
 	animState = EEnemyState::TrippleAttack;
+
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
 void UBossAnim::AnimNotify_AcEnd()
 {
 	animState = EEnemyState::Dash;
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 // 대쉬 초반 공격
 void UBossAnim::AnimNotify_DashFir()
@@ -66,9 +52,11 @@ void UBossAnim::AnimNotify_DashFir()
 	FVector Right = BossMk->GetActorRightVector();
 	FVector Velocity = Right * 2500;
 	BossMk->LaunchCharacter(Velocity, true,true);
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 }
 
 void UBossAnim::AnimNotify_DashEnd()
 {
 	animState = EEnemyState::Attack;
+	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }

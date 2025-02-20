@@ -34,24 +34,24 @@ ASword::ASword()
 		SwordMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	}
 	// 스워드 캡슐 콜리전을 비활성화 한다 - 공격했을시만 활성화 시키기 위해서
-	SwordCapsule->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	SwordCapsule->SetGenerateOverlapEvents(true);
-}
+	SwordCapsule->SetGenerateOverlapEvents(false);
+	SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+}	
 
 // Called when the game starts or when spawned
 void ASword::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	// 웨폰캡슐의 OnComponent의 오버랩 이벤트가 실행되었을떄 OnMyBeginOverlap을 실행시킨다 
 	SwordCapsule->OnComponentBeginOverlap.AddDynamic(this, &ASword::OnMyBeginOverlap);
 
 	BossMk = Cast<ABossMk>(GetOwner());
 }
 
-void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedCompnent, AActor* OtherActor,
+void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Display, TEXT("DamageApplied"));
+	UE_LOG(LogTemp, Display, TEXT("DamageApplied: %s"), *OtherActor->GetName());
 	UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),
 	OtherActor, nullptr);
 }

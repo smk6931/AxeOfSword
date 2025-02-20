@@ -31,9 +31,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
 	
-	void ToggleSwordCollision(bool IsEnabled);
-
-	void DisableSwordCollision();
+	// void ToggleSwordCollision(bool IsEnabled);
 	
 	UFUNCTION()
 	void AnimNotify_AaFir();
@@ -54,6 +52,4 @@ public:
 	void AnimNotify_DashEnd();
 
 	FTimerHandle TimerHandleA;
-	FTimerHandle TimerHandleB;
-	FTimerHandle TimerHandleC;
 };

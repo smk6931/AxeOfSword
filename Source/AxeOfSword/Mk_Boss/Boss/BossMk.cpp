@@ -3,7 +3,6 @@
 #include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
 #include "AxeOfSword/Mk_Boss/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Kismet/GameplayStatics.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -11,6 +10,8 @@ ABossMk::ABossMk()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	Hp = 100;
+
+	// UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
 
 	PrimaryActorTick.bCanEverTick = true;
 	
@@ -72,13 +73,10 @@ void ABossMk::DamageAnimation()
 {
 	if (DamageMontage && GetMesh())
 	{
-		UE_LOG(LogTemp, Display, TEXT("DamageMontage && GetMesh"));
-		
 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
 		if (AnimInstance)
 		{
 			AnimInstance->Montage_Play(DamageMontage);
-			UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
 		}
 	}
 }
@@ -104,7 +102,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	{
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
 		// 1초 뒤에 DestroyBoss 함수 호출
-		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, false);
+		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.5f, false);
 	}
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
