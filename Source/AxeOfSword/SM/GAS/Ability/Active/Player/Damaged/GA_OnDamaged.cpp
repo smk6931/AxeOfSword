@@ -7,9 +7,22 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
+bool UGA_OnDamaged::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+	
+	return !UStateHelper::IsDamaged(GetAbilitySystemComponentFromActorInfo()) &&
+		!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Attack);
+}
+
 void UGA_OnDamaged::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo,
-	FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
+                                const FGameplayAbilityActivationInfo ActivationInfo,
+                                FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 

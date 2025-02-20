@@ -21,23 +21,6 @@ bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	return !IsAvatarDoingAttack();
 }
 
-void UGA_Attack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
-	const FGameplayAbilityActivationInfo ActivationInfo,
-	FOnGameplayAbilityEnded::FDelegate* OnGameplayAbilityEndedDelegate, const FGameplayEventData* TriggerEventData)
-{
-	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
-
-	// 기본 상태가 아니라면 굳이 세팅할 필요가 없다.
-	if (!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Idle))
-	{
-		return;
-	}
-	
-	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
-	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Status_Combat, 1);
-}
-
 void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
                                  const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
                                  const FGameplayEventData* TriggerEventData)
@@ -76,8 +59,10 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
 	// 일반 공격이 종료된 상태임에도 홀딩이 유지되고 있는 경우 강공격 전용 AnimMontage Task를
 	// 실행시킴으로써 강공격을 계속해서 진행시킬 수 있도록 한다.
+	
 	if (!IsHoldEnd)
 	{
+		
 		// 이미 공격 실행 상태이면 굳이 더 감지할 필요는 없다.
 		if (IsAvatarDoingHeavyAttack())
 		{
@@ -120,7 +105,6 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 	IsHoldToThrow = false;
 	if (bWasCancelled)
 	{
-		UE_LOG(LogTemp, Display, TEXT("공격 캔슬"))
 		if (AT_ComboAttackAnim)
 		{
 			AT_ComboAttackAnim->EndTask();
@@ -135,24 +119,43 @@ void UGA_Attack::EndAbility(const FGameplayAbilitySpecHandle Handle,
 		}
 	}
 	
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
-	
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_Combat);
+	ClearAttackTag();
+	
+	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+}
+
+void UGA_Attack::ClearAttackTag()
+{
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Default);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Heavy);
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Ability_Attack_Throw);
+}
+
+void UGA_Attack::SetCombatMode()
+{
+	// 기본 상태가 아니라면 굳이 세팅할 필요가 없다.
+	if (!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Idle))
+	{
+		return;
+	}
 	
-	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	// Ability 실행 이전에는 현재 공격 Ability가 활성화 됨을 태그로 명시한다.
+	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Combat, 1);
 }
 
 void UGA_Attack::DoComboAttack()
 {
+	SetCombatMode();
+	
 	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
-
 	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
@@ -170,6 +173,7 @@ void UGA_Attack::DoComboAttack()
 		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
 		FGameplayTagContainer()
 		);
+	AT_ComboAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnBlendOutAttack);
 	AT_ComboAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnCancelAttack);
 	AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
 	AT_ComboAttackAnim->ReadyForActivation();
@@ -177,13 +181,9 @@ void UGA_Attack::DoComboAttack()
 
 void UGA_Attack::DoHeavyAttack()
 {
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Throw);
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Default);
-	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Heavy, 1);
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	SetCombatMode();
+	
+	ClearAttackTag();
 	
 	if (!IsValid(AT_HeavyAttackAnim))
 	{
@@ -210,13 +210,7 @@ void UGA_Attack::DoHeavyAttack()
 
 void UGA_Attack::DoThrowAttack()
 {
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Heavy);
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Default);
-	AOSGameplayTags::SetGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Throw, 1);
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	ClearAttackTag();
 	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Casting);
 	
@@ -238,6 +232,7 @@ void UGA_Attack::DoThrowAttack()
 			EquipComponent->GetMainWeapon()->GetThrowAttackAnim(),
 			FGameplayTagContainer()
 			);
+		AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);
 		AT_ThrowAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndThrowAttack);
 	} else
 	{
@@ -245,6 +240,18 @@ void UGA_Attack::DoThrowAttack()
 	}
 	
 	AT_ThrowAttackAnim->ReadyForActivation();
+}
+
+void UGA_Attack::OnBlendOutAttack(FGameplayTag EventTag, FGameplayEventData EventData)
+{
+	ClearAttackTag();
+	ClearAttackStackInWeapon();
+
+	if (UStateHelper::IsDamaged(GetAbilitySystemComponentFromActorInfo()))
+	{
+		EndAbility(CurrentSpecHandle, CurrentActorInfo,
+			CurrentActivationInfo, false, false);
+	}
 }
 
 void UGA_Attack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData EventData)

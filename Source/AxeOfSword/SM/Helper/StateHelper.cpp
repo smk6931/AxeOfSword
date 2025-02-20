@@ -10,7 +10,7 @@ bool UStateHelper::IsIdle(const UAbilitySystemComponent* ASC)
 
 bool UStateHelper::IsDamaged(const UAbilitySystemComponent* ASC)
 {
-	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Idle);
+	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Damaged);
 }
 
 bool UStateHelper::IsZoomIn(const UAbilitySystemComponent* ASC)

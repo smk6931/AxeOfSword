@@ -163,12 +163,14 @@ void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
 		FMath::Clamp(Damage / 250, 0.05, 0.1));
 
 	// 주의사항: GlobalTimeDilation에 따라 Timeout의 시간도 늘어난다.
-	UE_LOG(LogTemp, Display, TEXT("Test Case: %d"), DamageStack);
-	UE_LOG(LogTemp, Display, TEXT("Test Result: %f"), FMath::Clamp((Damage / 10) / DamageStack, 0.0001, 0.02));
+	UE_LOG(LogTemp, Display, TEXT("Leviathan Axe Attack Damage Stack: %d"), DamageStack);
+	UE_LOG(LogTemp, Display, TEXT("Leviathan Axe Attack HitStopTime: %f"),
+		FMath::Clamp(Damage / 1000 - DamageStack * 0.001, 0.001, 0.02));
 	
 	GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnHitStopEnd),
-		FMath::Clamp((Damage / 10) / DamageStack, 0.0001, 0.02), false);
+		FMath::Clamp(Damage / 1000 - DamageStack * 0.001
+			, 0.001, 0.02), false);
 }
 
 void ALeviathanAxe::OnHitStopEnd()

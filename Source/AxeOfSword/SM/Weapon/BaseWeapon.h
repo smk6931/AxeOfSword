@@ -44,7 +44,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
 	int8 Damage;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
 	uint8 DamageStack = 1;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))

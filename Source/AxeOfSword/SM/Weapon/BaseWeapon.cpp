@@ -46,5 +46,5 @@ void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
 
 void ABaseWeapon::ClearDamageStack()
 {
-	DamageStack = 1;
+	DamageStack = 0;
 }
