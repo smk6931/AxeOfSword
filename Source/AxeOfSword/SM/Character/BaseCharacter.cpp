@@ -4,12 +4,18 @@
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("Equip Component");
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void ABaseCharacter::BeginPlay()

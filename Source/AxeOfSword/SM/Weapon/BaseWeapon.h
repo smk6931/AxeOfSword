@@ -1,20 +1,25 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "AxeOfSword/SM/Helper/UtilHelper.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemInitializeData.h"
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
 class UBoxComponent;
+class UAOSAbilitySystemComponent;
 
 UCLASS()
-class AXEOFSWORD_API ABaseWeapon : public AActor
+class AXEOFSWORD_API ABaseWeapon : public AActor, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	ABaseWeapon();
-
+	
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
 	void ClearDamageStack();
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
 	virtual void UpdateWeaponAttackable(const bool IsEnable);
@@ -27,6 +32,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UAOSAbilitySystemComponent* AbilitySystemComponent;
+	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USceneComponent> Root;
 	
@@ -52,6 +60,9 @@ protected:
 	FTimerHandle EndHitStopTimerHandle;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
+	
 	// TODO: 임시용으로 무기에 장착하지만 DataTable과 EquipComponent에서 무기를 감지하고
 	// 그에 맞는 애니메이션 리스트를 부과해주는 것이 맞다.
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
