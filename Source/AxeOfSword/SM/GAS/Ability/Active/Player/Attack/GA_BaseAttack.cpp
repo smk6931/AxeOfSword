@@ -21,6 +21,19 @@ void UGA_BaseAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
+	// 캐스팅 상태이면서도, 현재 CloseHold Ability가 활성화된 상태에서 공격 키를 누르면
+	// 무기 던지기 특수 스킬을 구현한다.
+	if (AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+	AOSGameplayTags::Ability_CloseHold))
+	{
+		FGameplayTagContainer TagContainer;
+		TagContainer.AddTag(AOSGameplayTags::Ability_Attack_Throw);
+		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(TagContainer);
+		
+		EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
+		return;
+	}
+	
 	AOSGameplayTags::ToggleGameplayTag(
 		GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Attack_Hold);
 
@@ -43,11 +56,13 @@ void UGA_BaseAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const
 {
 	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
 
-	if (AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Status_Attack_Hold) && UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
+	// 계속 눌려있을 때 Pressed가 호출되며, 홀딩이 계속되는 상태이면서도 Idle인 상태 즉
+	// 일반 공격 1번이 끝났다는 것으로 정의해 강공격을 이후 계속 진행한다.
+	if (IsPlayerHoldingAttack() && UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
 	{
 		FGameplayTagContainer TagContainer;
 		TagContainer.AddTag(AOSGameplayTags::Ability_Attack_Heavy);
+		
 		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
 		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(TagContainer);
 	}
@@ -61,4 +76,10 @@ void UGA_BaseAttack::InputReleased(const FGameplayAbilitySpecHandle Handle, cons
 	AOSGameplayTags::RemoveGameplayTag(
 		GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Attack_Hold);
 	EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
+}
+
+bool UGA_BaseAttack::IsPlayerHoldingAttack() const
+{
+	return AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Attack_Hold);
 }

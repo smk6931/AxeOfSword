@@ -2,15 +2,15 @@
 
 #include "CoreMinimal.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/BaseInputAbility.h"
-#include "GA_BaseAttack.generated.h"
+#include "GA_ThrowAttack.generated.h"
 
-class UGA_ComboAttack;
+class UPlayMontageWithEvent;
 
 UCLASS()
-class AXEOFSWORD_API UGA_BaseAttack : public UBaseInputAbility
+class AXEOFSWORD_API UGA_ThrowAttack : public UBaseInputAbility
 {
 	GENERATED_BODY()
-
+	
 protected:
 	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr,
@@ -24,12 +24,10 @@ protected:
 		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 		bool bReplicateEndAbility, bool bWasCancelled) override;
 
-	virtual void InputPressed(const FGameplayAbilitySpecHandle Handle,
-		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
-	
-	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle,
-		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
-
 private:
-	bool IsPlayerHoldingAttack() const;
+	UPROPERTY()
+	TObjectPtr<UPlayMontageWithEvent> AT_ThrowAttackAnim;
+
+	UFUNCTION()
+	void OnEndThrowAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 };
