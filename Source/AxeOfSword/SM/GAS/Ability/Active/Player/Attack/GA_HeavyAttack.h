@@ -2,12 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/BaseInputAbility.h"
-#include "GA_BaseAttack.generated.h"
+#include "GA_HeavyAttack.generated.h"
 
-class UGA_ComboAttack;
+class UPlayMontageWithEvent;
 
 UCLASS()
-class AXEOFSWORD_API UGA_BaseAttack : public UBaseInputAbility
+class AXEOFSWORD_API UGA_HeavyAttack : public UBaseInputAbility
 {
 	GENERATED_BODY()
 
@@ -24,9 +24,13 @@ protected:
 		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo,
 		bool bReplicateEndAbility, bool bWasCancelled) override;
 
-	virtual void InputPressed(const FGameplayAbilitySpecHandle Handle,
-		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
+private:
+	UPROPERTY()
+	TObjectPtr<UPlayMontageWithEvent> AT_HeavyAttackAnim;
 	
-	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle,
-		const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
+	UFUNCTION()
+	void OnBlendOutHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
+	
+	UFUNCTION()
+	void OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 };

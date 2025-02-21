@@ -2,10 +2,11 @@
 
 #include "AbilitySystemComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 
 bool UGA_BaseAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
-	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
-	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+                                        const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+                                        const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
 	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
 	{
@@ -43,10 +44,11 @@ void UGA_BaseAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const
 	Super::InputPressed(Handle, ActorInfo, ActivationInfo);
 
 	if (AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::Status_Attack_Hold))
+		AOSGameplayTags::Status_Attack_Hold) && UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
 	{
 		FGameplayTagContainer TagContainer;
 		TagContainer.AddTag(AOSGameplayTags::Ability_Attack_Heavy);
+		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
 		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(TagContainer);
 	}
 }

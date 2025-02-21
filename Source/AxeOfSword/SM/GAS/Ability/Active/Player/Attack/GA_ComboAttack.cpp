@@ -16,7 +16,7 @@ bool UGA_ComboAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return false;
 	}
 	
-	return true;
+	return AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::State_Idle);
 }
 
 void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -25,7 +25,6 @@ void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
-	// GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
 	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
