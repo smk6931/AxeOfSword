@@ -32,16 +32,14 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 
-	if (!AT_ThrowAttackAnim)
-	{
-		AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
+	AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
 		EquipComponent->GetMainWeapon()->GetThrowAttackAnim(),
 		FGameplayTagContainer()
 		);
-		AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);
-		AT_ThrowAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndThrowAttack);
-	}
+	AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);
+	AT_ThrowAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnEndThrowAttack);
+	AT_ThrowAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndThrowAttack);
 	
 	AT_ThrowAttackAnim->Activate();
 }
@@ -49,15 +47,14 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UGA_ThrowAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
+	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+	AOSGameplayTags::Ability_Attack_Throw);
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UGA_ThrowAttack::OnEndThrowAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-	AOSGameplayTags::Ability_Attack_Throw);
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
-	
 	EndAbility(CurrentSpecHandle, CurrentActorInfo,
 		CurrentActivationInfo, false, false);
 }

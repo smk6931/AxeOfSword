@@ -24,6 +24,8 @@ public:
 
 	void ToggleAttack(const bool IsAttack);
 
+	bool IsMainWeaponOwner() const;
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -1,6 +1,8 @@
 ﻿#include "GA_BaseAttack.h"
 
 #include "AbilitySystemComponent.h"
+#include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 
@@ -26,8 +28,16 @@ void UGA_BaseAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	if (AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_CloseHold))
 	{
+		const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+		if (!BaseCharacter->GetEquipComponent()->IsMainWeaponOwner())
+		{
+			return;
+		}
+		
 		FGameplayTagContainer TagContainer;
 		TagContainer.AddTag(AOSGameplayTags::Ability_Attack_Throw);
+		
+		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
 		GetAbilitySystemComponentFromActorInfo()->TryActivateAbilitiesByTag(TagContainer);
 		
 		EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
