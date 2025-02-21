@@ -7,11 +7,14 @@ class UAbilitySystemComponent;
 
 namespace AOSGameplayTags
 {
-	AXEOFSWORD_API void AddGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count = 1, const bool bIsReplicated = false);
-	AXEOFSWORD_API void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count = -1, const bool bIsReplicated = false);
-	AXEOFSWORD_API void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated = false);
+	AXEOFSWORD_API void AddGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count = 1, const bool IsReplicated = false);
+	AXEOFSWORD_API void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count = -1, const bool IsReplicated = false);
+	AXEOFSWORD_API void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool IsReplicated = false);
 	AXEOFSWORD_API void SwapGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FromTag, const FGameplayTag ToTag
-		, const bool bIsReplicated = false);
+		, const bool IsReplicated = false);
+	AXEOFSWORD_API bool HasGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FindToTag);
+	AXEOFSWORD_API void ToggleGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag,
+		const bool IsForceActive = false, const bool IsReplicated = false);
 	
 	// Ability 관련 최상위 트리 태그로 여러개가 들어갈 수 있음
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability)
@@ -22,6 +25,8 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_CloseHold)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_Sprint)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_TurnBack)
+
+	// Passive 관련 최상위 트리 태그로 여러개가 들어갈 수 있음
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Passive)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Passive_Damaged)
 
@@ -37,7 +42,9 @@ namespace AOSGameplayTags
 	// 플레이어 상태 값을 넣는 곳으로 여러개가 들어갈 수 있는 부가적인 상태
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Combat)
+	// TODO: 이름 변경 CloseHold는 잘못된 표현
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_CloseHold)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Attack_Hold)
 
 	// GameplayCue 관련 태그
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue)

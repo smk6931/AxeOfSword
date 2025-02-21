@@ -6,7 +6,7 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
- 
+
 bool UGA_Attack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 									const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
 									FGameplayTagContainer* OptionalRelevantTags) const
@@ -39,6 +39,9 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	
 	// 기존의 콤보 초기화 관련 Timer는 초기화 시켜준다.
 	DoComboAttack();
+
+	EndAbility(Handle, ActorInfo, ActivationInfo,
+		false, false);
 }
 
 void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -66,7 +69,6 @@ void UGA_Attack::InputPressed(const FGameplayAbilitySpecHandle Handle, const FGa
 		{
 			return;
 		}
-		
 		DoHeavyAttack();
 	} else
 	{
