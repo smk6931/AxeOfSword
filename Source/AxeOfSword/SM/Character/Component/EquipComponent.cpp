@@ -57,3 +57,8 @@ void UEquipComponent::ToggleAttack(const bool IsAttack)
 		SubWeapon->UpdateWeaponAttackable(IsAttack);
 	}
 }
+
+bool UEquipComponent::IsMainWeaponOwner() const
+{
+	return MainWeapon->GetOwner() == GetOwner();
+}

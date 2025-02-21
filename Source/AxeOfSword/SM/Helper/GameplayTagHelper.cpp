@@ -5,44 +5,59 @@
 
 namespace AOSGameplayTags
 {
-	void AddGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated)
+	void AddGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool IsReplicated)
 	{
-		if (bIsReplicated)
+		if (IsReplicated)
 		{
 			ASC->SetReplicatedLooseGameplayTagCount(Tag, Count);
 		}
 		ASC->SetLooseGameplayTagCount(Tag, Count);
 	}
 
-	void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated)
+	void RemoveGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool IsReplicated)
 	{
 		// Count가 -1 즉 기본 값으로 설정되어 있다면, 전부 없애기 위해 0으로 설정하고
 		// 그게 아니라면 현재 갯수에서 N개만 빼게 설정한다.
 		const int32 NewCount = Count == -1 ? 0 : ASC->GetGameplayTagCount(Tag) - Count;
 		
-		if (bIsReplicated)
+		if (IsReplicated)
 		{
 			ASC->SetReplicatedLooseGameplayTagCount(Tag, NewCount);
 		}
 		ASC->SetLooseGameplayTagCount(Tag, NewCount);
 	}
 
-	void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool bIsReplicated)
+	void SetGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const int32 Count, const bool IsReplicated)
 	{
-		if (bIsReplicated)
+		if (IsReplicated)
 		{
 			ASC->SetReplicatedLooseGameplayTagCount(Tag, Count);
 		}
 		ASC->SetLooseGameplayTagCount(Tag, Count);
 	}
 
-	void SwapGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FromTag, const FGameplayTag ToTag, const bool bIsReplicated)
+	void SwapGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FromTag, const FGameplayTag ToTag, const bool IsReplicated)
 	{
 		const uint8 FromTagCount = ASC->GetGameplayTagCount(FromTag);
-		RemoveGameplayTag(ASC, FromTag, FromTagCount, bIsReplicated);
-		AddGameplayTag(ASC, ToTag, FromTagCount, bIsReplicated);
+		RemoveGameplayTag(ASC, FromTag, FromTagCount, IsReplicated);
+		AddGameplayTag(ASC, ToTag, FromTagCount, IsReplicated);
 	}
-	
+
+	bool HasGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag FindToTag)
+	{
+		return ASC->HasMatchingGameplayTag(FindToTag);
+	}
+
+	void ToggleGameplayTag(UAbilitySystemComponent* ASC, const FGameplayTag Tag, const bool IsForceActive, const bool IsReplicated)
+	{
+		const bool HasTag = ASC->HasMatchingGameplayTag(Tag);
+		// 강제 태그 
+		const uint32 TagCount = IsForceActive ? IsForceActive : !HasTag;
+
+		SetGameplayTag(ASC, Tag, TagCount, IsReplicated);
+	}
+
+
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability, "Ability", "Ability 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack, "Ability.Attack", "공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Default, "Ability.Attack.Default", "일반 공격 Ability 실행 상태를 의미함");
@@ -64,6 +79,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(State_TurnBack, "State.TurnBack", "현재 무기 회수 단계에 돌입했음을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status, "Status", "Status 관련 최상위 트리 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Attack_Hold, "Status.Attack.Hold", "현재 공격 관련 Input Key가 Holding 처리되었음을 의미");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Combat, "Status.Combat", "현재 전투 모드로 들어갔음을 의미하는 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_CloseHold, "Status.CloseHold", "현재 조준하고 있음을 의미함");
 	

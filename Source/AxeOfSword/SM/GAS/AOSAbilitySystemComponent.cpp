@@ -20,9 +20,12 @@ void UAOSAbilitySystemComponent::Initialize(const UAOSAbilitySystemInitializeDat
 		for (auto Ability : InitialData->GetDefaultGameplayAbilities())
 		{
 			const UBaseInputAbility* InputAbility = Ability->GetDefaultObject<UBaseInputAbility>();
+			const int32 InputId = InputAbility->GetInputId() == EAbilityInputId::Undefined
+				? INDEX_NONE : static_cast<int32>(InputAbility->GetInputId());
+			
 			GiveAbility(FGameplayAbilitySpec(
 				Ability, InputAbility->GetAbilityLevel()
-				, static_cast<uint8>(InputAbility->GetInputId()), this));
+				, InputId, this));
 		}
 	}
 	
