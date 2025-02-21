@@ -3,26 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "Animation/AnimInstance.h"
 #include "RangeAnim.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class AXEOFSWORD_API ARangeAnim : public ACharacter
+class AXEOFSWORD_API URangeAnim : public UAnimInstance
 {
 	GENERATED_BODY()
-
-public:
-	// Sets default values for this character's properties
-	ARangeAnim();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

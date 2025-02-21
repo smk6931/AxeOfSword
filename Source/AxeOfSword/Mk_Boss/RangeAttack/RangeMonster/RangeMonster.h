@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AxeOfSword/Mk_Boss/RangeAttack/RangeFSM/RangeFSM.h"
 #include "GameFramework/Character.h"
 #include "RangeMonster.generated.h"
 
@@ -28,10 +29,16 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class USkeletalMeshComponent* RangeMesh;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class URangeAnim* RangeAnim;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	class APlayerCharacter* PlayerCharacter;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	FVector Direction;
-
-	// UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	// TSubclassOf<class ARangeAttacker> RangeAttacker;
+	TSubclassOf<class ARangeStaff>RangeStaff;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	URangeFSM* RangeFSM;
 };
