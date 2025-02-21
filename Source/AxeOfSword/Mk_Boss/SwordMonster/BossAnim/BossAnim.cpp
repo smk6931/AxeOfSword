@@ -2,8 +2,8 @@
 
 #include "BossAnim.h"
 #include "TimerManager.h"
-#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
-#include "AxeOfSword/Mk_Boss/Sword/Sword.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "Components/CapsuleComponent.h"
 
 

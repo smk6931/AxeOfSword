@@ -3,11 +3,9 @@
 
 #include "EnemyFSM.h"
 
-#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
-#include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
-#include "AxeOfSword/Mk_Boss/Sword/Sword.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Components/CapsuleComponent.h"
 
 
 // Sets default values for this component's properties

@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
-#include "AxeOfSword/Mk_Boss/EnemyFSM/EnemyFSM.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/EnemyFSM/EnemyFSM.h"
 #include "BossAnim.generated.h"
 
 /**

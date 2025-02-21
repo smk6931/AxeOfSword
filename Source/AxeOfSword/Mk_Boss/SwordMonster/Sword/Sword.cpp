@@ -3,7 +3,7 @@
 
 #include "Sword.h"
 
-#include "AxeOfSword/Mk_Boss/Boss/BossMk.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 

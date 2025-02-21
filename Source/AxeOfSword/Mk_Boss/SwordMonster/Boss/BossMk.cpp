@@ -1,7 +1,7 @@
 #include "BossMk.h"
 #include "TimerManager.h"
-#include "AxeOfSword/Mk_Boss/BossAnim/BossAnim.h"
-#include "AxeOfSword/Mk_Boss/Sword/Sword.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
+#include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 
 class UBossHpWidget;
