@@ -1,6 +1,7 @@
 ﻿#include "LeviathanAxe.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "Kismet/GameplayStatics.h"
@@ -43,39 +44,6 @@ void ALeviathanAxe::BeginPlay()
 	TurnBackTimeline->SetTimelineFinishedFunc(TurnBackFinish);
 }
 
-void ALeviathanAxe::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	switch (AxeStatus)
-	{
-		case ELeviathanAxeStatus::Throw:
-		{
-			// RotateByPowerInTick(DeltaSeconds);
-			//
-			// FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
-			// GravityStack += DeltaSeconds * DeltaSeconds;
-			// ForwardVector.Z -= GravityScale * GravityStack;
-			//
-			// AddActorWorldOffset(ForwardVector);
-			//
-			// FHitResult HitResult;
-			// TraceWeaponThrow(HitResult);
-			//
-			// if (HitResult.bBlockingHit)
-			// {
-			// 	OnHitThrown(HitResult);
-			// }
-			// break;
-		}
-		case ELeviathanAxeStatus::Return:
-		default:
-		{
-			break;
-		}
-	}
-}
-
 void ALeviathanAxe::Throw()
 {
 	CastWeaponSkill(AOSGameplayTags::Skill_LeviathanAxe_Throw);
@@ -83,6 +51,10 @@ void ALeviathanAxe::Throw()
 
 void ALeviathanAxe::TurnBack(AActor* NewOwner)
 {
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
+	AbilitySystemComponent->CancelAbilities(&TagContainer);
+	
 	if (AxeStatus == ELeviathanAxeStatus::Return)
 	{
 		return;
@@ -125,35 +97,6 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 	DamageStack = FMath::Min<uint8>(DamageStack + 1, MaxDamageStack);
 	
 	OnHitDamage(OtherActor);
-}
-
-void ALeviathanAxe::OnHitThrown(const FHitResult& HitResult)
-{
-	GravityStack = 0;
-	AxeStatus = ELeviathanAxeStatus::Thrown_Idle;
-	
-	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
-		GetActorRightVector()).Rotator();
-	
-	SetActorRotation(ActorRotate);
-	SetActorLocation(HitResult.ImpactPoint);
-
-	const FVector Location{-40, 0, 30};
-	const FRotator Angle{-120, 0, 0};
-	
-	WeaponMesh->SetRelativeLocation(Location);
-	WeaponMesh->SetRelativeRotation(Angle);
-	
-	SetOwner(HitResult.GetActor());
-}
-
-void ALeviathanAxe::TraceWeaponThrow(FHitResult& HitResult)
-{
-	TArray<AActor*> IgnoreActors;
-	IgnoreActors.Add(this);
-	UKismetSystemLibrary::SphereTraceSingle(GetWorld(), WeaponPivot->GetComponentLocation(),
-		WeaponPivot->GetComponentLocation(), 50, TraceTypeQuery1, false, IgnoreActors,
-		EDrawDebugTrace::None, HitResult, true);
 }
 
 void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
@@ -229,15 +172,4 @@ void ALeviathanAxe::OnTurnBackEnd()
 		return;
 	}
 	PC->PlayerCameraManager->StartCameraShake(TurnBackEndCameraShake);
-}
-
-void ALeviathanAxe::RotateByPowerInTick(const float DeltaTime)
-{
-	const FRotator WeaponMeshRotation = WeaponMesh->GetRelativeRotation();
-	const FQuat NewRotationQuat = FQuat(WeaponMeshRotation);
-	const FQuat MoveToRotationQuat = FQuat(FVector(0, 1, 0), ThrowRotatePower * DeltaTime);
-	FQuat NewMeshRotation = MoveToRotationQuat * NewRotationQuat;
-	NewMeshRotation.X = 0;
-	NewMeshRotation.Z = 0;
-	WeaponMesh->SetRelativeRotation(NewMeshRotation.Rotator());
 }

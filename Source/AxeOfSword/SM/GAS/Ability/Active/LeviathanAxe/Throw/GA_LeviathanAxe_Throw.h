@@ -25,4 +25,7 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Balance", meta = (AllowPrivateAccess = true))
 	FLeviathanAxeThrowBalance SkillBalance;
+
+	UFUNCTION()
+	void OnEndThrowAxe();
 };

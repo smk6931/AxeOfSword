@@ -8,13 +8,14 @@ UAT_LeviathanAxe_Throw* UAT_LeviathanAxe_Throw::InitialEvent(
 {
 	UAT_LeviathanAxe_Throw* NewTask = NewAbilityTask<UAT_LeviathanAxe_Throw>(OwningAbility);
 	NewTask->Balance = NewBalance;
+	NewTask->LeviathanAxe = Cast<ALeviathanAxe>(OwningAbility->GetAvatarActorFromActorInfo());
 	return NewTask;
 }
 
 void UAT_LeviathanAxe_Throw::Activate()
 {
 	Super::Activate();
-	LeviathanAxe = Cast<ALeviathanAxe>(Ability->GetAvatarActorFromActorInfo());
+	
 	LeviathanAxe->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	
 	if (const APawn* Pawn = Cast<APawn>(LeviathanAxe->GetOwner()))
@@ -22,7 +23,8 @@ void UAT_LeviathanAxe_Throw::Activate()
 		ThrowRotate = Pawn->GetController()->GetControlRotation();
 		LeviathanAxe->SetWeaponMeshRotation(Pawn->GetController()->GetControlRotation());
 	}
-	
+
+	UE_LOG(LogTemp, Display, TEXT("%hhd"), LeviathanAxe->GetAxeStatus());
 	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Throw);
 	GravityStack = 0;
 	
@@ -32,7 +34,6 @@ void UAT_LeviathanAxe_Throw::Activate()
 void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
 {
 	Super::TickTask(DeltaTime);
-
 	RotateByPowerInTick(DeltaTime);
 	
 	FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * Balance.ThrowMovePower * DeltaTime;
@@ -73,6 +74,7 @@ void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
 	LeviathanAxe->SetActorRotation(ActorRotate);
 	LeviathanAxe->SetActorLocation(HitResult.ImpactPoint);
 
+	// TODO: 해당 부분은 Leviathan Pivot Point를 가져오는 것으로 후에 처리할 것
 	const FVector Location{-40, 0, 30};
 	const FRotator Angle{-120, 0, 0};
 	
@@ -80,6 +82,9 @@ void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
 	LeviathanAxe->GetWeaponMesh()->SetRelativeRotation(Angle);
 	
 	LeviathanAxe->SetOwner(HitResult.GetActor());
+
+	// 여기서 Ability를 강제로 종료시키게 처리한다.
+	OnThrowEndNotified.Broadcast();
 }
 
 void UAT_LeviathanAxe_Throw::RotateByPowerInTick(const float DeltaTime)

@@ -25,8 +25,6 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaSeconds) override;
 	
 	UFUNCTION()
 	virtual void OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComponent,
@@ -39,17 +37,6 @@ protected:
 
 private:
 	ELeviathanAxeStatus AxeStatus = ELeviathanAxeStatus::Idle;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan", meta = (AllowPrivateAccess = true))
-	float GravityScale = 720.f;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
-		meta = (AllowPrivateAccess = true))
-	int32 ThrowMovePower = 2000;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
-		meta = (AllowPrivateAccess = true))
-	int32 ThrowRotatePower = 720;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
 		meta = (AllowPrivateAccess = true))
@@ -76,8 +63,7 @@ private:
 	FOnTimelineVector TurnBackCallback;
 	
 	FOnTimelineEvent TurnBackFinish;
-
-	void OnHitThrown(const FHitResult& HitResult);
+	
 	void OnHitDamage(AActor* TargetActor);
 	void OnTurnBackEnd();
 	
@@ -89,8 +75,4 @@ private:
 	
 	UFUNCTION()
 	void OnTurnBackFinish();
-
-	void TraceWeaponThrow(FHitResult& HitResult);
-
-	void RotateByPowerInTick(const float DeltaTime);
 };

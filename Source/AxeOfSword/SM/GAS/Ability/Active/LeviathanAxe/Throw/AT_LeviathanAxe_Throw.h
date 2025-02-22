@@ -19,6 +19,8 @@ struct FLeviathanAxeThrowBalance
 	float GravityScale;
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnThrowEndNotified);
+
 UCLASS()
 class AXEOFSWORD_API UAT_LeviathanAxe_Throw : public UAbilityTask
 {
@@ -28,6 +30,8 @@ public:
 	static UAT_LeviathanAxe_Throw* InitialEvent(UGameplayAbility* OwningAbility, const FLeviathanAxeThrowBalance& NewBalance);
 	
 	virtual void Activate() override;
+
+	FOnThrowEndNotified OnThrowEndNotified;
 	
 protected:
 	virtual void TickTask(float DeltaTime) override;
@@ -35,8 +39,8 @@ protected:
 private:
 	TObjectPtr<ALeviathanAxe> LeviathanAxe;
 	
-	FRotator ThrowRotate;
-	FRotator WeaponMeshRotate;
+	FRotator ThrowRotate = FRotator::ZeroRotator;
+	FRotator WeaponMeshRotate = FRotator::ZeroRotator;
 
 	FLeviathanAxeThrowBalance Balance;
 

@@ -10,12 +10,10 @@ void UGA_LeviathanAxe_Throw::ActivateAbility(
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	if (!AT_LeviathanAxeThrow)
-	{
-		AT_LeviathanAxeThrow = UAT_LeviathanAxe_Throw::InitialEvent(this, SkillBalance);
-	}
+	AT_LeviathanAxeThrow = UAT_LeviathanAxe_Throw::InitialEvent(this, SkillBalance);
+	AT_LeviathanAxeThrow->OnThrowEndNotified.AddDynamic(this, &ThisClass::OnEndThrowAxe);
 	
-	AT_LeviathanAxeThrow->Activate();
+	AT_LeviathanAxeThrow->ReadyForActivation();
 }
 
 void UGA_LeviathanAxe_Throw::EndAbility(const FGameplayAbilitySpecHandle Handle
@@ -25,4 +23,9 @@ void UGA_LeviathanAxe_Throw::EndAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility
 					, bWasCancelled);
+}
+
+void UGA_LeviathanAxe_Throw::OnEndThrowAxe()
+{
+	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }
