@@ -21,6 +21,7 @@ public:
 	void TurnBack(AActor* NewOwner);
 
 	GETTER_SETTER(ELeviathanAxeStatus, AxeStatus)
+	GETTER(TObjectPtr<USceneComponent>, WeaponPivot)
 	
 protected:
 	virtual void BeginPlay() override;

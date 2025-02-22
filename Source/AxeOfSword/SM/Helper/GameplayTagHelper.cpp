@@ -67,6 +67,9 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Sprint, "Ability.Sprint", "달리기 Ability 사용하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_TurnBack, "Ability.TurnBack", "무기 복귀에 대한 Ability를 사용하고 있음을 의미함");
 	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_Throw, "Skill.LeviathanAxe.Throw", "Leviathan 도끼의 던지기 스킬 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_TurnBack, "Skill.LeviathanAxe.TurnBack", "Leviathan 도끼의 복귀 스킬 태그");
+	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Passive, "Passive", "패시브 Ability 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Passive_Damaged, "Passive.Damaged", "피격 시 발동하는 패시브 Ability 태그");
 	

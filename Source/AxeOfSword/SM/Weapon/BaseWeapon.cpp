@@ -12,6 +12,8 @@ ABaseWeapon::ABaseWeapon()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
 	WeaponMesh->SetupAttachment(GizmoPoint);
 	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	
+	AbilitySystemComponent = CreateDefaultSubobject<UAOSAbilitySystemComponent>("Ability System Component");
 }
 
 UAbilitySystemComponent* ABaseWeapon::GetAbilitySystemComponent() const
@@ -47,7 +49,19 @@ void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
 	}
 }
 
+void ABaseWeapon::SetWeaponMeshRotation(const FRotator& NewRotator)
+{
+	WeaponMesh->SetRelativeRotation(NewRotator);
+}
+
 void ABaseWeapon::ClearDamageStack()
 {
 	DamageStack = 0;
+}
+
+void ABaseWeapon::CastWeaponSkill(const FGameplayTag& SkillTag)
+{
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(SkillTag);
+	AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 }

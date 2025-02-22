@@ -1,6 +1,7 @@
 ﻿#include "LeviathanAxe.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -11,6 +12,16 @@ ALeviathanAxe::ALeviathanAxe()
 	
 	WeaponPivot = CreateDefaultSubobject<USceneComponent>("Weapon Pivot");
 	WeaponPivot->SetupAttachment(GetRootComponent());
+
+	ConstructorHelpers::FObjectFinder<UAOSAbilitySystemInitializeData>
+		TempInitialData(TEXT("/Script/AxeOfSword.AOSAbilitySystemInitializeData'"
+					   "/Game/SM/Weapon/Cretos_Axe/DA_LeviathanAxe_InitialData.DA_LeviathanAxe_InitialData'"));
+
+	if (TempInitialData.Succeeded())
+	{
+		InitialData = TempInitialData.Object;
+	}
+	
 	
 	PrimaryActorTick.bCanEverTick = true;
 }
@@ -40,22 +51,22 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 	{
 		case ELeviathanAxeStatus::Throw:
 		{
-			RotateByPowerInTick(DeltaSeconds);
-	
-			FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
-			GravityStack += DeltaSeconds * DeltaSeconds;
-			ForwardVector.Z -= GravityScale * GravityStack;
-
-			AddActorWorldOffset(ForwardVector);
-
-			FHitResult HitResult;
-			TraceWeaponThrow(HitResult);
-
-			if (HitResult.bBlockingHit)
-			{
-				OnHitThrown(HitResult);
-			}
-			break;
+			// RotateByPowerInTick(DeltaSeconds);
+			//
+			// FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * ThrowMovePower * DeltaSeconds;
+			// GravityStack += DeltaSeconds * DeltaSeconds;
+			// ForwardVector.Z -= GravityScale * GravityStack;
+			//
+			// AddActorWorldOffset(ForwardVector);
+			//
+			// FHitResult HitResult;
+			// TraceWeaponThrow(HitResult);
+			//
+			// if (HitResult.bBlockingHit)
+			// {
+			// 	OnHitThrown(HitResult);
+			// }
+			// break;
 		}
 		case ELeviathanAxeStatus::Return:
 		default:
@@ -67,14 +78,7 @@ void ALeviathanAxe::Tick(float DeltaSeconds)
 
 void ALeviathanAxe::Throw()
 {
-	DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	if (const APawn* Pawn = Cast<APawn>(GetOwner()))
-	{
-		ThrowRotate = Pawn->GetController()->GetControlRotation();
-		WeaponMesh->SetRelativeRotation(Pawn->GetController()->GetControlRotation());
-	}
-	
-	AxeStatus = ELeviathanAxeStatus::Throw;
+	CastWeaponSkill(AOSGameplayTags::Skill_LeviathanAxe_Throw);
 }
 
 void ALeviathanAxe::TurnBack(AActor* NewOwner)
