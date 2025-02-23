@@ -13,6 +13,4 @@ public:
 
 protected:
 	virtual void TickTask(float DeltaTime) override;
-
-	virtual void ExternalCancel() override;
 };

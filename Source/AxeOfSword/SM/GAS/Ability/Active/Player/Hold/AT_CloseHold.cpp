@@ -43,12 +43,3 @@ void UAT_CloseHold::TickTask(float DeltaTime)
 		PC->GetPlayerHUD()->GetZoomWidget()->ToggleWing(false);
 	}
 }
-
-void UAT_CloseHold::ExternalCancel()
-{
-	Super::ExternalCancel();
-	
-	const APlayerCharacter* Player = Cast<APlayerCharacter>(GetAvatarActor());
-	const AAOSPlayerController* PC = Player->GetController<AAOSPlayerController>();
-	PC->GetPlayerHUD()->GetZoomWidget()->ToggleZoomMode(false);
-}

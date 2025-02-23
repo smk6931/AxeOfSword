@@ -3,6 +3,9 @@
 #include "AbilitySystemComponent.h"
 #include "AT_CloseHold.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
+#include "AxeOfSword/SM/UI/HUD/Module/ZoomWidget.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
@@ -53,11 +56,9 @@ void UGA_CloseHold::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		EquipComponent->GetZoomMontage(),
 		FGameplayTagContainer()
 	);
-	
 	AT_AttackZoomAnim->ReadyForActivation();
 
 	AT_CloseHold = UAT_CloseHold::InitialEvent(this);
-	UE_LOG(LogTemp, Display, TEXT("텟읏틋: %p"), &AT_CloseHold);
 	AT_CloseHold->ReadyForActivation();
 }
 
@@ -73,6 +74,12 @@ void UGA_CloseHold::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 		AOSGameplayTags::Status_CloseHold);
+	
+	if (const APlayerCharacter* Player = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo()))
+	{
+		const AAOSPlayerController* PC = Player->GetController<AAOSPlayerController>();
+		PC->GetPlayerHUD()->GetZoomWidget()->ToggleZoomMode(false);
+	}
 	
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }

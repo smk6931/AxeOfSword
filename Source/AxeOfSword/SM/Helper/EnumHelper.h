@@ -37,3 +37,16 @@ enum class ELeviathanAxeStatus : uint8
 	Return,
 	Thrown_Idle,
 };
+
+UENUM()
+enum class EDirection : uint8
+{
+	North,
+	NorthRight,
+	NorthLeft,
+	Left,
+	Right,
+	South,
+	SouthRight,
+	SouthLeft
+};
