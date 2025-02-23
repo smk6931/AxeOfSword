@@ -2,6 +2,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Player/AOSPlayerController.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
