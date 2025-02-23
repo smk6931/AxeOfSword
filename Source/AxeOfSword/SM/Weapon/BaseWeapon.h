@@ -1,32 +1,45 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystemInterface.h"
 #include "AxeOfSword/SM/Helper/UtilHelper.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemInitializeData.h"
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
 class UBoxComponent;
+class UAOSAbilitySystemComponent;
 
 UCLASS()
-class AXEOFSWORD_API ABaseWeapon : public AActor
+class AXEOFSWORD_API ABaseWeapon : public AActor, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
 public:
 	ABaseWeapon();
-
+	
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
 	void ClearDamageStack();
+	void CastWeaponSkill(const FGameplayTag& SkillTag);
 	void EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh);
 	virtual void UpdateWeaponAttackable(const bool IsEnable);
+
+	void SetWeaponMeshRotation(const FRotator& NewRotator);
 
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, ThrowAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, DamagedAnim)
 
+	GETTER(TObjectPtr<UStaticMeshComponent>, WeaponMesh)
+
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UAOSAbilitySystemComponent* AbilitySystemComponent;
+	
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<USceneComponent> Root;
 	
@@ -51,6 +64,8 @@ protected:
 	
 	FTimerHandle EndHitStopTimerHandle;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Options")
+	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
 private:
 	// TODO: 임시용으로 무기에 장착하지만 DataTable과 EquipComponent에서 무기를 감지하고
 	// 그에 맞는 애니메이션 리스트를 부과해주는 것이 맞다.

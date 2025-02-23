@@ -1,8 +1,5 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "BaseWeapon.h"
-
+﻿#include "BaseWeapon.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -15,12 +12,20 @@ ABaseWeapon::ABaseWeapon()
 	WeaponMesh = CreateDefaultSubobject<UStaticMeshComponent>("Weapon Mesh");
 	WeaponMesh->SetupAttachment(GizmoPoint);
 	WeaponMesh->SetCollisionResponseToChannel(ECC_Camera, ECR_Ignore);
+	
+	AbilitySystemComponent = CreateDefaultSubobject<UAOSAbilitySystemComponent>("Ability System Component");
+}
+
+UAbilitySystemComponent* ABaseWeapon::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void ABaseWeapon::BeginPlay()
 {
 	Super::BeginPlay();
 	UpdateWeaponAttackable(false);
+	AbilitySystemComponent->Initialize(InitialData);
 }
 
 void ABaseWeapon::EquipWeaponToTarget(USkeletalMeshComponent* TargetMesh)
@@ -44,7 +49,19 @@ void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
 	}
 }
 
+void ABaseWeapon::SetWeaponMeshRotation(const FRotator& NewRotator)
+{
+	WeaponMesh->SetRelativeRotation(NewRotator);
+}
+
 void ABaseWeapon::ClearDamageStack()
 {
 	DamageStack = 0;
+}
+
+void ABaseWeapon::CastWeaponSkill(const FGameplayTag& SkillTag)
+{
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(SkillTag);
+	AbilitySystemComponent->TryActivateAbilitiesByTag(TagContainer);
 }

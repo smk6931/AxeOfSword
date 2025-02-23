@@ -45,6 +45,7 @@ void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		EquipComponent->GetMainWeapon()->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
 		FGameplayTagContainer()
 		);
+	AT_ComboAttackAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnBlendOutAttack);
 	AT_ComboAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnBlendOutAttack);
 	AT_ComboAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnCancelAttack);
 	AT_ComboAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndAttack);
@@ -60,6 +61,9 @@ void UGA_ComboAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const 
 
 void UGA_ComboAttack::OnBlendOutAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
+	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
+	GetWorld()->GetTimerManager().SetTimer(EndDefaultAttackHandle,
+		FTimerDelegate::CreateUObject(this, &ThisClass::OnEndCombo), ComboEndDelayTime, false);
 	EndAbility(CurrentSpecHandle, CurrentActorInfo,
 		CurrentActivationInfo, false, false);
 }
@@ -72,9 +76,6 @@ void UGA_ComboAttack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData E
 void UGA_ComboAttack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
 	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
-	GetWorld()->GetTimerManager().ClearTimer(EndDefaultAttackHandle);
-	GetWorld()->GetTimerManager().SetTimer(EndDefaultAttackHandle,
-		FTimerDelegate::CreateUObject(this, &ThisClass::OnEndCombo), ComboEndDelayTime, false);
 }
 
 void UGA_ComboAttack::OnEndCombo()
