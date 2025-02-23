@@ -6,6 +6,18 @@
 #include "Components/ActorComponent.h"
 #include "RangeFSM.generated.h"
 
+UENUM(Blueprintable)
+enum class ERangeFSMState : uint8
+{
+	Idle UMETA(DisplayName = "Idle"),
+	AiMove,
+	JumpMonster,
+	ShockWave,
+	Avoid,
+	Damage,
+	Die,
+};
+	
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class AXEOFSWORD_API URangeFSM : public UActorComponent
@@ -25,6 +37,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	ERangeFSMState mState = ERangeFSMState::Idle;
+	
 	//스킬 컴포넌트 형성
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class APlayerCharacter* Player;
@@ -37,17 +52,25 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class AAIController* Ai;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	TArray<AActor*>OverlappingActors;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	class URangeAnim* Anim;
+
 public:// 스킬
+	void Idle();
 	void AiMove();
 	void ShockWave();
 	void JumpMonster();
-	void BackJump();
+	void Avoid();
+
+	void SwitchState();
 
 public:
-	FVector PeDistance();
-
 	FTimerHandle JumpTimer;
 	FTimerHandle ShockTimer;
 	FTimerHandle BackJumpTimer;
+	FTimerHandle StateSwitchTimer;
 	
 };

@@ -13,4 +13,10 @@ UCLASS()
 class AXEOFSWORD_API URangeAnim : public UAnimInstance
 {
 	GENERATED_BODY()
+
+public:
+	UFUNCTION(BlueprintImplementableEvent, Category="Animation")
+	void PlayJumpAnimaition();
 };
+
+
