@@ -24,7 +24,6 @@ void UAT_LeviathanAxe_Throw::Activate()
 		LeviathanAxe->SetWeaponMeshRotation(Pawn->GetController()->GetControlRotation());
 	}
 
-	UE_LOG(LogTemp, Display, TEXT("%hhd"), LeviathanAxe->GetAxeStatus());
 	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Throw);
 	GravityStack = 0;
 	
