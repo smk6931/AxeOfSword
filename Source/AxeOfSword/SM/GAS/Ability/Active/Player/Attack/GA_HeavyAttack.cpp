@@ -3,6 +3,7 @@
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
@@ -40,7 +41,7 @@ void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 		AT_HeavyAttackAnim = UPlayMontageWithEvent::InitialEvent(
 			this, NAME_None,
-			EquipComponent->GetMainWeapon()->GetHeavyAttackAnim(),
+			EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetHeavyAttackAnim(),
 			FGameplayTagContainer()
 			);
 		AT_HeavyAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnBlendOutHeavyAttack);
