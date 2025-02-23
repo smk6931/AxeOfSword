@@ -1,6 +1,7 @@
 ﻿#include "EquipComponent.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
 
@@ -33,7 +34,7 @@ void UEquipComponent::BeginPlay()
 
 void UEquipComponent::SetNextCombo()
 {
-	if (ComboIndex == MainWeapon->GetComboAttackAnim().Num() - 1)
+	if (ComboIndex == MainWeapon->GetWeaponAnimationData()->GetComboAttackAnim().Num() - 1)
 	{
 		ComboIndex = 0;
 		return;

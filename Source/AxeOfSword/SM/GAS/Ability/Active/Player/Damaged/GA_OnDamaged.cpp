@@ -1,6 +1,8 @@
 ﻿#include "GA_OnDamaged.h"
 
+#include "AbilitySystemComponent.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
+#include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
@@ -41,7 +43,8 @@ void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 		return;
 	}
 
-	UAnimMontage* DamagedMontage = BaseCharacter->GetEquipComponent()->GetMainWeapon()->GetDamagedAnim();
+	UAnimMontage* DamagedMontage = BaseCharacter->GetEquipComponent()->GetMainWeapon()->
+		GetWeaponAnimationData()->GetDamagedAnim().FindRef(EDirection::North);
 	AT_DamagedAnim = UPlayMontageWithEvent::InitialEvent(
 	this, NAME_None, DamagedMontage,
 		FGameplayTagContainer()
