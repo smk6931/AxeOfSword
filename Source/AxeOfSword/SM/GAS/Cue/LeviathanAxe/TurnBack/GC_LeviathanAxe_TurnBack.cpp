@@ -89,7 +89,8 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackCallback(FVector Output)
 	TargetWeapon->AddActorLocalOffset({0, Output.Y * TurnBackRightPower, 0});
 
 	// 회전 방향을 설정해준다.
-	const FRotator NewWeaponMeshRotate = FMath::Lerp(FRotator::ZeroRotator, FRotator(0, -90, 0), Output.X);
+	FRotator NewWeaponMeshRotate = FMath::Lerp(FRotator::ZeroRotator, FRotator(0, -90, 0), Output.X);
+	NewWeaponMeshRotate.Pitch += Output.Z * 180;
 	TargetWeapon->GetWeaponMesh()->SetRelativeRotation(NewWeaponMeshRotate);
 	
 	if (FVector::Distance(GetActorLocation(), MoveTo) <= 50)
@@ -103,6 +104,7 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackFinish()
 {
 	OnTurnBackEnd();
 }
+
 void AGC_LeviathanAxe_TurnBack::OnTurnBackEnd() const
 {
 	ALeviathanAxe* TargetWeapon = Cast<ALeviathanAxe>(TargetCharacter->GetEquipComponent()->GetMainWeapon());
