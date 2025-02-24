@@ -80,7 +80,7 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	FGameplayTagContainer TagContainer;
 	TagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
 	GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
-	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_TurnBack);
+	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_Shake);
 }
 
 void UGA_TurnBack::EndAbility(const FGameplayAbilitySpecHandle Handle
