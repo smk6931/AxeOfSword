@@ -58,6 +58,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	class URangeAnim* Anim;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	float ForwardSpeed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	float RightSpeed;
+
 public:// 스킬
 	void Idle();
 	void AiMove();

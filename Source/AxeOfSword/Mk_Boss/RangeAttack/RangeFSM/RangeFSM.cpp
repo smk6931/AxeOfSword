@@ -30,10 +30,9 @@ void URangeFSM::BeginPlay()
 	RangeMonster = Cast<ARangeMonster>(GetOwner());
 	RadialForce->SetupAttachment(RangeMonster->GetRootComponent());
 	Ai = Cast<AAIController>(RangeMonster->GetController());
-
 	Anim = Cast<URangeAnim>(RangeMonster->GetMesh()->GetAnimInstance());
 	
-	GetWorld()->GetTimerManager().SetTimer(StateSwitchTimer, this,&URangeFSM::SwitchState, 2.0f, true);
+	// GetWorld()->GetTimerManager().SetTimer(StateSwitchTimer, this,&URangeFSM::SwitchState, 2.0f, true);
 }
 
 // Called every frame
@@ -43,6 +42,26 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SetActorRot();
+
+	// APawn* Pawn = Ai->GetPawn();
+	// //Velocity 구하기
+	// FVector Velocity = RangeMonster->GetVelocity();
+	// //전방벡터 구하기
+	// FVector ForwardVector = RangeMonster->GetActorForwardVector();
+	// //오른쪽벡터구하기
+	// FVector RightVector = RangeMonster->GetActorRightVector();
+	// //내적에서 전방, 측면 속도 구하기
+	// ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
+	// RightSpeed = FVector::DotProduct(Velocity, RightVector);
+	// //전방, 측면속도 0 ~ 100 값 조절하기
+	// ForwardSpeed = FMath::Clamp(ForwardSpeed, -100.0f, 100.0f);
+	// RightSpeed = FMath::Clamp(RightSpeed, -100.0f, 100.0f);
+	//
+	// Anim->Vertical = ForwardSpeed;
+	// Anim->Horizontal = RightSpeed;
+	//
+	// UE_LOG(LogTemp, Warning, TEXT("ForwardSpeed: %f"),Anim->Vertical);
+	// UE_LOG(LogTemp, Warning, TEXT("RightSpeed: %f"),Anim->Horizontal);
 }
 
 void URangeFSM::Avoid()
@@ -55,6 +74,7 @@ void URangeFSM::Avoid()
 	RangeMonster->LaunchCharacter(-power,false,false);
 	Anim->PlayJumpBackFlip();
 	mState = ERangeFSMState::Idle;
+	Anim->animState = ERangeFSMState::Idle;
 }
 
 void URangeFSM::Idle()
@@ -78,7 +98,12 @@ void URangeFSM::AiMove()
 	//플레이어와 나와의 거리
 	FVector FinalDestiantion = Destination - Offset;
 	
+	// FVector ForwardVector = Pawn->GetActorForwardVector();
+	// float ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
+	
 	Ai->MoveToLocation(FinalDestiantion - Dir * 300);
+	
+	Anim->animState = ERangeFSMState::AiMove;
 	
 	mState = ERangeFSMState::JumpMonster;
 }
@@ -96,6 +121,12 @@ void URangeFSM::ShockWave()
 	RadialForce->bImpulseVelChange = true;
 	RadialForce->FireImpulse();
 	
+	auto pc = GetWorld()->GetFirstPlayerController();
+	if (pc)
+	{
+		pc->PlayerCameraManager->StartCameraShake(RangeMonster->cameraShake);
+	}
+	
 	UGameplayStatics::ApplyRadialDamage(GetOwner(), DamageAmount, ImpulseOrigin, ImpulseRadius,
 		UDamageType::StaticClass(), OverlappingActors, GetOwner(), GetOwner()->GetInstigatorController(), true);
 
@@ -112,9 +143,10 @@ void URangeFSM::JumpMonster()
 	FVector Power = Player->GetActorLocation() - RangeMonster->GetActorLocation() - dir * 300;
 	Power.Z = 700.f;
     
-	Anim->PlayJumpAnimaition();
+	Anim->PlayJumpAnimation();
 	RangeMonster->LaunchCharacter(Power,false,false);
 	mState = ERangeFSMState::ShockWave;
+	
 }
 
 void URangeFSM::SetActorRot()
@@ -125,7 +157,6 @@ void URangeFSM::SetActorRot()
 	FRotator SetRot = SetVec.Rotation();
 	RangeMonster->SetActorRotation(SetRot);
 }
-
 
 
 void URangeFSM::SwitchState()
@@ -149,6 +180,7 @@ void URangeFSM::SwitchState()
 		break;
 	}
 }
+
 
 
 

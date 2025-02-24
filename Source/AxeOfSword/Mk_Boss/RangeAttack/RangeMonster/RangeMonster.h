@@ -19,6 +19,13 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	// (떄리는쪽)AppendDamage -> TakeDamage가 호출되고
+								// -> TakeRadialDamage가 호출되고 Radial 관련된 처리 여기서 하고 반환하면
+								// TakeDamage가 종료되면
+								// TakeAnyDamage가 호출되고 마무리가 돼
+								
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+						 class AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
 	// Called every frame
@@ -41,4 +48,16 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	URangeFSM* RangeFSM;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FVector KnockBackDestPos;
+	// UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	// ALeviathanAxe* LeviathanAxe;
+
+	// RangeMonster 체력
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float HP = 100.f;
+
+	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
+	TSubclassOf<class UCameraShakeBase> cameraShake;
 };
