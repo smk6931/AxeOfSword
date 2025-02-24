@@ -4,12 +4,18 @@
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("Equip Component");
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void ABaseCharacter::BeginPlay()
@@ -30,12 +36,22 @@ float ABaseCharacter::TakeDamage(float DamageAmount
 	, FDamageEvent const& DamageEvent, AController* EventInstigator
 	, AActor* DamageCauser)
 {
-	AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>();
-	if (!PS)
+	if (!AbilitySystemComponent)
 	{
 		return 0;
 	}
-	PS->GetAttribute()->SetHealth(PS->GetAttribute()->GetHealth() - DamageAmount);
+	
+	if (!Attribute)
+	{
+		return 0;
+	}
+
+	if (AOSGameplayTags::HasGameplayTag(AbilitySystemComponent, AOSGameplayTags::Status_Invincible))
+	{
+		return 0;
+	}
+	
+	Attribute->SetHealth(Attribute->GetHealth() - DamageAmount);
 	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator
 							, DamageCauser);

@@ -2,6 +2,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Player/AOSPlayerController.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
@@ -93,6 +94,7 @@ void APlayerCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 {
 	const FVector2d InputVector = Value.Get<FVector2d>();
+	MoveDirection = { InputVector.X, InputVector.Y, 0 };
 
 	const FRotator MoveRotation = {0, GetController()->GetControlRotation().Yaw, 0};
 	const FVector ForwardVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::X) * InputVector.X;

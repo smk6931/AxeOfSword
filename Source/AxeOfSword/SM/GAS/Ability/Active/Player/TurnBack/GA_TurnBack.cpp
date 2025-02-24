@@ -72,6 +72,9 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	}
 	
 	LeviathanAxe->TurnBack(BaseCharacter);
+	FGameplayTagContainer TagContainer;
+	TagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
+	GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
 
 	EndAbility(Handle, ActorInfo, ActivationInfo, false, false);
 }

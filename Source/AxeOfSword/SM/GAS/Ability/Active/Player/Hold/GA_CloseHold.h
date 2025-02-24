@@ -4,6 +4,7 @@
 #include "AxeOfSword/SM/GAS/Ability/Utility/BaseInputAbility.h"
 #include "GA_CloseHold.generated.h"
 
+class UAT_CloseHold;
 class UPlayMontageWithEvent;
 
 UCLASS()
@@ -31,4 +32,7 @@ protected:
 private:
 	UPROPERTY()
 	TObjectPtr<UPlayMontageWithEvent> AT_AttackZoomAnim;
+
+	UPROPERTY()
+	TObjectPtr<UAT_CloseHold> AT_CloseHold;
 };

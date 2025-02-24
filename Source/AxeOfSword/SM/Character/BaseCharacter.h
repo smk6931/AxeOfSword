@@ -2,12 +2,16 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystemInterface.h"
-#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
+#include "AxeOfSword/SM/Helper/UtilHelper.h"
 #include "GameFramework/Character.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemInitializeData.h"
+#include "GameplayEffectTypes.h"
 #include "BaseCharacter.generated.h"
 
+class UWeaponAnimation;
 class UBaseAttribute;
 class UEquipComponent;
+class UAOSAbilitySystemComponent;
 
 UCLASS()
 class AXEOFSWORD_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -17,10 +21,7 @@ class AXEOFSWORD_API ABaseCharacter : public ACharacter, public IAbilitySystemIn
 public:
 	ABaseCharacter();
 
-	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override
-	{
-		return AbilitySystemComponent;
-	}
+	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
 	GETTER(TObjectPtr<UBaseAttribute>, Attribute)
