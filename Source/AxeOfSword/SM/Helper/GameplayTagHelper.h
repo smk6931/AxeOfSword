@@ -31,6 +31,7 @@ namespace AOSGameplayTags
 
 	// 도끼 관련 능력
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Skill_LeviathanAxe_Throw)
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Skill_LeviathanAxe_ThrowAfterHit)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(Skill_LeviathanAxe_TurnBack)
 
 	// Passive 관련 최상위 트리 태그로 여러개가 들어갈 수 있음
@@ -67,4 +68,6 @@ namespace AOSGameplayTags
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Character_Camera_Fov_ZoomIn)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Leviathan_Shake)
 	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Leviathan_TurnBack)
+	
+	AXEOFSWORD_API UE_DECLARE_GAMEPLAY_TAG_EXTERN(GameplayCue_Sound_Leviathan_Throw)
 }

@@ -1,19 +1,19 @@
-#include "GA_LeviathanAxe_Throw.h"
+#include "GA_LeviathanAxe_ThrowAfterHit.h"
 
 #include "AbilitySystemComponent.h"
-#include "AT_LeviathanAxe_Throw.h"
+#include "AT_LeviathanAxe_ThrowAfterHit.h"
 #include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 
-void UGA_LeviathanAxe_Throw::ActivateAbility(
+void UGA_LeviathanAxe_ThrowAfterHit::ActivateAbility(
 	const FGameplayAbilitySpecHandle Handle
 	, const FGameplayAbilityActorInfo* ActorInfo
 	, const FGameplayAbilityActivationInfo ActivationInfo
 	, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
-	AT_LeviathanAxeThrow = UAT_LeviathanAxe_Throw::InitialEvent(this, SkillBalance);
-	AT_LeviathanAxeThrow->OnThrowEndNotified.AddDynamic(this, &ThisClass::OnEndThrowAxe);
+	
+	AT_LeviathanAxeThrow = UAT_LeviathanAxe_ThrowAfterHit::InitialEvent(this, SkillBalance);
+	AT_LeviathanAxeThrow->OnThrowAfterHitEndNotified.AddDynamic(this, &ThisClass::OnEndThrowAxe);
 
 	ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(GetAvatarActorFromActorInfo());
 	
@@ -22,7 +22,7 @@ void UGA_LeviathanAxe_Throw::ActivateAbility(
 	AT_LeviathanAxeThrow->ReadyForActivation();
 }
 
-void UGA_LeviathanAxe_Throw::EndAbility(const FGameplayAbilitySpecHandle Handle
+void UGA_LeviathanAxe_ThrowAfterHit::EndAbility(const FGameplayAbilitySpecHandle Handle
 	, const FGameplayAbilityActorInfo* ActorInfo
 	, const FGameplayAbilityActivationInfo ActivationInfo
 	, bool bReplicateEndAbility, bool bWasCancelled)
@@ -34,7 +34,7 @@ void UGA_LeviathanAxe_Throw::EndAbility(const FGameplayAbilitySpecHandle Handle
 					, bWasCancelled);
 }
 
-void UGA_LeviathanAxe_Throw::OnEndThrowAxe()
+void UGA_LeviathanAxe_ThrowAfterHit::OnEndThrowAxe()
 {
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }

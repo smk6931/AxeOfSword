@@ -71,6 +71,8 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Cooldown_Ability_Evade, "Cooldown.Ability.Evade", "Evade Skill의 Cooldown 전용 태그");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_Throw, "Skill.LeviathanAxe.Throw", "Leviathan 도끼의 던지기 스킬 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_ThrowAfterHit, "Skill.LeviathanAxe.ThrowAfterHit",
+		"Leviathan 도끼가 던져지는 중에 적을 맞출경우 진행하는 스킬 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_TurnBack, "Skill.LeviathanAxe.TurnBack", "Leviathan 도끼의 복귀 스킬 태그");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Passive, "Passive", "패시브 Ability 관련 최상위 트리 태그");
@@ -113,4 +115,7 @@ namespace AOSGameplayTags
 	"GameplayCue.Leviathan.Shake", "레비아탄 도끼가 회전해서 돌아오기 전 살짝 덜컥거리는 스킬");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_TurnBack,
 	"GameplayCue.Leviathan.TurnBack", "레비아탄 도끼가 회전해서 돌아올 때의 Visual 처리 기능");
+	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Sound_Leviathan_Throw,
+	"GameplayCue.Sound.Leviathan.Throw", "레비아탄 도끼 던질 때 나오는 사운드 Cue");
 }
