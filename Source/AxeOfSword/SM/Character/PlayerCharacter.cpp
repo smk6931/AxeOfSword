@@ -94,6 +94,7 @@ void APlayerCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 {
 	const FVector2d InputVector = Value.Get<FVector2d>();
+	MoveDirection = { InputVector.X, InputVector.Y, 0 };
 
 	const FRotator MoveRotation = {0, GetController()->GetControlRotation().Yaw, 0};
 	const FVector ForwardVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::X) * InputVector.X;

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AxeOfSword/SM/Helper/UtilHelper.h"
+#include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "Components/ActorComponent.h"
 #include "EquipComponent.generated.h"
 
@@ -25,6 +26,8 @@ public:
 	void ToggleAttack(const bool IsAttack);
 
 	bool IsMainWeaponOwner() const;
+
+	TObjectPtr<UWeaponAnimation> GetMainWeaponAnimationData() { return MainWeapon->GetWeaponAnimationData(); }
 
 protected:
 	virtual void BeginPlay() override;
