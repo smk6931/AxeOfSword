@@ -27,6 +27,7 @@ enum class EAbilityInputId : uint8
 	TurnBack,
 	Sprint,
 	Damaged,
+	Evade,
 };
 
 UENUM()
@@ -39,14 +40,14 @@ enum class ELeviathanAxeStatus : uint8
 };
 
 UENUM()
-enum class EDirection : uint8
+enum class EMoveDirection : uint8
 {
-	North,
-	NorthRight,
-	NorthLeft,
+	Forward,
+	ForwardRight,
+	ForwardLeft,
 	Left,
 	Right,
-	South,
-	SouthRight,
-	SouthLeft
+	Backward,
+	BackwardRight,
+	BackwardLeft
 };

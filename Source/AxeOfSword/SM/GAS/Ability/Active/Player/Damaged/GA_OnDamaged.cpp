@@ -44,7 +44,7 @@ void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	}
 
 	UAnimMontage* DamagedMontage = BaseCharacter->GetEquipComponent()->GetMainWeapon()->
-		GetWeaponAnimationData()->GetDamagedAnim().FindRef(EDirection::North);
+		GetWeaponAnimationData()->GetDamagedAnim().FindRef(EMoveDirection::Forward);
 	AT_DamagedAnim = UPlayMontageWithEvent::InitialEvent(
 	this, NAME_None, DamagedMontage,
 		FGameplayTagContainer()
