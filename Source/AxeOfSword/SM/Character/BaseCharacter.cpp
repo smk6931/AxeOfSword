@@ -36,12 +36,22 @@ float ABaseCharacter::TakeDamage(float DamageAmount
 	, FDamageEvent const& DamageEvent, AController* EventInstigator
 	, AActor* DamageCauser)
 {
-	AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>();
-	if (!PS)
+	if (!AbilitySystemComponent)
 	{
 		return 0;
 	}
-	PS->GetAttribute()->SetHealth(PS->GetAttribute()->GetHealth() - DamageAmount);
+	
+	if (!Attribute)
+	{
+		return 0;
+	}
+
+	if (AOSGameplayTags::HasGameplayTag(AbilitySystemComponent, AOSGameplayTags::Status_Invincible))
+	{
+		return 0;
+	}
+	
+	Attribute->SetHealth(Attribute->GetHealth() - DamageAmount);
 	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator
 							, DamageCauser);

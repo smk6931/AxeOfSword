@@ -4,6 +4,7 @@
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
 void UGA_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -23,17 +24,22 @@ void UGA_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 		GetMainWeaponAnimationData()->GetEvadeAnim().FindRef(GetDirection()),
 		FGameplayTagContainer());
 
+	EvadeAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnEndEvade);
+	EvadeAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndEvade);
+	EvadeAnim->OnCancelled.AddDynamic(this, &ThisClass::OnEndEvade);
 	EvadeAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndEvade);
-	
-	UE_LOG(LogTemp, Display, TEXT("하이하이 : %p"), this);
 
 	EvadeAnim->ReadyForActivation();
+
+	AOSGameplayTags::AddGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Invincible);
+	CommitAbilityCooldown(Handle, ActorInfo, ActivationInfo, true);
 }
 
 void UGA_Evade::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Invincible);
 }
 
 void UGA_Evade::OnEndEvade(FGameplayTag EventTag, FGameplayEventData EventData)
