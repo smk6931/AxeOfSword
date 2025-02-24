@@ -1,27 +1,25 @@
-#include "AT_LeviathanAxe_Throw.h"
+#include "AT_LeviathanAxe_ThrowAfterHit.h"
 
-#include "AbilitySystemComponent.h"
-#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 #include "Kismet/KismetSystemLibrary.h"
 
-UAT_LeviathanAxe_Throw* UAT_LeviathanAxe_Throw::InitialEvent(
-	UGameplayAbility* OwningAbility, const FLeviathanAxeThrowBalance& NewBalance)
+UAT_LeviathanAxe_ThrowAfterHit* UAT_LeviathanAxe_ThrowAfterHit::InitialEvent(
+	UGameplayAbility* OwningAbility, const FLeviathanAxeThrowAfterHitBalance& NewBalance)
 {
-	UAT_LeviathanAxe_Throw* NewTask = NewAbilityTask<UAT_LeviathanAxe_Throw>(OwningAbility);
+	UAT_LeviathanAxe_ThrowAfterHit* NewTask = NewAbilityTask<UAT_LeviathanAxe_ThrowAfterHit>(OwningAbility);
 	NewTask->Balance = NewBalance;
 	NewTask->LeviathanAxe = Cast<ALeviathanAxe>(OwningAbility->GetAvatarActorFromActorInfo());
 	return NewTask;
 }
 
-void UAT_LeviathanAxe_Throw::Activate()
+void UAT_LeviathanAxe_ThrowAfterHit::Activate()
 {
 	Super::Activate();
 	
 	LeviathanAxe->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 	
 	if (const APawn* Pawn = Cast<APawn>(LeviathanAxe->GetOwner()))
-	{
+	{ 
 		ThrowRotate = Pawn->GetController()->GetControlRotation();
 		LeviathanAxe->SetWeaponMeshRotation(Pawn->GetController()->GetControlRotation());
 	}
@@ -32,12 +30,15 @@ void UAT_LeviathanAxe_Throw::Activate()
 	bTickingTask = true;
 }
 
-void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
+void UAT_LeviathanAxe_ThrowAfterHit::TickTask(float DeltaTime)
 {
 	Super::TickTask(DeltaTime);
 	RotateByPowerInTick(DeltaTime);
+
+	FVector MoveToVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X).GetSafeNormal();
+	MoveToVector.Z = 1;
 	
-	FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * Balance.ThrowMovePower * DeltaTime;
+	FVector ForwardVector = MoveToVector * Balance.ThrowMovePower * DeltaTime;
 	GravityStack += DeltaTime * DeltaTime;
 	ForwardVector.Z -= Balance.GravityScale * GravityStack;
 
@@ -52,7 +53,7 @@ void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
 	}
 }
 
-void UAT_LeviathanAxe_Throw::TraceWeaponThrow(FHitResult& HitResult)
+void UAT_LeviathanAxe_ThrowAfterHit::TraceWeaponThrow(FHitResult& HitResult)
 {
 	const FVector PivotPoint = LeviathanAxe->GetWeaponPivot()->GetComponentLocation();
 	
@@ -64,19 +65,10 @@ void UAT_LeviathanAxe_Throw::TraceWeaponThrow(FHitResult& HitResult)
 		EDrawDebugTrace::None, HitResult, true);
 }
 
-void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
+void UAT_LeviathanAxe_ThrowAfterHit::OnHitThrown(const FHitResult& HitResult)
 {
-	// Pawn 종류를 맞춘다면 다음 스킬 동작을 수행해준다.
-	if (HitResult.GetActor())
+	if (HitResult.GetActor()->IsA(APawn::StaticClass()))
 	{
-		FGameplayTagContainer CancelTagContainer;
-        CancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
-        AbilitySystemComponent->CancelAbilities(&CancelTagContainer);
-
-        FGameplayTagContainer ApplyTagContainer;
-        ApplyTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_ThrowAfterHit);
-        AbilitySystemComponent->TryActivateAbilitiesByTag(ApplyTagContainer);
-		
 		return;
 	}
 	
@@ -99,10 +91,10 @@ void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
 	LeviathanAxe->SetOwner(HitResult.GetActor());
 
 	// 여기서 Ability를 강제로 종료시키게 처리한다.
-	OnThrowEndNotified.Broadcast();
+	OnThrowAfterHitEndNotified.Broadcast();
 }
 
-void UAT_LeviathanAxe_Throw::RotateByPowerInTick(const float DeltaTime)
+void UAT_LeviathanAxe_ThrowAfterHit::RotateByPowerInTick(const float DeltaTime)
 {
 	UStaticMeshComponent* WeaponMesh = LeviathanAxe->GetWeaponMesh();
 	
