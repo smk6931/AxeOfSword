@@ -66,6 +66,9 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_CloseHold, "Ability.CloseHold", "무기 조준 스킬을 사용하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Sprint, "Ability.Sprint", "달리기 Ability 사용하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_TurnBack, "Ability.TurnBack", "무기 복귀에 대한 Ability를 사용하고 있음을 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Evade, "Ability.Evade", "스텝을 뛰어 빠르게 단거리를 회피하는 스킬");
+	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Cooldown_Ability_Evade, "Cooldown.Ability.Evade", "Evade Skill의 Cooldown 전용 태그");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_Throw, "Skill.LeviathanAxe.Throw", "Leviathan 도끼의 던지기 스킬 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Skill_LeviathanAxe_TurnBack, "Skill.LeviathanAxe.TurnBack", "Leviathan 도끼의 복귀 스킬 태그");
@@ -85,6 +88,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Attack_Hold, "Status.Attack.Hold", "현재 공격 관련 Input Key가 Holding 처리되었음을 의미");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Combat, "Status.Combat", "현재 전투 모드로 들어갔음을 의미하는 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_CloseHold, "Status.CloseHold", "현재 조준하고 있음을 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Invincible, "Status.Invincible", "무적 상태임을 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,

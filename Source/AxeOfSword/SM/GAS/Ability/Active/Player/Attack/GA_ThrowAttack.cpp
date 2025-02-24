@@ -1,5 +1,7 @@
 ﻿#include "GA_ThrowAttack.h"
 
+#include "AbilitySystemComponent.h"
+#include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
@@ -34,7 +36,7 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
-		EquipComponent->GetMainWeapon()->GetThrowAttackAnim(),
+		EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetThrowAttackAnim(),
 		FGameplayTagContainer()
 		);
 	AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);

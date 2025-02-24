@@ -8,6 +8,7 @@
 #include "GameplayEffectTypes.h"
 #include "BaseCharacter.generated.h"
 
+class UWeaponAnimation;
 class UBaseAttribute;
 class UEquipComponent;
 class UAOSAbilitySystemComponent;
