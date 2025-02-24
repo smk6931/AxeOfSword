@@ -109,4 +109,6 @@ namespace AOSGameplayTags
 	"GameplayCue.Character.Camera.Fov", "카메라 줌 자체를 관리하기 위한 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov_ZoomIn,
 	"GameplayCue.Character.Camera.Fov.ZoomIn", "카메라 줌 인 기능");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_TurnBack,
+	"GameplayCue.Leviathan.TurnBack", "레비아탄 도끼가 회전해서 돌아올 때의 Visual 처리 기능");
 }

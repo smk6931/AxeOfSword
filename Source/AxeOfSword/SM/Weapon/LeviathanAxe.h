@@ -18,10 +18,9 @@ public:
 
 	void Throw();
 
-	void TurnBack(AActor* NewOwner);
-
 	GETTER_SETTER(ELeviathanAxeStatus, AxeStatus)
 	GETTER(TObjectPtr<USceneComponent>, WeaponPivot)
+	GETTER(FTransform, InitialWeaponMeshTransform)
 	
 protected:
 	virtual void BeginPlay() override;
@@ -40,39 +39,16 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
 		meta = (AllowPrivateAccess = true))
-	int32 TurnBackRightPower = 720;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
-		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
 	
 	float GravityStack;
 	
 	FRotator ThrowRotate;
-
-	FVector TurnBackStartLocation;
-
+	
 	FTransform InitialWeaponMeshTransform;
 	
-	UPROPERTY(EditDefaultsOnly)
-	TObjectPtr<UTimelineComponent> TurnBackTimeline;
-	
-	UPROPERTY(EditDefaultsOnly, Category="Option|Leviathan", meta = (AllowPrivateAccess = true, EditCondition = "IsEnabledCameraFov"))
-	TObjectPtr<UCurveVector> TurnBackTimingCurve;
-	
-	FOnTimelineVector TurnBackCallback;
-	
-	FOnTimelineEvent TurnBackFinish;
-	
 	void OnHitDamage(AActor* TargetActor);
-	void OnTurnBackEnd();
 	
 	UFUNCTION()
 	void OnHitStopEnd();
-
-	UFUNCTION()
-	void OnTurnBackCallback(FVector Output);
-	
-	UFUNCTION()
-	void OnTurnBackFinish();
 };
