@@ -42,40 +42,50 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	SetActorRot();
 }
 
 void URangeFSM::Avoid()
 {
+	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::Avoid"));
 	FVector dir = Player->GetActorLocation() - RangeMonster->GetActorLocation();
 	dir.Normalize();
-	RangeMonster->LaunchCharacter(dir,false,false);
+	FVector power = dir * 500.f;
+	power.Z = -500.f;
+	RangeMonster->LaunchCharacter(-power,false,false);
+	Anim->PlayJumpBackFlip();
+	mState = ERangeFSMState::Idle;
 }
 
 void URangeFSM::Idle()
 {
+	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::Idle"));
 	mState = ERangeFSMState::AiMove;
 }
 
 void URangeFSM::AiMove()
 {
-	float Time = GetWorld()->GetDeltaSeconds();
-	FRotator RangeRot = RangeMonster->GetActorRotation();
-	RangeMonster->SetActorRotation(RangeRot);
+	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::AIMove"));
 	//플레이어 위치
-    FVector Destination = Player->GetActorLocation();
+    FVector Destination = RangeMonster->GetActorLocation();
 	FVector Direction = Destination - RangeMonster->GetActorLocation();
+
+	float RandomAngle = FMath::RandRange(0.0f,2.0f * PI);
+	FVector Offset = FVector(FMath::Cos(RandomAngle) * 700, FMath::Sin(RandomAngle) * 700, 0);
+	
 	//플레이어 방향 벡터
 	FVector Dir = Direction.GetSafeNormal();
 	//플레이어와 나와의 거리
-	FVector FinalDestiantion = Destination - Dir * 700;
+	FVector FinalDestiantion = Destination - Offset;
 	
-	Ai->MoveToLocation(FinalDestiantion);
+	Ai->MoveToLocation(FinalDestiantion - Dir * 300);
 	
 	mState = ERangeFSMState::JumpMonster;
 }
 
 void URangeFSM::ShockWave()
 {
+	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::ShockWave"));
 	FVector ImpulseOrigin = GetOwner()->GetActorLocation(); // 임펄스 발생 위치
 	float ImpulseRadius = 500.0f; // 임펄스 반경
 	float ImpulseStrength = 1000.0f;
@@ -91,20 +101,32 @@ void URangeFSM::ShockWave()
 
 	DrawDebugSphere(GetWorld(),RadialForce->GetComponentLocation(), 1000, 16, FColor::Red, true, 1.0f);
 	DrawDebugSphere(GetWorld(),RangeMonster->GetActorLocation(), 1000, 16, FColor::Red, true, 1.0f);
-    mState = ERangeFSMState::Idle;
+    mState = ERangeFSMState::Avoid;
 }
 
 void URangeFSM::JumpMonster()
 {
+	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::JumpMonster"));
 	FVector dir = Player->GetActorLocation() - RangeMonster->GetActorLocation();
 	dir.Normalize();
-	FVector Power = Player->GetActorLocation() - RangeMonster->GetActorLocation() - dir * 100;
-	Power.Z = 600.f;
+	FVector Power = Player->GetActorLocation() - RangeMonster->GetActorLocation() - dir * 300;
+	Power.Z = 700.f;
     
 	Anim->PlayJumpAnimaition();
 	RangeMonster->LaunchCharacter(Power,false,false);
 	mState = ERangeFSMState::ShockWave;
 }
+
+void URangeFSM::SetActorRot()
+{
+	FRotator Rotator = RangeMonster->GetActorRotation();
+	FVector SetVec = Player->GetActorLocation() - RangeMonster->GetActorLocation(); 
+	SetVec.Normalize();
+	FRotator SetRot = SetVec.Rotation();
+	RangeMonster->SetActorRotation(SetRot);
+}
+
+
 
 void URangeFSM::SwitchState()
 {

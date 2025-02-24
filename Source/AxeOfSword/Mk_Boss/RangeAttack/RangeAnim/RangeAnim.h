@@ -17,6 +17,9 @@ class AXEOFSWORD_API URangeAnim : public UAnimInstance
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category="Animation")
 	void PlayJumpAnimaition();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Animation")
+	void PlayJumpBackFlip();
 };
 
 

@@ -66,6 +66,7 @@ public:// 스킬
 	void Avoid();
 
 	void SwitchState();
+	void SetActorRot();
 
 public:
 	FTimerHandle JumpTimer;
