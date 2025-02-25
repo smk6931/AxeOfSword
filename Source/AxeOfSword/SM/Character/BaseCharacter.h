@@ -13,6 +13,8 @@ class UBaseAttribute;
 class UEquipComponent;
 class UAOSAbilitySystemComponent;
 
+enum class ECharacterState : uint8;
+
 UCLASS()
 class AXEOFSWORD_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
@@ -23,8 +25,10 @@ public:
 
 	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	GETTER_SETTER(ECharacterState, CurrentState)
 	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
 	GETTER(TObjectPtr<UBaseAttribute>, Attribute)
+	
 	float GetHealth() const;
 
 protected:
@@ -50,4 +54,7 @@ protected:
 
 	virtual void OnHealthChanged(const FOnAttributeChangeData& Data);
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+private:
+	ECharacterState CurrentState = ECharacterState::Idle;
 };

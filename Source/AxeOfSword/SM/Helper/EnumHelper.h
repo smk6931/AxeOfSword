@@ -31,7 +31,7 @@ enum class EAbilityInputId : uint8
 };
 
 UENUM()
-enum class EPlayerState : uint8
+enum class ECharacterState : uint8
 {
 	Idle,
 	Attack,
