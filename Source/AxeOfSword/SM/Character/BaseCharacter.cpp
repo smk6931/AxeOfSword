@@ -18,7 +18,6 @@ ABaseCharacter::ABaseCharacter()
 	FistRightSphereCapsule = CreateDefaultSubobject<USphereComponent>("Fist Right Sphere Capsule");
 	FistRightSphereCapsule->SetupAttachment(GetMesh());
 
-	FistRightSphereCapsule->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "hand_r");
 	FistRightSphereCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
@@ -31,6 +30,8 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FistRightSphereCapsule->AttachToComponent(GetMesh(),
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "hand_r");
 	GetCharacterMovement()->MaxWalkSpeed = Attribute->GetMovementSpeed();
 	
 	HealthChangedDelegateHandle = AbilitySystemComponent->
