@@ -4,7 +4,6 @@
 #include "RangeMonster.h"
 #include "AxeOfSword/Mk_Boss/RangeAttack/RangeAnim/RangeAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Components/CapsuleComponent.h"
 
 
 // Sets default values
@@ -23,7 +22,8 @@ ARangeMonster::ARangeMonster()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -70),
 			FRotator(0,-110,0));
 	}
-	ConstructorHelpers::FClassFinder<UAnimInstance>tempAnim(TEXT("'/Game/Boss_MK/RangeMonster/MyRangeAnim.MyRangeAnim_c'"));
+	ConstructorHelpers::FClassFinder<UAnimInstance>tempAnim(TEXT(
+		"'/Game/Boss_MK/RangeMonster/MyRangeAnim.MyRangeAnim_c'"));
 	if (tempAnim.Class)
 	{
 		GetMesh()->SetAnimInstanceClass(tempAnim.Class);
@@ -35,35 +35,26 @@ void ARangeMonster::BeginPlay()
 	Super::BeginPlay();
 	PlayerCharacter = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	RangeAnim = Cast<URangeAnim>(GetMesh()->GetAnimInstance());
-	// LeviathanAxe = Cast<ALeviathanAxe>(PlayerCharacter->)
-
-	
-	UCapsuleComponent* CapsuleComp = GetCapsuleComponent();
-	if (CapsuleComp)
-	{
-		// 캡슐 컴포넌트의 위치를 가져옵니다.
-		FVector CapsuleLocation = CapsuleComp->GetComponentLocation();
-
-		// 캡슐 컴포넌트의 절반 높이를 가져옵니다.
-		float HalfHeight = CapsuleComp->GetScaledCapsuleHalfHeight();
-
-		// 중앙값 계산
-		FVector CapsuleCenter = CapsuleLocation + FVector(0, 0, HalfHeight);
-
-		// 중앙값 출력
-		UE_LOG(LogTemp, Warning, TEXT("Capsule Center: %s"), *CapsuleCenter.ToString());
-	}
-    
 }
 
 float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 	class AController* EventInstigator, AActor* DamageCauser)
 {
-	HP -= DamageAmount;
+	if (ExecutionGauge > 0)
+	{
+		ExecutionGauge -= DamageAmount;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Gauge is 0"));
+	}
+	if (HP > 0)
+	{
+		HP -= DamageAmount;
+	}
 	RangeAnim -> PlayStuckDamage();
-	
 	UE_LOG(LogTemp, Display, TEXT("ARangeMonster::TakeDamage(),%f"), HP);
-
+	UpdateHpbarWidget();
 	
 	KnockBackDestPos = GetActorLocation()-GetActorForwardVector() * 100;
 	FVector from = GetActorLocation();
@@ -71,16 +62,11 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	FVector updatePos = FMath::Lerp(from,updatePos,p);
 
 	// 넉벡위치와 현재 캐릭터 위치 출력
-	UE_LOG(LogTemp, Warning, TEXT("RangeLoc, KnockBack,%f,%f,%f,%f,%f,%f"),
-		from.X,from.Y,from.Z,KnockBackDestPos.X,KnockBackDestPos.Y,KnockBackDestPos.Z);
-	SetActorLocation(KnockBackDestPos, false);
-
 	// FRotator rotFrom = GetActorRotation();
 	// FVector toward = -knockBackForce;
 	// FRotator rotTo = UKismetMathLibrary::MakeRotFromZX(FVector::UpVector, toward);
 	// FRotator destRot = FMath::Lerp(rotFrom,rotTo,p);
 	// me->SetActorRotation(destRot);
-	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -88,10 +74,6 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 void ARangeMonster::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FVector dir = PlayerCharacter->GetActorLocation()-GetActorLocation();
-	dir.Normalize();
-	SetActorRotation(dir.Rotation());
 }
 
 // Called to bind functionality to input

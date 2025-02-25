@@ -70,6 +70,8 @@ public:// 스킬
 	void ShockWave();
 	void JumpMonster();
 	void Avoid();
+	void Destroy();
+	void TimerDestroy();
 
 	void SwitchState();
 	void SetActorRot();

@@ -24,11 +24,12 @@ ASpearMonster::ASpearMonster()
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
 	}
 
-	ConstructorHelpers::FClassFinder<UAnimInstance>TempAnim(TEXT("'/Game/Boss_MK/SpearMonster/MySpearAnim.MySpearAnim_c'"));
-	if (TempAnim.Succeeded())
-	{
-		GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-	}
+	// ConstructorHelpers::FClassFinder<UAnimInstance>TempAnim(
+	// 	TEXT("'/Game/Boss_MK/SpearMonster/MySpearAnim.MySpearAnim_c'"));
+	// if (TempAnim.Succeeded())
+	// {
+	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	// }
 }
 
 // Called when the game starts or when spawned

@@ -59,7 +59,7 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 	Anim->Vertical = ForwardSpeed;
 	Anim->Horizontal = RightSpeed;
-	//
+	
 	// UE_LOG(LogTemp, Warning, TEXT("ForwardSpeed: %f"),Anim->Vertical);
 	// UE_LOG(LogTemp, Warning, TEXT("RightSpeed: %f"),Anim->Horizontal);
 }
@@ -97,9 +97,10 @@ void URangeFSM::AiMove()
 	FVector Dir = Direction.GetSafeNormal();
 	//플레이어와 나와의 거리
 	FVector FinalDestiantion = Destination - Offset;
-	
-	// FVector ForwardVector = Pawn->GetActorForwardVector();
-	// float ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
+
+	// FVector dir = Player->GetActorLocation()-RangeMonster->GetActorLocation();
+	// dir.Normalize();
+	// Player(dir.Rotation());
 	
 	Ai->MoveToLocation(FinalDestiantion - Dir * 300);
 	
@@ -130,8 +131,8 @@ void URangeFSM::ShockWave()
 	UGameplayStatics::ApplyRadialDamage(GetOwner(), DamageAmount, ImpulseOrigin, ImpulseRadius,
 		UDamageType::StaticClass(), OverlappingActors, GetOwner(), GetOwner()->GetInstigatorController(), true);
 
-	DrawDebugSphere(GetWorld(),RadialForce->GetComponentLocation(), 1000, 16, FColor::Red, true, 1.0f);
-	DrawDebugSphere(GetWorld(),RangeMonster->GetActorLocation(), 1000, 16, FColor::Red, true, 1.0f);
+	// DrawDebugSphere(GetWorld(),RadialForce->GetComponentLocation(), 1000, 16, FColor::Red, true, 1.0f);
+	// DrawDebugSphere(GetWorld(),RangeMonster->GetActorLocation(), 1000, 16, FColor::Red, true, 1.0f);
     mState = ERangeFSMState::Avoid;
 }
 
@@ -146,7 +147,6 @@ void URangeFSM::JumpMonster()
 	Anim->PlayJumpAnimation();
 	RangeMonster->LaunchCharacter(Power,false,false);
 	mState = ERangeFSMState::ShockWave;
-	
 }
 
 void URangeFSM::SetActorRot()
@@ -158,6 +158,18 @@ void URangeFSM::SetActorRot()
 	RangeMonster->SetActorRotation(SetRot);
 }
 
+void URangeFSM::TimerDestroy()
+{
+	FTimerHandle DestroyTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(DestroyTimerHandle,
+		this,&URangeFSM::Destroy,1.0f,false);
+}
+
+void URangeFSM::Destroy()
+{
+	UE_LOG(LogTemp, Warning, TEXT("RangeMonster::Destroy"));
+	// RangeMonster->Destroy();
+}
 
 void URangeFSM::SwitchState()
 {

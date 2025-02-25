@@ -105,6 +105,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
                           class AController* EventInstigator, AActor* DamageCauser)
 {
 	Hp -= DamageAmount;
+	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%d"),Hp);
 	DamageAnimation();
 	BossAnim->animState = EEnemyState::idle;
 	
