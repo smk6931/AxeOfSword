@@ -36,7 +36,7 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
-		EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetThrowAttackAnim(),
+		EquipComponent->GetMainWeaponAnimationData()->GetThrowAttackAnim(),
 		FGameplayTagContainer()
 		);
 	AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);

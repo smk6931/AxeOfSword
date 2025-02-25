@@ -32,9 +32,20 @@ void UEquipComponent::BeginPlay()
 	}
 }
 
+TObjectPtr<UWeaponAnimation> UEquipComponent::GetMainWeaponAnimationData() const
+{
+	if (!IsMainWeaponOwner())
+	{
+		return FistAnimation;
+	}
+	
+	return MainWeapon->GetWeaponAnimationData();
+}
+
 void UEquipComponent::SetNextCombo()
 {
-	if (ComboIndex == MainWeapon->GetWeaponAnimationData()->GetComboAttackAnim().Num() - 1)
+	UE_LOG(LogTemp, Display, TEXT("하이: %d"), ComboIndex)
+	if (ComboIndex >= GetMainWeaponAnimationData()->GetComboAttackAnim().Num() - 1)
 	{
 		ComboIndex = 0;
 		return;
@@ -49,14 +60,13 @@ void UEquipComponent::ClearCombo()
 
 void UEquipComponent::ToggleAttack(const bool IsAttack)
 {
-	if (MainWeapon)
+	if (MainWeapon->GetOwner() == GetOwner())
 	{
 		MainWeapon->UpdateWeaponAttackable(IsAttack);
+		return;
 	}
-	if (SubWeapon)
-	{
-		SubWeapon->UpdateWeaponAttackable(IsAttack);
-	}
+
+	// 여기에는 주먹 관련 로직 추가
 }
 
 bool UEquipComponent::IsMainWeaponOwner() const

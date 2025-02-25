@@ -5,7 +5,6 @@
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
-#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 
 bool UGA_ComboAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -42,7 +41,7 @@ void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	// TODO: 가능하면 Pooling 처리 해두기
 	AT_ComboAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
-		EquipComponent->GetMainWeapon()->GetWeaponAnimationData()
+		EquipComponent->GetMainWeaponAnimationData()
 			->GetComboAttackAnim()[EquipComponent->GetComboIndex()],
 		FGameplayTagContainer()
 		);
