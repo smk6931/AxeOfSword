@@ -22,7 +22,7 @@ bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 
 	return !GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(
-		AOSGameplayTags::Status_Combat) && UStateHelper::IsDamaged(GetAvatarActorFromActorInfo());
+		AOSGameplayTags::Status_Combat) && !UStateHelper::IsDamaged(GetAvatarActorFromActorInfo());
 }
 
 void UGA_CloseHold::PreActivate(const FGameplayAbilitySpecHandle Handle
