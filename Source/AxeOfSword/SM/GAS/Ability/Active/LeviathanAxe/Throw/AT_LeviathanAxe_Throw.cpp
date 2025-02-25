@@ -1,5 +1,7 @@
 #include "AT_LeviathanAxe_Throw.h"
 
+#include "AbilitySystemComponent.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
 #include "Kismet/KismetSystemLibrary.h"
 
@@ -24,7 +26,7 @@ void UAT_LeviathanAxe_Throw::Activate()
 		LeviathanAxe->SetWeaponMeshRotation(Pawn->GetController()->GetControlRotation());
 	}
 
-	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Throw);
+	LeviathanAxe->SetAxeStatus(ELeviathanAxeState::Throw);
 	GravityStack = 0;
 	
 	bTickingTask = true;
@@ -33,6 +35,7 @@ void UAT_LeviathanAxe_Throw::Activate()
 void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
 {
 	Super::TickTask(DeltaTime);
+	
 	RotateByPowerInTick(DeltaTime);
 	
 	FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * Balance.ThrowMovePower * DeltaTime;
@@ -45,7 +48,7 @@ void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
 	TraceWeaponThrow(HitResult);
 
 	if (HitResult.bBlockingHit)
-	{
+	{	
 		OnHitThrown(HitResult);
 	}
 }
@@ -64,8 +67,22 @@ void UAT_LeviathanAxe_Throw::TraceWeaponThrow(FHitResult& HitResult)
 
 void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
 {
+	// Pawn 종류를 맞춘다면 다음 스킬 동작을 수행해준다.
+	if (HitResult.GetActor())
+	{
+		FGameplayTagContainer CancelTagContainer;
+        CancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
+        AbilitySystemComponent->CancelAbilities(&CancelTagContainer);
+
+        FGameplayTagContainer ApplyTagContainer;
+        ApplyTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_ThrowAfterHit);
+        AbilitySystemComponent->TryActivateAbilitiesByTag(ApplyTagContainer);
+		
+		return;
+	}
+	
 	GravityStack = 0;
-	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Thrown_Idle);
+	LeviathanAxe->SetAxeStatus(ELeviathanAxeState::Thrown_Idle);
 	
 	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
 		LeviathanAxe->GetActorRightVector()).Rotator();

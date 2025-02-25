@@ -55,10 +55,12 @@ void AGC_LeviathanAxe_TurnBack::InitializeWeapon()
 	// 처음에 방향과 회전 정보를 설정해준다.
 	const FVector MoveTo = TargetCharacter->GetMesh()->GetSocketLocation("WeaponSocket");
 	const FRotator NewMoveToSet = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), MoveTo);
+	
 	TurnBackStartLocation = TargetWeapon->GetActorLocation();
 	
-	TargetWeapon->SetAxeStatus(ELeviathanAxeStatus::Return);
+	TargetWeapon->SetAxeStatus(ELeviathanAxeState::Return);
 	TargetWeapon->SetOwner(TargetCharacter);
+	TargetWeapon->UpdateWeaponAttackable(false);
 
 	// Weapon 자체의 상대 좌표들을 전부 초기화해줌
 	TargetWeapon->SetActorRotation(NewMoveToSet);
@@ -109,8 +111,8 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackEnd() const
 {
 	ALeviathanAxe* TargetWeapon = Cast<ALeviathanAxe>(TargetCharacter->GetEquipComponent()->GetMainWeapon());
 	
-	UStateHelper::ClearState(TargetCharacter->GetAbilitySystemComponent());
-	TargetWeapon->SetAxeStatus(ELeviathanAxeStatus::Idle);
+	UStateHelper::ClearState(TargetCharacter);
+	TargetWeapon->SetAxeStatus(ELeviathanAxeState::Idle);
 	TargetWeapon->GetWeaponMesh()->SetRelativeTransform(TargetWeapon->GetInitialWeaponMeshTransform());
 	TargetWeapon->AttachToComponent(TargetCharacter->GetMesh(),
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");

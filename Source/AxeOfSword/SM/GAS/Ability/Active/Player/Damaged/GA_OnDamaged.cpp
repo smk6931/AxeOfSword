@@ -17,9 +17,15 @@ bool UGA_OnDamaged::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		return false;
 	}
+
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	if (!BaseCharacter)
+	{
+		return false;
+	}
 	
-	return !UStateHelper::IsDamaged(GetAbilitySystemComponentFromActorInfo()) &&
-		!GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(AOSGameplayTags::State_Attack_Ing);
+	return !UStateHelper::IsDamaged(GetAvatarActorFromActorInfo())
+		&& BaseCharacter->GetCurrentState() == ECharacterState::AttackIng;
 }
 
 void UGA_OnDamaged::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -28,8 +34,13 @@ void UGA_OnDamaged::PreActivate(const FGameplayAbilitySpecHandle Handle, const F
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Damaged);
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	if (!BaseCharacter)
+	{
+		return;
+	}
+
+	BaseCharacter->SetCurrentState(ECharacterState::Damaged);
 }
 
 void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -59,12 +70,12 @@ void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 void UGA_OnDamaged::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
 void UGA_OnDamaged::OnDamagedBlendOut(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }

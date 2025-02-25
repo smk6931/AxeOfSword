@@ -36,7 +36,7 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 
 	AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
-		EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetThrowAttackAnim(),
+		EquipComponent->GetMainWeaponAnimationData()->GetThrowAttackAnim(),
 		FGameplayTagContainer()
 		);
 	AT_ThrowAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndThrowAttack);
@@ -49,7 +49,7 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UGA_ThrowAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
 	AOSGameplayTags::Ability_Attack_Throw);
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);

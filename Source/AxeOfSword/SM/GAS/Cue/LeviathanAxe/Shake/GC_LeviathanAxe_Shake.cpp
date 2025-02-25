@@ -29,6 +29,7 @@ bool AGC_LeviathanAxe_Shake::OnExecute_Implementation(AActor* MyTarget, const FG
 	{
 		return true;
 	}
+	
 	BaseOwner = Cast<ABaseCharacter>(MyTarget);
 
 	if (!BaseOwner)

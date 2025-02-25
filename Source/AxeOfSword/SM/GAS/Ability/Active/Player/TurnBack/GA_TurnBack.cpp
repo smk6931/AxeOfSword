@@ -32,20 +32,20 @@ bool UGA_TurnBack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return false;
 	}
 
-	if (!UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
+	if (!UStateHelper::IsIdle(GetAvatarActorFromActorInfo()))
 	{
 		return false;
 	}
 
-	if (LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Return)
+	if (LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Return)
 	{
 		return false;
 	}
 	
 	// 현재 도끼가 가만히 있는 상태여야 하며, 동시에 현재 Owner가
 	// BaseCharacter 가 아닌 즉 벽에 박혀있지 않는 상태인 경우 사용 가능하다.
-	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw ||
-		LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Thrown_Idle;
+	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Throw ||
+		LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Thrown_Idle;
 }
 
 void UGA_TurnBack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -54,8 +54,14 @@ void UGA_TurnBack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FG
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle, AOSGameplayTags::State_TurnBack);
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+
+	if (!BaseCharacter)
+	{
+		return;
+	}
+	
+	BaseCharacter->SetCurrentState(ECharacterState::WeaponTurnBack);
 }
 
 void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
@@ -65,21 +71,34 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
 
-	ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(BaseCharacter->GetEquipComponent()->GetMainWeapon());
+	const ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(BaseCharacter->GetEquipComponent()->GetMainWeapon());
 	if (!LeviathanAxe)
 	{
 		return;
 	}
 	
-	FGameplayTagContainer TagContainer;
-	TagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
-	GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
+	const bool IsThrowing = LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Throw;
+
+	if (IsThrowing)
+	{
+		FGameplayTagContainer PlayerAbilityCancelTagContainer;
+		PlayerAbilityCancelTagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
+		PlayerAbilityCancelTagContainer.AddTag(AOSGameplayTags::Ability_Attack_Throw);
+		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&PlayerAbilityCancelTagContainer);
+
+		FGameplayTagContainer WeaponSkillCancelTagContainer;
+		WeaponSkillCancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
+		LeviathanAxe->GetAbilitySystemComponent()->CancelAbilities(&WeaponSkillCancelTagContainer);
+
+		GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_TurnBack);
+	}
+	
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_Shake);
 }
 

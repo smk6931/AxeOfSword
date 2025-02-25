@@ -8,10 +8,13 @@
 #include "GameplayEffectTypes.h"
 #include "BaseCharacter.generated.h"
 
+class USphereComponent;
 class UWeaponAnimation;
 class UBaseAttribute;
 class UEquipComponent;
 class UAOSAbilitySystemComponent;
+
+enum class ECharacterState : uint8;
 
 UCLASS()
 class AXEOFSWORD_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
@@ -23,9 +26,14 @@ public:
 
 	FORCEINLINE virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	GETTER_SETTER(ECharacterState, CurrentState)
 	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
 	GETTER(TObjectPtr<UBaseAttribute>, Attribute)
+	GETTER(TObjectPtr<USphereComponent>, FistRightSphereCapsule)
+	
 	float GetHealth() const;
+
+	void ToggleFistAttackMode(const bool Toggle);
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,11 +44,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
 
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly)
 	UAOSAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UEquipComponent> EquipComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USphereComponent> FistRightSphereCapsule;
 	
 	UPROPERTY()
 	TObjectPtr<UBaseAttribute> Attribute;
@@ -50,4 +61,7 @@ protected:
 
 	virtual void OnHealthChanged(const FOnAttributeChangeData& Data);
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
+
+private:
+	ECharacterState CurrentState;
 };

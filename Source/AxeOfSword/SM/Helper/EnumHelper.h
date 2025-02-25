@@ -31,7 +31,19 @@ enum class EAbilityInputId : uint8
 };
 
 UENUM()
-enum class ELeviathanAxeStatus : uint8
+enum class ECharacterState : uint8
+{
+	Idle,
+	Attack,
+	AttackIng,
+	Casting,
+	Damaged,
+	WeaponTurnBack,
+	Died,
+};
+
+UENUM()
+enum class ELeviathanAxeState : uint8
 {
 	Idle,
 	Throw,

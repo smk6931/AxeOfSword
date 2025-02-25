@@ -1,5 +1,6 @@
 ﻿#include "CueNotify.h"
 
+#include "AbilitySystemComponent.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 
 void UCueNotify::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation,
