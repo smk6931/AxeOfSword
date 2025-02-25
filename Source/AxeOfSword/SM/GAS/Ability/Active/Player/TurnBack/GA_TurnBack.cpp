@@ -65,21 +65,34 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
-	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
 
-	ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(BaseCharacter->GetEquipComponent()->GetMainWeapon());
+	const ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(BaseCharacter->GetEquipComponent()->GetMainWeapon());
 	if (!LeviathanAxe)
 	{
 		return;
 	}
 	
-	FGameplayTagContainer TagContainer;
-	TagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
-	GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&TagContainer);
+	const bool IsThrowing = LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw;
+
+	if (IsThrowing)
+	{
+		FGameplayTagContainer PlayerAbilityCancelTagContainer;
+		PlayerAbilityCancelTagContainer.AddTag(AOSGameplayTags::Ability_Sprint);
+		PlayerAbilityCancelTagContainer.AddTag(AOSGameplayTags::Ability_Attack_Throw);
+		GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&PlayerAbilityCancelTagContainer);
+
+		FGameplayTagContainer WeaponSkillCancelTagContainer;
+		WeaponSkillCancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
+		LeviathanAxe->GetAbilitySystemComponent()->CancelAbilities(&WeaponSkillCancelTagContainer);
+
+		GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_TurnBack);
+	}
+	
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_Shake);
 }
 

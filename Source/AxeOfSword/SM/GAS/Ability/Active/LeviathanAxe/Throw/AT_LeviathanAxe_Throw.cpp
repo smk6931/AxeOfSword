@@ -35,6 +35,7 @@ void UAT_LeviathanAxe_Throw::Activate()
 void UAT_LeviathanAxe_Throw::TickTask(float DeltaTime)
 {
 	Super::TickTask(DeltaTime);
+	
 	RotateByPowerInTick(DeltaTime);
 	
 	FVector ForwardVector = FRotationMatrix(ThrowRotate).GetUnitAxis(EAxis::X) * Balance.ThrowMovePower * DeltaTime;
