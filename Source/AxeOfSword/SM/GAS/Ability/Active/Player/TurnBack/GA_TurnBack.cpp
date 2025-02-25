@@ -82,6 +82,8 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 	{
 		return;
 	}
+
+	BaseCharacter->GetEquipComponent()->ClearCombo();
 	
 	const bool IsThrowing = LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Throw;
 
@@ -97,6 +99,8 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		LeviathanAxe->GetAbilitySystemComponent()->CancelAbilities(&WeaponSkillCancelTagContainer);
 
 		GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_TurnBack);
+
+		return;
 	}
 	
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_Shake);

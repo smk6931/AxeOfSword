@@ -32,7 +32,8 @@ void UGA_ThrowAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	CancelTags.AddTag(AOSGameplayTags::Ability_CloseHold);
 	GetAbilitySystemComponentFromActorInfo()->CancelAbilities(&CancelTags);
 	
-	const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
+	EquipComponent->ClearCombo();
 
 	AT_ThrowAttackAnim = UPlayMontageWithEvent::InitialEvent(
 		this, NAME_None,
