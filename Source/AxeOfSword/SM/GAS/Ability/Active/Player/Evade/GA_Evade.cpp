@@ -5,7 +5,6 @@
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
-#include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
 void UGA_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                 const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -18,10 +17,16 @@ void UGA_Evade::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 	{
 		return;
 	}
+
+	TObjectPtr<UWeaponAnimation> WeaponAnimation = Player->GetEquipComponent()->
+		GetMainWeaponAnimationData();
+	
+	UAnimMontage* EvadeAnimation = AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Sprint) ?
+		WeaponAnimation->GetRollAnim().FindRef(GetDirection())
+		: WeaponAnimation->GetEvadeAnim().FindRef(GetDirection());
 	
 	EvadeAnim = UPlayMontageWithEvent::InitialEvent(this,
-		NAME_None, Player->GetEquipComponent()->
-		GetMainWeaponAnimationData()->GetEvadeAnim().FindRef(GetDirection()),
+		NAME_None, EvadeAnimation,
 		FGameplayTagContainer());
 
 	EvadeAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnEndEvade);

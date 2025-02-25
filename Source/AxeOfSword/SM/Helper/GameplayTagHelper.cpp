@@ -91,6 +91,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Combat, "Status.Combat", "현재 전투 모드로 들어갔음을 의미하는 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_CloseHold, "Status.CloseHold", "현재 조준하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Invincible, "Status.Invincible", "무적 상태임을 의미함");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Sprint, "Status.Sprint", "현재 달리고 있는 상태를 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
