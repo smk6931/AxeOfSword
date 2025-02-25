@@ -95,7 +95,8 @@ void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 {
 	const FVector2d InputVector = Value.Get<FVector2d>();
 	MoveDirection = { InputVector.X, InputVector.Y, 0 };
-
+	UE_LOG(LogTemp, Display, TEXT("%s"), *MoveDirection.ToString())
+	
 	const FRotator MoveRotation = {0, GetController()->GetControlRotation().Yaw, 0};
 	const FVector ForwardVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::X) * InputVector.X;
 	const FVector RightVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::Y) * InputVector.Y;

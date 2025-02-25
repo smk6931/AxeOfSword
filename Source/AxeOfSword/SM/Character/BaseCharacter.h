@@ -56,5 +56,5 @@ protected:
 	void OnMovementSpeedChanged(const FOnAttributeChangeData& Data);
 
 private:
-	ECharacterState CurrentState = ECharacterState::Idle;
+	ECharacterState CurrentState;
 };

@@ -16,8 +16,8 @@ bool UGA_ComboAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 	{
 		return false;
 	}
-	
-	return AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::State_Idle);
+
+	return UStateHelper::IsIdle(GetAvatarActorFromActorInfo());
 }
 
 void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -26,16 +26,15 @@ void UGA_ComboAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	
-	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
  
 	const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
-	
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Attack);
+
+	BaseCharacter->SetCurrentState(ECharacterState::Attack);
 	
 	// 최초 실행 시 첫번째 Montage를 실행시킨다.
 	// 캐싱은 하지 않는다. 캐싱의 경우는 무기에 따라 달라지지만
@@ -77,7 +76,7 @@ void UGA_ComboAttack::OnCancelAttack(FGameplayTag EventTag, FGameplayEventData E
 
 void UGA_ComboAttack::OnEndAttack(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 }
 
 void UGA_ComboAttack::OnEndCombo()

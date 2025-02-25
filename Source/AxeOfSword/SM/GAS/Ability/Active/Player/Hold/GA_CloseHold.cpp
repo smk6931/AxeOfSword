@@ -9,6 +9,7 @@
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerController.h"
 
 bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -21,7 +22,7 @@ bool UGA_CloseHold::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	}
 
 	return !GetAbilitySystemComponentFromActorInfo()->HasMatchingGameplayTag(
-		AOSGameplayTags::Status_Combat);
+		AOSGameplayTags::Status_Combat) && UStateHelper::IsDamaged(GetAvatarActorFromActorInfo());
 }
 
 void UGA_CloseHold::PreActivate(const FGameplayAbilitySpecHandle Handle

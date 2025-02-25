@@ -14,7 +14,7 @@ bool UGA_BaseAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		return false;
 	}
-	return AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::State_Idle);
+	return UStateHelper::IsIdle(GetAvatarActorFromActorInfo());
 }
 
 void UGA_BaseAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -68,7 +68,7 @@ void UGA_BaseAttack::InputPressed(const FGameplayAbilitySpecHandle Handle, const
 
 	// 계속 눌려있을 때 Pressed가 호출되며, 홀딩이 계속되는 상태이면서도 Idle인 상태 즉
 	// 일반 공격 1번이 끝났다는 것으로 정의해 강공격을 이후 계속 진행한다.
-	if (IsPlayerHoldingAttack() && UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
+	if (IsPlayerHoldingAttack() && UStateHelper::IsIdle(GetAvatarActorFromActorInfo()))
 	{
 		FGameplayTagContainer TagContainer;
 		TagContainer.AddTag(AOSGameplayTags::Ability_Attack_Heavy);

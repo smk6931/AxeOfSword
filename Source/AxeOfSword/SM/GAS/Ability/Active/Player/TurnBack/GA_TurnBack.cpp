@@ -32,7 +32,7 @@ bool UGA_TurnBack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return false;
 	}
 
-	if (!UStateHelper::IsIdle(GetAbilitySystemComponentFromActorInfo()))
+	if (!UStateHelper::IsIdle(GetAvatarActorFromActorInfo()))
 	{
 		return false;
 	}
@@ -54,8 +54,14 @@ void UGA_TurnBack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FG
 {
 	Super::PreActivate(Handle, ActorInfo, ActivationInfo, OnGameplayAbilityEndedDelegate, TriggerEventData);
 
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle, AOSGameplayTags::State_TurnBack);
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
+
+	if (!BaseCharacter)
+	{
+		return;
+	}
+	
+	BaseCharacter->SetCurrentState(ECharacterState::WeaponTurnBack);
 }
 
 void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle

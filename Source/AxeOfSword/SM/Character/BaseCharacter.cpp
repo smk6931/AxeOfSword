@@ -5,11 +5,13 @@
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
+#include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
+	CurrentState = ECharacterState::Idle;
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("Equip Component");
 }
 
@@ -66,7 +68,7 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 	}
 
 	// 이미 데미지를 받은 상태인 경우 굳이 뭘 하지 않는다.
-	if (UStateHelper::IsDamaged(GetAbilitySystemComponent()))
+	if (UStateHelper::IsDamaged(this))
 	{
 		return;
 	}

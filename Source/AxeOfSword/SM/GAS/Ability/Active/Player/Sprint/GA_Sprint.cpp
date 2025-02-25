@@ -13,7 +13,7 @@ bool UGA_Sprint::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	}
 
 	// TODO: 현재는 복귀 시지만 막는 전용 태그가 필요할 것 같다.
-	return !UStateHelper::IsWaitForTurnBackWeapon(GetAbilitySystemComponentFromActorInfo());
+	return !UStateHelper::IsWaitForTurnBackWeapon(GetAvatarActorFromActorInfo());
 }
 
 void UGA_Sprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle

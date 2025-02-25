@@ -111,7 +111,7 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackEnd() const
 {
 	ALeviathanAxe* TargetWeapon = Cast<ALeviathanAxe>(TargetCharacter->GetEquipComponent()->GetMainWeapon());
 	
-	UStateHelper::ClearState(TargetCharacter->GetAbilitySystemComponent());
+	UStateHelper::ClearState(TargetCharacter);
 	TargetWeapon->SetAxeStatus(ELeviathanAxeState::Idle);
 	TargetWeapon->GetWeaponMesh()->SetRelativeTransform(TargetWeapon->GetInitialWeaponMeshTransform());
 	TargetWeapon->AttachToComponent(TargetCharacter->GetMesh(),

@@ -18,7 +18,7 @@ bool UGA_HeavyAttack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 	}
 	
 	return AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Attack_Hold)
-		&& AOSGameplayTags::HasGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::State_Idle);
+		&& UStateHelper::IsIdle(GetAvatarActorFromActorInfo());
 }
 
 void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
@@ -26,18 +26,16 @@ void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-
-	AOSGameplayTags::SwapGameplayTag(GetAbilitySystemComponentFromActorInfo(),
-		AOSGameplayTags::State_Idle, AOSGameplayTags::State_Attack);
 	
 	if (!IsValid(AT_HeavyAttackAnim))
 	{
-		const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
+		ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(CurrentActorInfo->AvatarActor);
 		if (!IsValid(BaseCharacter))
 		{
 			return;
 		}
-		
+
+		BaseCharacter->SetCurrentState(ECharacterState::Attack);
 		const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 		AT_HeavyAttackAnim = UPlayMontageWithEvent::InitialEvent(
 			this, NAME_None,
@@ -53,7 +51,7 @@ void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 void UGA_HeavyAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
 	const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled)
 {
-	UStateHelper::ClearState(GetAbilitySystemComponentFromActorInfo());
+	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
