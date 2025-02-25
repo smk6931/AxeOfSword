@@ -5,7 +5,7 @@
 #include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "LeviathanAxe.generated.h"
 
-enum class ELeviathanAxeStatus : uint8;
+enum class ELeviathanAxeState : uint8;
 
 UCLASS()
 class AXEOFSWORD_API ALeviathanAxe : public ABaseWeapon
@@ -17,7 +17,7 @@ public:
 
 	void Throw();
 
-	GETTER_SETTER(ELeviathanAxeStatus, AxeStatus)
+	GETTER_SETTER(ELeviathanAxeState, AxeStatus)
 	GETTER(TObjectPtr<USceneComponent>, WeaponPivot)
 	GETTER(FTransform, InitialWeaponMeshTransform)
 	
@@ -34,7 +34,7 @@ protected:
 	TObjectPtr<USceneComponent> WeaponPivot;
 
 private:
-	ELeviathanAxeStatus AxeStatus = ELeviathanAxeStatus::Idle;
+	ELeviathanAxeState AxeStatus = ELeviathanAxeState::Idle;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
 		meta = (AllowPrivateAccess = true))

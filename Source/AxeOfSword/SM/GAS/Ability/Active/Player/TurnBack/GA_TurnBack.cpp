@@ -37,15 +37,15 @@ bool UGA_TurnBack::CanActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return false;
 	}
 
-	if (LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Return)
+	if (LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Return)
 	{
 		return false;
 	}
 	
 	// 현재 도끼가 가만히 있는 상태여야 하며, 동시에 현재 Owner가
 	// BaseCharacter 가 아닌 즉 벽에 박혀있지 않는 상태인 경우 사용 가능하다.
-	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw ||
-		LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Thrown_Idle;
+	return LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Throw ||
+		LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Thrown_Idle;
 }
 
 void UGA_TurnBack::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -77,7 +77,7 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 		return;
 	}
 	
-	const bool IsThrowing = LeviathanAxe->GetAxeStatus() == ELeviathanAxeStatus::Throw;
+	const bool IsThrowing = LeviathanAxe->GetAxeStatus() == ELeviathanAxeState::Throw;
 
 	if (IsThrowing)
 	{

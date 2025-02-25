@@ -24,7 +24,7 @@ void UAT_LeviathanAxe_ThrowAfterHit::Activate()
 		LeviathanAxe->SetWeaponMeshRotation(Pawn->GetController()->GetControlRotation());
 	}
 
-	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Throw);
+	LeviathanAxe->SetAxeStatus(ELeviathanAxeState::Throw);
 	GravityStack = 0;
 	
 	bTickingTask = true;
@@ -73,7 +73,7 @@ void UAT_LeviathanAxe_ThrowAfterHit::OnHitThrown(const FHitResult& HitResult)
 	}
 	
 	GravityStack = 0;
-	LeviathanAxe->SetAxeStatus(ELeviathanAxeStatus::Thrown_Idle);
+	LeviathanAxe->SetAxeStatus(ELeviathanAxeState::Thrown_Idle);
 	
 	const FRotator ActorRotate = FRotationMatrix::MakeFromZY(HitResult.ImpactNormal,
 		LeviathanAxe->GetActorRightVector()).Rotator();

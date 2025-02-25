@@ -58,7 +58,7 @@ void AGC_LeviathanAxe_TurnBack::InitializeWeapon()
 	
 	TurnBackStartLocation = TargetWeapon->GetActorLocation();
 	
-	TargetWeapon->SetAxeStatus(ELeviathanAxeStatus::Return);
+	TargetWeapon->SetAxeStatus(ELeviathanAxeState::Return);
 	TargetWeapon->SetOwner(TargetCharacter);
 	TargetWeapon->UpdateWeaponAttackable(false);
 
@@ -112,7 +112,7 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackEnd() const
 	ALeviathanAxe* TargetWeapon = Cast<ALeviathanAxe>(TargetCharacter->GetEquipComponent()->GetMainWeapon());
 	
 	UStateHelper::ClearState(TargetCharacter->GetAbilitySystemComponent());
-	TargetWeapon->SetAxeStatus(ELeviathanAxeStatus::Idle);
+	TargetWeapon->SetAxeStatus(ELeviathanAxeState::Idle);
 	TargetWeapon->GetWeaponMesh()->SetRelativeTransform(TargetWeapon->GetInitialWeaponMeshTransform());
 	TargetWeapon->AttachToComponent(TargetCharacter->GetMesh(),
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
