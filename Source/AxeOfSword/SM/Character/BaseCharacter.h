@@ -8,6 +8,7 @@
 #include "GameplayEffectTypes.h"
 #include "BaseCharacter.generated.h"
 
+class USphereComponent;
 class UWeaponAnimation;
 class UBaseAttribute;
 class UEquipComponent;
@@ -28,8 +29,11 @@ public:
 	GETTER_SETTER(ECharacterState, CurrentState)
 	GETTER(TObjectPtr<UEquipComponent>, EquipComponent)
 	GETTER(TObjectPtr<UBaseAttribute>, Attribute)
+	GETTER(TObjectPtr<USphereComponent>, FistRightSphereCapsule)
 	
 	float GetHealth() const;
+
+	void ToggleFistAttackMode(const bool Toggle);
 
 protected:
 	virtual void BeginPlay() override;
@@ -40,11 +44,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAOSAbilitySystemInitializeData> InitialData;
 
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly)
 	UAOSAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UEquipComponent> EquipComponent;
+
+	UPROPERTY(EditDefaultsOnly)
+	TObjectPtr<USphereComponent> FistRightSphereCapsule;
 	
 	UPROPERTY()
 	TObjectPtr<UBaseAttribute> Attribute;

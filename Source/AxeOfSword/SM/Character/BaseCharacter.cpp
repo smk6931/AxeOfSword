@@ -7,12 +7,19 @@
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "Component/EquipComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	CurrentState = ECharacterState::Idle;
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("Equip Component");
+
+	FistRightSphereCapsule = CreateDefaultSubobject<USphereComponent>("Fist Right Sphere Capsule");
+	FistRightSphereCapsule->SetupAttachment(GetMesh());
+
+	FistRightSphereCapsule->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, "hand_r");
+	FistRightSphereCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
@@ -90,4 +97,10 @@ void ABaseCharacter::OnMovementSpeedChanged(const FOnAttributeChangeData& Data)
 float ABaseCharacter::GetHealth() const
 {
 	return Attribute->GetHealth();
+}
+
+void ABaseCharacter::ToggleFistAttackMode(const bool Toggle)
+{
+	FistRightSphereCapsule->SetCollisionEnabled(Toggle ?
+		ECollisionEnabled::Type::QueryAndPhysics : ECollisionEnabled::Type::NoCollision);
 }

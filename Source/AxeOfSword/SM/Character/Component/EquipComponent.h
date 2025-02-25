@@ -51,5 +51,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Animation", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UWeaponAnimation> FistAnimation;
 
+	uint32 FistDamage = 10;
+
 	uint8 ComboIndex = 0;
+
+	UFUNCTION()
+	void OnFistAttack(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
