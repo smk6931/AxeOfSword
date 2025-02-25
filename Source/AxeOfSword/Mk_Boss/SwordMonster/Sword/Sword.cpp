@@ -35,7 +35,7 @@ ASword::ASword()
 	}
 	// 스워드 캡슐 콜리전을 비활성화 한다 - 공격했을시만 활성화 시키기 위해서
 	SwordCapsule->SetGenerateOverlapEvents(false);
-	SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
+	SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }	
 
 // Called when the game starts or when spawned
@@ -48,8 +48,13 @@ void ASword::BeginPlay()
 	BossMk = Cast<ABossMk>(GetOwner());
 }
 
+void ASword::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
+
 void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                              UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Display, TEXT("DamageApplied: %s"), *OtherActor->GetName());
 	UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),

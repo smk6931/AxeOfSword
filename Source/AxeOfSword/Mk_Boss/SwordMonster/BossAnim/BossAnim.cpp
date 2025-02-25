@@ -10,6 +10,11 @@
 void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+}
+
+void UBossAnim::NativeBeginPlay()
+{
+	Super::NativeBeginPlay();
 
 	BossMk = Cast<ABossMk>(GetOwningActor());
 }
@@ -21,6 +26,7 @@ void UBossAnim::AnimNotify_AaFir()
 
 void UBossAnim::AnimNotify_AaEnd()
 {
+	
 	FString stateStr = UEnum::GetValueAsString(animState);
 
 	if (animState == EEnemyState::JumpAttack)
@@ -52,11 +58,19 @@ void UBossAnim::AnimNotify_DashFir()
 	FVector Right = BossMk->GetActorRightVector();
 	FVector Velocity = Right * 2500;
 	BossMk->LaunchCharacter(Velocity, true,true);
-	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::QueryOnly);
 }
 
 void UBossAnim::AnimNotify_DashEnd()
 {
-	animState = EEnemyState::Attack;
-	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	animState = EEnemyState::idle;
+	BossMk->Fsm->mState = animState;
+}
+
+void UBossAnim::PrintViewPort()
+{
+	if (GEngine)
+	{
+		FString StateMessage = FString::Printf(TEXT("Current Animation State: %s"),animState);
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, StateMessage);
+	}
 }

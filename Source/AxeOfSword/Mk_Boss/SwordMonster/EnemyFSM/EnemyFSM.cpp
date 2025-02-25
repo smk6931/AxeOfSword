@@ -83,6 +83,8 @@ void UEnemyFSM::IdleState()
 	// 첫 Idle 상태
 	CurrentTime += GetWorld()->DeltaTimeSeconds;
 	// Idle 타임이 지나면 Move 상태로 전환
+	UE_LOG(LogTemp, Warning, TEXT("IdleState"));
+	
 	if (CurrentTime > IdleDelayTime)
 	{
 		mState = EEnemyState::Move;
@@ -101,6 +103,8 @@ void UEnemyFSM::MoveState()
 	Direction.Normalize();
 	Boss->SetActorRotation(Direction.Rotation());
 	
+	UE_LOG(LogTemp, Warning, TEXT("MoveState"));
+	
 	//적에게 이동한다
 	Boss->AddMovementInput(Direction);
 	//적과의 거리가 공격 거리보다 작아졌을때
@@ -118,6 +122,8 @@ void UEnemyFSM::AttackState()
 	Direction.Normalize();
 	
 	float Distance = FVector::Dist(Boss->GetActorLocation(), Player->GetActorLocation());
+	
+	UE_LOG(LogTemp, Warning, TEXT("AttackState"));
 	
 	// 거리가 공격 범위보다 커졌을때
 	// 이동 상태로 전환한다

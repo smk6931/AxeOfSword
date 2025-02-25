@@ -65,11 +65,15 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	UE_LOG(LogTemp, Display, TEXT("ARangeMonster::TakeDamage(),%f"), HP);
 
 	
-	KnockBackDestPos = GetActorLocation()-GetActorForwardVector()*20500;
+	KnockBackDestPos = GetActorLocation()-GetActorForwardVector() * 100;
 	FVector from = GetActorLocation();
 	float p = 3 * GetWorld()->GetDeltaSeconds();
-	FVector updatePos = FMath::Lerp(from,KnockBackDestPos,p);
-	SetActorLocation(KnockBackDestPos, true);
+	FVector updatePos = FMath::Lerp(from,updatePos,p);
+
+	// 넉벡위치와 현재 캐릭터 위치 출력
+	UE_LOG(LogTemp, Warning, TEXT("RangeLoc, KnockBack,%f,%f,%f,%f,%f,%f"),
+		from.X,from.Y,from.Z,KnockBackDestPos.X,KnockBackDestPos.Y,KnockBackDestPos.Z);
+	SetActorLocation(KnockBackDestPos, false);
 
 	// FRotator rotFrom = GetActorRotation();
 	// FVector toward = -knockBackForce;

@@ -60,4 +60,7 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
 	TSubclassOf<class UCameraShakeBase> cameraShake;
+
+	// UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
+	// void RandLocationSpawn();
 };

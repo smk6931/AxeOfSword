@@ -17,6 +17,7 @@ class AXEOFSWORD_API UBossAnim : public UAnimInstance
 
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+	virtual void NativeBeginPlay() override;
 	
 public:
  //    UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -27,6 +28,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class ABossMk* BossMk;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ASword* Sword;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
@@ -52,4 +56,6 @@ public:
 	void AnimNotify_DashEnd();
 
 	FTimerHandle TimerHandleA;
+
+	void PrintViewPort();
 };

@@ -32,7 +32,7 @@ void URangeFSM::BeginPlay()
 	Ai = Cast<AAIController>(RangeMonster->GetController());
 	Anim = Cast<URangeAnim>(RangeMonster->GetMesh()->GetAnimInstance());
 	
-	// GetWorld()->GetTimerManager().SetTimer(StateSwitchTimer, this,&URangeFSM::SwitchState, 2.0f, true);
+	GetWorld()->GetTimerManager().SetTimer(StateSwitchTimer, this,&URangeFSM::SwitchState, 2.0f, true);
 }
 
 // Called every frame
@@ -43,22 +43,22 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SetActorRot();
 
-	// APawn* Pawn = Ai->GetPawn();
-	// //Velocity 구하기
-	// FVector Velocity = RangeMonster->GetVelocity();
-	// //전방벡터 구하기
-	// FVector ForwardVector = RangeMonster->GetActorForwardVector();
-	// //오른쪽벡터구하기
-	// FVector RightVector = RangeMonster->GetActorRightVector();
-	// //내적에서 전방, 측면 속도 구하기
-	// ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
-	// RightSpeed = FVector::DotProduct(Velocity, RightVector);
-	// //전방, 측면속도 0 ~ 100 값 조절하기
-	// ForwardSpeed = FMath::Clamp(ForwardSpeed, -100.0f, 100.0f);
-	// RightSpeed = FMath::Clamp(RightSpeed, -100.0f, 100.0f);
-	//
-	// Anim->Vertical = ForwardSpeed;
-	// Anim->Horizontal = RightSpeed;
+	APawn* Pawn = Ai->GetPawn();
+	//Velocity 구하기
+	FVector Velocity = RangeMonster->GetVelocity();
+	//전방벡터 구하기
+	FVector ForwardVector = RangeMonster->GetActorForwardVector();
+	//오른쪽벡터구하기
+	FVector RightVector = RangeMonster->GetActorRightVector();
+	//내적에서 전방, 측면 속도 구하기
+	ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
+	RightSpeed = FVector::DotProduct(Velocity, RightVector);
+	//전방, 측면속도 0 ~ 100 값 조절하기
+	ForwardSpeed = FMath::Clamp(ForwardSpeed, -100.0f, 100.0f);
+	RightSpeed = FMath::Clamp(RightSpeed, -100.0f, 100.0f);
+	
+	Anim->Vertical = ForwardSpeed;
+	Anim->Horizontal = RightSpeed;
 	//
 	// UE_LOG(LogTemp, Warning, TEXT("ForwardSpeed: %f"),Anim->Vertical);
 	// UE_LOG(LogTemp, Warning, TEXT("RightSpeed: %f"),Anim->Horizontal);

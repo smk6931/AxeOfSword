@@ -42,7 +42,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category=FSM)
 	float AttackTime = 2;
-	float IdleDelayTime = 0.6;
+	float IdleDelayTime = 1.5;
 	float CurrentTime = 0;
 	float AttackRange = 150;
 	
@@ -70,4 +70,5 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class ASword* Sword;
+		
 };

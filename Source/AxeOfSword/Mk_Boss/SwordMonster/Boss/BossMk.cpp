@@ -3,6 +3,7 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "Components/CapsuleComponent.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -62,6 +63,15 @@ void ABossMk::BeginPlay()
 void ABossMk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	// if (BossSword->SwordCapsule->IsCollisionEnabled())
+	// {
+	// 	UE_LOG(LogTemp, Display, TEXT("Capsule Collision is Enabled"));
+	// }
+	// else
+	// {
+	// 	UE_LOG(LogTemp, Display, TEXT("Capsule Collision is Disabled"));
+	// }
 }
 // Called to bind functionality to input
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
