@@ -53,7 +53,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		RgAttack();
 		break;
 	case EEnemyState::TrippleAttack:
-		TrippleAttack();
+		TripleAttack();
 		break;
 	case EEnemyState::Dash:
 		Dash();
@@ -137,7 +137,7 @@ void UEnemyFSM::RgAttack()
 	mState = Anim->animState;
 }
 
-void UEnemyFSM::TrippleAttack()
+void UEnemyFSM::TripleAttack()
 {
 	mState = Anim->animState;
 }

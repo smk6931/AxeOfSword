@@ -52,7 +52,7 @@ public:
 	
 	void JumpAttack();
 	void RgAttack();
-	void TrippleAttack();
+	void TripleAttack();
 	void Dash();
 	
 	void AttackState();

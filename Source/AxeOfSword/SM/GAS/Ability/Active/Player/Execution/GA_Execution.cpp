@@ -9,6 +9,7 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 void UGA_Execution::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
@@ -51,8 +52,8 @@ void UGA_Execution::OnCinematicEnd()
 
 	if (ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget()))
 	{
-		NewBoss->Fsm->mState = EEnemyState::Die;
-		NewBoss->Fsm->Anim->animState = EEnemyState::Die;
+		UGameplayStatics::ApplyDamage(NewBoss, 99999,
+			NewBoss->GetController(), GetAvatarActorFromActorInfo(), nullptr);
 	}
 	
 	BaseCharacter->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
