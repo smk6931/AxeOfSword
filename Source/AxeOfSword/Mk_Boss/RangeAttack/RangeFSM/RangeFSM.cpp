@@ -122,11 +122,11 @@ void URangeFSM::ShockWave()
 	RadialForce->bImpulseVelChange = true;
 	RadialForce->FireImpulse();
 	
-	auto pc = GetWorld()->GetFirstPlayerController();
-	if (pc)
-	{
-		pc->PlayerCameraManager->StartCameraShake(RangeMonster->cameraShake);
-	}
+	// auto pc = GetWorld()->GetFirstPlayerController();
+	// if (pc)
+	// {
+	// 	pc->PlayerCameraManager->StartCameraShake(RangeMonster->cameraShake);
+	// }
 	
 	UGameplayStatics::ApplyRadialDamage(GetOwner(), DamageAmount, ImpulseOrigin, ImpulseRadius,
 		UDamageType::StaticClass(), OverlappingActors, GetOwner(), GetOwner()->GetInstigatorController(), true);

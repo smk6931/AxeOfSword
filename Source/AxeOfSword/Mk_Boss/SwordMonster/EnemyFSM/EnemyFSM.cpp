@@ -34,15 +34,6 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// 현재 상태값 출력
-	if (GEngine)
-	{
-		int32 BossHp = Boss->Hp;
-		// FString stateStr = UEnum::GetValueAsString(mState);
-		// GEngine->AddOnScreenDebugMessage(1, 0.0f, 
-		// 	FColor::Green,FString::Printf(
-		// 		TEXT("Boss Status: %s\n"
-		// 		"HP: %d"), *stateStr, BossHp));
-	}
 	
 	switch (mState)
 	{
