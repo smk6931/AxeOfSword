@@ -34,6 +34,4 @@ void UHeavyAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 	}
 	
 	UStateHelper::ClearState(BaseCharacter);
-	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
-	AOSGameplayTags::Ability_Attack_Heavy);
 }

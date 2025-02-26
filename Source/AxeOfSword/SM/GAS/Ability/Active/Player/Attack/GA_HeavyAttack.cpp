@@ -42,10 +42,13 @@ void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 			EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetHeavyAttackAnim(),
 			FGameplayTagContainer()
 			);
-		AT_HeavyAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnBlendOutHeavyAttack);
+		AT_HeavyAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
+		AT_HeavyAttackAnim->OnCancelled.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
 		AT_HeavyAttackAnim->OnCompleted.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
+		AT_HeavyAttackAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnEndHeavyAttack);
 	}
-	AT_HeavyAttackAnim->Activate();
+	
+	AT_HeavyAttackAnim->ReadyForActivation();
 }
 
 void UGA_HeavyAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
@@ -53,12 +56,6 @@ void UGA_HeavyAttack::EndAbility(const FGameplayAbilitySpecHandle Handle, const 
 {
 	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	Super::EndAbility(Handle, ActorInfo, ActivationInfo, bReplicateEndAbility, bWasCancelled);
-}
-
-void UGA_HeavyAttack::OnBlendOutHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData)
-{
-	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo,
-		false, false);
 }
 
 void UGA_HeavyAttack::OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData)

@@ -5,7 +5,6 @@
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/GAS/Ability/Utility/PlayMontageWithEvent.h"
-#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 
@@ -23,9 +22,10 @@ bool UGA_OnDamaged::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
 	{
 		return false;
 	}
-	
+
+	// 공격 중인 경우는 무시해도 된다.
 	return !UStateHelper::IsDamaged(GetAvatarActorFromActorInfo())
-		&& BaseCharacter->GetCurrentState() == ECharacterState::AttackIng;
+		&& BaseCharacter->GetCurrentState() != ECharacterState::AttackIng;
 }
 
 void UGA_OnDamaged::PreActivate(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,

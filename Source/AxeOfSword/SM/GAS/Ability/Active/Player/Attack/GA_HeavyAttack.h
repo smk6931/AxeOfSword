@@ -29,8 +29,5 @@ private:
 	TObjectPtr<UPlayMontageWithEvent> AT_HeavyAttackAnim;
 	
 	UFUNCTION()
-	void OnBlendOutHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
-	
-	UFUNCTION()
 	void OnEndHeavyAttack(FGameplayTag EventTag, FGameplayEventData EventData);
 };
