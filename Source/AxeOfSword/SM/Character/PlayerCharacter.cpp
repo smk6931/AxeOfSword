@@ -1,6 +1,7 @@
 ﻿#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AxeOfSword/Mk_Boss/RangeAttack/RangeMonster/RangeMonster.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Player/AOSPlayerController.h"
@@ -10,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -103,6 +105,8 @@ void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 	const FVector MoveTo = ForwardVector + RightVector;
 
 	AddMovementInput(MoveTo, 1);
+	
+	FindTarget();
 }
 
 void APlayerCharacter::Look(const FInputActionValue& Value)
@@ -110,4 +114,24 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	const FVector2d LookToValue = Value.Get<FVector2d>();
 	AddControllerYawInput(LookToValue.X);
 	AddControllerPitchInput(LookToValue.Y);
+
+	FindTarget();
+}
+
+void APlayerCharacter::FindTarget()
+{
+	const FVector MoveToVector = GetActorLocation() + GetControlRotation().Vector() * 100;
+
+	const TArray<AActor*> IgnoreActor;
+	FHitResult HitResult;
+	
+	if (UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(),
+		GetActorLocation(), MoveToVector, 50, 50, TraceTypeQuery1,
+		false, IgnoreActor, EDrawDebugTrace::None, HitResult, true))
+	{
+		if (APawn* NewPawn = Cast<APawn>(HitResult.GetActor()))
+		{
+			ExecutionTarget = NewPawn;
+		}
+	}
 }

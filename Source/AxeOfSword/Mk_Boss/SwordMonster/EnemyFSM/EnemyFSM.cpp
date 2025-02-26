@@ -32,9 +32,8 @@ void UEnemyFSM::BeginPlay()
 void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// 현재 상태값 출력
 	
+	// 현재 상태값 출력
 	switch (mState)
 	{
 	case EEnemyState::idle:
@@ -51,7 +50,7 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		RgAttack();
 		break;
 	case EEnemyState::TrippleAttack:
-		TrippleAttack();
+		TripleAttack();
 		break;
 	case EEnemyState::Dash:
 		Dash();
@@ -135,7 +134,7 @@ void UEnemyFSM::RgAttack()
 	mState = Anim->animState;
 }
 
-void UEnemyFSM::TrippleAttack()
+void UEnemyFSM::TripleAttack()
 {
 	mState = Anim->animState;
 }

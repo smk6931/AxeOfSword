@@ -39,7 +39,7 @@ void UGA_HeavyAttack::ActivateAbility(const FGameplayAbilitySpecHandle Handle,
 		const UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
 		AT_HeavyAttackAnim = UPlayMontageWithEvent::InitialEvent(
 			this, NAME_None,
-			EquipComponent->GetMainWeapon()->GetWeaponAnimationData()->GetHeavyAttackAnim(),
+			EquipComponent->GetMainWeaponAnimationData()->GetHeavyAttackAnim(),
 			FGameplayTagContainer()
 			);
 		AT_HeavyAttackAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnEndHeavyAttack);

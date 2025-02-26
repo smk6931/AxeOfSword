@@ -17,7 +17,8 @@ enum class EEnemyState : uint8
 	TrippleAttack,
 	Dash,
 	Damage,
-	Die
+	Die,
+	UnKnown
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -51,7 +52,7 @@ public:
 	
 	void JumpAttack();
 	void RgAttack();
-	void TrippleAttack();
+	void TripleAttack();
 	void Dash();
 	
 	void AttackState();
