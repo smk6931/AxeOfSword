@@ -5,6 +5,7 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 UAT_PlayLevelSequence* UAT_PlayLevelSequence::InitialEvent(UGameplayAbility* Ability, ULevelSequence* LevelSequence)
@@ -53,13 +54,13 @@ void UAT_PlayLevelSequence::Activate()
 
 	BaseCharacter->GetCharacterMovement()->DisableMovement();
 	
-	LevelSequenceActor->AddBindingByTag(FName(TEXT("Player")), GetAvatarActor());
-	LevelSequenceActor->AddBindingByTag(FName(TEXT("Enemy")), NewBoss);
-	
 	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw * -1, 0};
 
 	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 30 + GetAvatarActor()->GetActorLocation());
 	NewBoss->SetActorRotation(RotateTo);
+	
+	LevelSequenceActor->AddBindingByTag(FName(TEXT("Player")), GetAvatarActor());
+	LevelSequenceActor->AddBindingByTag(FName(TEXT("Enemy")), NewBoss);
 	
 	LevelSequenceActor->SetActorTransform(GetAvatarActor()->GetTransform());
 	LevelSequencePlayer->Play();
