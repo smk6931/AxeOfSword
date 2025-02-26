@@ -120,14 +120,14 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 
 void APlayerCharacter::FindTarget()
 {
-	const FVector MoveToVector = GetActorLocation() + GetControlRotation().Vector() * 1000;
+	const FVector MoveToVector = GetActorLocation() + GetControlRotation().Vector() * 100;
 
 	const TArray<AActor*> IgnoreActor;
 	FHitResult HitResult;
 	
 	if (UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(),
 		GetActorLocation(), MoveToVector, 50, 50, TraceTypeQuery1,
-		false, IgnoreActor, EDrawDebugTrace::ForOneFrame, HitResult, true))
+		false, IgnoreActor, EDrawDebugTrace::None, HitResult, true))
 	{
 		if (APawn* NewPawn = Cast<APawn>(HitResult.GetActor()))
 		{

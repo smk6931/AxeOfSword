@@ -24,7 +24,7 @@ public:
 	GETTER(TObjectPtr<UPlayerCameraComponent>, CameraComponent)
 	GETTER(TObjectPtr<USpringArmComponent>, SpringArm)
 	GETTER(FVector, MoveDirection)
-	GETTER(TObjectPtr<APawn>, ExecutionTarget)
+	GETTER_SETTER(TObjectPtr<APawn>, ExecutionTarget)
 
 protected:
 	virtual void BeginPlay() override;

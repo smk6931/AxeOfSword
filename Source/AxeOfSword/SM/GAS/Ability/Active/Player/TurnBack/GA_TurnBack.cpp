@@ -96,6 +96,7 @@ void UGA_TurnBack::ActivateAbility(const FGameplayAbilitySpecHandle Handle
 
 		FGameplayTagContainer WeaponSkillCancelTagContainer;
 		WeaponSkillCancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
+		WeaponSkillCancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_ThrowAfterHit);
 		LeviathanAxe->GetAbilitySystemComponent()->CancelAbilities(&WeaponSkillCancelTagContainer);
 
 		GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(AOSGameplayTags::GameplayCue_Leviathan_TurnBack);

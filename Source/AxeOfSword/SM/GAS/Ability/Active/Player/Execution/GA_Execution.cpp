@@ -39,7 +39,7 @@ void UGA_Execution::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
 void UGA_Execution::OnCinematicEnd()
 {
-	const APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo());
+	APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo());
 	if (!BaseCharacter)
 	{
 		return;
@@ -55,7 +55,8 @@ void UGA_Execution::OnCinematicEnd()
 		UGameplayStatics::ApplyDamage(NewBoss, 99999,
 			NewBoss->GetController(), GetAvatarActorFromActorInfo(), nullptr);
 	}
-	
+
+	BaseCharacter->SetExecutionTarget(nullptr);
 	BaseCharacter->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	
 	EndAbility(CurrentSpecHandle, CurrentActorInfo,
