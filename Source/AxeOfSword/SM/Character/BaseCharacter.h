@@ -47,7 +47,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	UAOSAbilitySystemComponent* AbilitySystemComponent;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UEquipComponent> EquipComponent;
 
 	UPROPERTY(EditDefaultsOnly)

@@ -16,7 +16,6 @@ void UGA_LeviathanAxe_Throw::ActivateAbility(
 	AT_LeviathanAxeThrow->OnThrowEndNotified.AddDynamic(this, &ThisClass::OnEndThrowAxe);
 
 	ALeviathanAxe* LeviathanAxe = Cast<ALeviathanAxe>(GetAvatarActorFromActorInfo());
-	
 	LeviathanAxe->UpdateWeaponAttackable(true);
 	
 	AT_LeviathanAxeThrow->ReadyForActivation();

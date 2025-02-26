@@ -27,6 +27,11 @@ bool UStateHelper::IsDamaged(const AActor* Target)
 
 bool UStateHelper::IsZoomIn(const UAbilitySystemComponent* ASC)
 {
+	if (!ASC)
+	{
+		return false;
+	}
+	
 	return ASC->HasMatchingGameplayTag(AOSGameplayTags::Status_CloseHold);
 }
 

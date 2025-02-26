@@ -14,7 +14,5 @@ UFUNCTION(BlueprintCallable) \
 FORCEINLINE void Set##varName(const type& val) { varName = val; }
 
 #define GETTER_SETTER(type, varName) \
-UFUNCTION(BlueprintCallable) \
 GETTER(type, varName) \
-UFUNCTION(BlueprintCallable) \
 SETTER(type, varName)
