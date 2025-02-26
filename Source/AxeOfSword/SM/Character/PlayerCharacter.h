@@ -24,6 +24,7 @@ public:
 	GETTER(TObjectPtr<UPlayerCameraComponent>, CameraComponent)
 	GETTER(TObjectPtr<USpringArmComponent>, SpringArm)
 	GETTER(FVector, MoveDirection)
+	GETTER(TObjectPtr<APawn>, ExecutionTarget)
 
 protected:
 	virtual void BeginPlay() override;
@@ -56,4 +57,9 @@ private:
 
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
+
+	UPROPERTY()
+	TObjectPtr<APawn> ExecutionTarget;
+
+	void FindTarget();
 };

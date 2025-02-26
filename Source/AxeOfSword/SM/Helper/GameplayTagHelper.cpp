@@ -56,8 +56,7 @@ namespace AOSGameplayTags
 
 		SetGameplayTag(ASC, Tag, TagCount, IsReplicated);
 	}
-
-
+	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability, "Ability", "Ability 관련 최상위 트리 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack, "Ability.Attack", "공격 Ability 실행 상태를 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Attack_Default, "Ability.Attack.Default", "일반 공격 Ability 실행 상태를 의미함");
@@ -67,6 +66,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Sprint, "Ability.Sprint", "달리기 Ability 사용하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_TurnBack, "Ability.TurnBack", "무기 복귀에 대한 Ability를 사용하고 있음을 의미함");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Evade, "Ability.Evade", "스텝을 뛰어 빠르게 단거리를 회피하는 스킬");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Ability_Execution, "Ability.Execution", "처형 관련 스킬");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Cooldown_Ability_Evade, "Cooldown.Ability.Evade", "Evade Skill의 Cooldown 전용 태그");
 	

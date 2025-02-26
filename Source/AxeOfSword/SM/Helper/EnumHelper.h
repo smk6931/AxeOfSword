@@ -28,6 +28,7 @@ enum class EAbilityInputId : uint8
 	Sprint,
 	Damaged,
 	Evade,
+	Execution
 };
 
 UENUM()

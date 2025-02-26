@@ -5,6 +5,7 @@
 #include "Engine/DataAsset.h"
 #include "WeaponAnimation.generated.h"
 
+class ULevelSequence;
 enum class EMoveDirection: uint8;
 
 UCLASS()
@@ -16,6 +17,8 @@ public:
 	GETTER(TArray<TObjectPtr<UAnimMontage>>, ComboAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, HeavyAttackAnim)
 	GETTER(TObjectPtr<UAnimMontage>, ThrowAttackAnim)
+	GETTER(TObjectPtr<ULevelSequence>, ExecutionCinematic)
+	
 	FORCEINLINE TMap<EMoveDirection, TObjectPtr<UAnimMontage>> GetDamagedAnim() { return DamagedAnim; }
 	FORCEINLINE TMap<EMoveDirection, TObjectPtr<UAnimMontage>> GetEvadeAnim() { return EvadeAnim; }
 	FORCEINLINE TMap<EMoveDirection, TObjectPtr<UAnimMontage>> GetRollAnim() { return RollAnim; }
@@ -38,4 +41,7 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
 	TMap<EMoveDirection, TObjectPtr<UAnimMontage>> RollAnim;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Option|Weapon", meta = (AllowPrivateAccess = true))
+	TObjectPtr<ULevelSequence> ExecutionCinematic;
 };
