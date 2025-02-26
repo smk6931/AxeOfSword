@@ -127,7 +127,7 @@ void APlayerCharacter::FindTarget()
 	
 	if (UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(),
 		GetActorLocation(), MoveToVector, 50, 50, TraceTypeQuery1,
-		false, IgnoreActor, EDrawDebugTrace::None, HitResult, true))
+		false, IgnoreActor, EDrawDebugTrace::ForOneFrame, HitResult, true))
 	{
 		if (APawn* NewPawn = Cast<APawn>(HitResult.GetActor()))
 		{

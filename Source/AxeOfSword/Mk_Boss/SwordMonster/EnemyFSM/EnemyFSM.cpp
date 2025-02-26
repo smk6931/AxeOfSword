@@ -33,6 +33,8 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	UE_LOG(LogTemp, Display, TEXT("하이: %s"), *UEnum::GetValueAsString(mState))
+	
 	// 현재 상태값 출력
 	
 	switch (mState)
