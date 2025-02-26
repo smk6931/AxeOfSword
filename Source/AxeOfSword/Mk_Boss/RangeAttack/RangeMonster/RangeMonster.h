@@ -51,16 +51,21 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	FVector KnockBackDestPos;
-	// UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	// ALeviathanAxe* LeviathanAxe;
-
+	
 	// RangeMonster 체력
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
-	float HP = 100.f;
+	float HP = 200.f;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	float ExecutionGauge = HP*2/3; 
 
 	UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
 	TSubclassOf<class UCameraShakeBase> cameraShake;
 
 	// UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
 	// void RandLocationSpawn();
+
+public:
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateHpbarWidget();
 };
