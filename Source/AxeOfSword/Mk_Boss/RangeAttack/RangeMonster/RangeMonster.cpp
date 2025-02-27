@@ -14,8 +14,8 @@ ARangeMonster::ARangeMonster()
 
 	RangeFSM = CreateDefaultSubobject<URangeFSM>(TEXT("RangeFSM"));
 
-	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("'/Game/ParagonAurora/"
-	"Characters/Heroes/Aurora/Skins/GlacialEmpress/Meshes/Aurora_GlacialEmpress.Aurora_GlacialEmpress'"));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh>tempMesh(TEXT("'/Game/Boss_MK/Monster_Range/RangeMonster/Range_Skin/"
+	"Skins/GlacialEmpress/Meshes/Aurora_GlacialEmpress.Aurora_GlacialEmpress'"));
 	if (tempMesh.Object)
 	{
 		GetMesh()->SetSkeletalMesh(tempMesh.Object);
