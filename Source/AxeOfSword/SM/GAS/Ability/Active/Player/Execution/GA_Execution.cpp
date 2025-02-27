@@ -1,20 +1,38 @@
 ﻿#include "GA_Execution.h"
 
-#include "LevelSequencePlayer.h"
+#include "AT_PlayLevelSequence.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
-#include "AT_PlayLevelSequence.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
-#include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "Kismet/GameplayStatics.h"
+#include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+
+bool UGA_Execution::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	const APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo());
+	if (!BaseCharacter)
+	{
+		return false;
+	}
+	
+	return IsValid(BaseCharacter->GetExecutionTarget());
+}
 
 void UGA_Execution::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+
+	AOSGameplayTags::AddGameplayTag(GetAbilitySystemComponentFromActorInfo(), AOSGameplayTags::Status_Invincible);
 
 	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(GetAvatarActorFromActorInfo());
 	if (!BaseCharacter)
@@ -39,6 +57,9 @@ void UGA_Execution::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
 void UGA_Execution::OnCinematicEnd()
 {
+	AOSGameplayTags::RemoveGameplayTag(GetAbilitySystemComponentFromActorInfo(),
+		AOSGameplayTags::Status_Invincible);
+	
 	APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo());
 	if (!BaseCharacter)
 	{
@@ -49,13 +70,15 @@ void UGA_Execution::OnCinematicEnd()
 	{
 		return;
 	}
-
-	if (ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget()))
+	
+	ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget());
+	if (!NewBoss)
 	{
-		UGameplayStatics::ApplyDamage(NewBoss, 99999,
-			NewBoss->GetController(), GetAvatarActorFromActorInfo(), nullptr);
+		return;	
 	}
-
+	
+	NewBoss->DiedImmediately();
+	
 	BaseCharacter->SetExecutionTarget(nullptr);
 	BaseCharacter->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	

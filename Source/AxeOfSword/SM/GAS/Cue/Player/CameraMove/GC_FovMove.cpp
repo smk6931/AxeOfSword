@@ -33,8 +33,14 @@ bool AGC_FovMove::OnExecute_Implementation(AActor* MyTarget
 	Target = MyTarget;
 	
 	IsReverse = Parameters.AbilityLevel != 1;
-	
-	FovMoveTimeline->PlayFromStart();
+
+	if (IsReverse)
+	{
+		FovMoveTimeline->ReverseFromEnd();
+	} else
+	{
+		FovMoveTimeline->PlayFromStart();
+	}
 	
 	return false;
 }
@@ -49,7 +55,8 @@ void AGC_FovMove::OnFovMoveCallback(float Output)
 	
 	UPlayerCameraComponent* PlayerCameraComponent = Player->GetCameraComponent();
 
-	PlayerCameraComponent->AddFov(Output * (IsReverse ? -1 : 1) * FovMoveSpeed);
+	PlayerCameraComponent->SetFov(FMath::Lerp(PlayerCameraComponent->GetDefaultFov(),
+		FovTo, Output));
 }
 
 void AGC_FovMove::OnFovMoveFinish()

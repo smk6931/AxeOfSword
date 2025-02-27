@@ -26,7 +26,7 @@ private:
 	uint8 IsRollback:1 = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Option", meta = (AllowPrivateAccess = true, ClampMin = 0))
-	float FovMoveSpeed = 0;
+	float FovTo = 0;
 
 	bool IsReverse;
 	

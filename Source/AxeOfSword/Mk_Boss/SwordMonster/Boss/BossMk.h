@@ -63,6 +63,8 @@ public:
 	void DestroyBoss();
 	void DestroyBossSword();
 
+	void DiedImmediately();
+
 private:
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandleB;

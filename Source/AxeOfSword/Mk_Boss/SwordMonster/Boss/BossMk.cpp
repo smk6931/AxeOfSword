@@ -87,6 +87,12 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 // 	}
 // }
 
+void ABossMk::DiedImmediately()
+{
+	DestroyBossSword();
+	DestroyBoss();
+}
+
 void ABossMk::DestroyBoss()
 {
 	Destroy();

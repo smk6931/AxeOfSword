@@ -39,9 +39,6 @@ void UAT_PlayLevelSequence::Activate()
 		EndTask();
 		return;
 	}
-
-	// NewBoss->Fsm->Anim->animState = EEnemyState::idle;
-	// NewBoss->Fsm->mState = EEnemyState::UnKnown;
 	
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	PlaybackSettings.bAutoPlay = true;
@@ -54,7 +51,7 @@ void UAT_PlayLevelSequence::Activate()
 
 	BaseCharacter->GetCharacterMovement()->DisableMovement();
 	
-	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw * -1, 0};
+	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw + 180, 0};
 
 	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 30 + GetAvatarActor()->GetActorLocation());
 	NewBoss->SetActorRotation(RotateTo);
@@ -63,6 +60,7 @@ void UAT_PlayLevelSequence::Activate()
 	LevelSequenceActor->AddBindingByTag(FName(TEXT("Enemy")), NewBoss);
 	
 	LevelSequenceActor->SetActorTransform(GetAvatarActor()->GetTransform());
+	
 	LevelSequencePlayer->Play();
 }
 
