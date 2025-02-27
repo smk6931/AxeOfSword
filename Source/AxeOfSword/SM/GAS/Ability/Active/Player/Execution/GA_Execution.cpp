@@ -48,13 +48,16 @@ void UGA_Execution::OnCinematicEnd()
 	{
 		return;
 	}
-
-	if (ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget()))
+	
+	ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget());
+	if (!NewBoss)
 	{
-		UGameplayStatics::ApplyDamage(NewBoss, 99999,
-			NewBoss->GetController(), GetAvatarActorFromActorInfo(), nullptr);
+		return;	
 	}
-
+	
+	UGameplayStatics::ApplyDamage(NewBoss, 99999,
+				NewBoss->GetController(), GetAvatarActorFromActorInfo(), nullptr);
+	
 	BaseCharacter->SetExecutionTarget(nullptr);
 	BaseCharacter->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
 	
