@@ -47,6 +47,7 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gauge is 0"));
+		GetWorld()->GetTimerManager().SetTimer(DeathTime,this,&ARangeMonster::DestroySelf,2,false);
 	}
 	if (HP > 0)
 	{
@@ -54,7 +55,7 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	}
 	RangeAnim -> PlayStuckDamage();
 	UE_LOG(LogTemp, Display, TEXT("ARangeMonster::TakeDamage(),%f"), HP);
-	UpdateHpbarWidget();
+	// UpdateHpbarWidget();
 	
 	KnockBackDestPos = GetActorLocation()-GetActorForwardVector() * 100;
 	FVector from = GetActorLocation();
@@ -67,6 +68,7 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	// FRotator rotTo = UKismetMathLibrary::MakeRotFromZX(FVector::UpVector, toward);
 	// FRotator destRot = FMath::Lerp(rotFrom,rotTo,p);
 	// me->SetActorRotation(destRot);
+	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -80,6 +82,11 @@ void ARangeMonster::Tick(float DeltaTime)
 void ARangeMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+}
+
+void ARangeMonster::DestroySelf()
+{
+	this->Destroy();
 }
 
 

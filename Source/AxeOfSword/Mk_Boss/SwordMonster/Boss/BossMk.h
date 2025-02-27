@@ -54,16 +54,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
-	// UFUNCTION(BlueprintCallable)
-	// void DamageAnimation();
-	//
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	// UAnimMontage* DamageMontage;
-
 	void DestroyBoss();
 	void DestroyBossSword();
 
 	void DiedImmediately();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+	void BlueTakeDamage();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DamageAnimation();
 
 private:
 	FTimerHandle TimerHandle;
