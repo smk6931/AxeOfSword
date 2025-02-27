@@ -39,9 +39,6 @@ void UAT_PlayLevelSequence::Activate()
 		EndTask();
 		return;
 	}
-
-	// NewBoss->Fsm->Anim->animState = EEnemyState::idle;
-	// NewBoss->Fsm->mState = EEnemyState::UnKnown;
 	
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	PlaybackSettings.bAutoPlay = true;
@@ -63,6 +60,7 @@ void UAT_PlayLevelSequence::Activate()
 	LevelSequenceActor->AddBindingByTag(FName(TEXT("Enemy")), NewBoss);
 	
 	LevelSequenceActor->SetActorTransform(GetAvatarActor()->GetTransform());
+	
 	LevelSequencePlayer->Play();
 }
 
