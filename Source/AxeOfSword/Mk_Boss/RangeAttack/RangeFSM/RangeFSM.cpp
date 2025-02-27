@@ -1,9 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "RangeFSM.h"
 #include "AIController.h"
-#include "NavigationSystem.h"
 #include "AxeOfSword/Mk_Boss/RangeAttack/RangeAnim/RangeAnim.h"
 #include "AxeOfSword/Mk_Boss/RangeAttack/RangeMonster/RangeMonster.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
@@ -11,11 +7,8 @@
 #include "PhysicsEngine/RadialForceComponent.h"
 
 
-// Sets default values for this component's properties
 URangeFSM::URangeFSM()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
 	RadialForce = CreateDefaultSubobject<URadialForceComponent>(TEXT("RadialForce"));
@@ -28,14 +21,12 @@ void URangeFSM::BeginPlay()
 
 	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	RangeMonster = Cast<ARangeMonster>(GetOwner());
-	RadialForce->SetupAttachment(RangeMonster->GetRootComponent());
 	Ai = Cast<AAIController>(RangeMonster->GetController());
 	Anim = Cast<URangeAnim>(RangeMonster->GetMesh()->GetAnimInstance());
 	
 	GetWorld()->GetTimerManager().SetTimer(StateSwitchTimer, this,&URangeFSM::SwitchState, 2.0f, true);
 }
 
-// Called every frame
 void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 	FActorComponentTickFunction* ThisTickFunction)
 
@@ -43,7 +34,6 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SetActorRot();
 
-	APawn* Pawn = Ai->GetPawn();
 	//Velocity 구하기
 	FVector Velocity = RangeMonster->GetVelocity();
 	//전방벡터 구하기
@@ -59,9 +49,6 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 	
 	Anim->Vertical = ForwardSpeed;
 	Anim->Horizontal = RightSpeed;
-	
-	// UE_LOG(LogTemp, Warning, TEXT("ForwardSpeed: %f"),Anim->Vertical);
-	// UE_LOG(LogTemp, Warning, TEXT("RightSpeed: %f"),Anim->Horizontal);
 }
 
 void URangeFSM::Avoid()
