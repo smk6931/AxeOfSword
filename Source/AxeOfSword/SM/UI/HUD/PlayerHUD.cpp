@@ -2,7 +2,7 @@
 
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
-#include "AxeOfSword/SM/UI/Module/ValuePercentBar.h"
+#include "AxeOfSword/SM/UI/Common/ValuePercentBar.h"
 
 void UPlayerHUD::InitializeHUD()
 {

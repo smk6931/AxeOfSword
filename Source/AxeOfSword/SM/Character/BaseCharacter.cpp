@@ -4,18 +4,34 @@
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
+#include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "Component/EquipComponent.h"
+#include "Components/SphereComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 ABaseCharacter::ABaseCharacter()
 {
+	CurrentState = ECharacterState::Idle;
 	EquipComponent = CreateDefaultSubobject<UEquipComponent>("Equip Component");
+
+	FistRightSphereCapsule = CreateDefaultSubobject<USphereComponent>("Fist Right Sphere Capsule");
+	FistRightSphereCapsule->SetupAttachment(GetMesh());
+
+	FistRightSphereCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+}
+
+UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
 }
 
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	FistRightSphereCapsule->AttachToComponent(GetMesh(),
+		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "hand_r");
 	GetCharacterMovement()->MaxWalkSpeed = Attribute->GetMovementSpeed();
 	
 	HealthChangedDelegateHandle = AbilitySystemComponent->
@@ -30,12 +46,22 @@ float ABaseCharacter::TakeDamage(float DamageAmount
 	, FDamageEvent const& DamageEvent, AController* EventInstigator
 	, AActor* DamageCauser)
 {
-	AAOSPlayerState* PS = GetPlayerState<AAOSPlayerState>();
-	if (!PS)
+	if (!AbilitySystemComponent)
 	{
 		return 0;
 	}
-	PS->GetAttribute()->SetHealth(PS->GetAttribute()->GetHealth() - DamageAmount);
+	
+	if (!Attribute)
+	{
+		return 0;
+	}
+
+	if (AOSGameplayTags::HasGameplayTag(AbilitySystemComponent, AOSGameplayTags::Status_Invincible))
+	{
+		return 0;
+	}
+	
+	Attribute->SetHealth(Attribute->GetHealth() - DamageAmount);
 	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator
 							, DamageCauser);
@@ -50,7 +76,7 @@ void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 	}
 
 	// 이미 데미지를 받은 상태인 경우 굳이 뭘 하지 않는다.
-	if (UStateHelper::IsDamaged(GetAbilitySystemComponent()))
+	if (UStateHelper::IsDamaged(this))
 	{
 		return;
 	}
@@ -72,4 +98,10 @@ void ABaseCharacter::OnMovementSpeedChanged(const FOnAttributeChangeData& Data)
 float ABaseCharacter::GetHealth() const
 {
 	return Attribute->GetHealth();
+}
+
+void ABaseCharacter::ToggleFistAttackMode(const bool Toggle)
+{
+	FistRightSphereCapsule->SetCollisionEnabled(Toggle ?
+		ECollisionEnabled::Type::QueryAndPhysics : ECollisionEnabled::Type::NoCollision);
 }

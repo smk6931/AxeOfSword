@@ -1,41 +1,54 @@
 #include "StateHelper.h"
 
 #include "AbilitySystemComponent.h"
+#include "EnumHelper.h"
 #include "GameplayTagHelper.h"
+#include "AxeOfSword/SM/Character/BaseCharacter.h"
 
-bool UStateHelper::IsIdle(const UAbilitySystemComponent* ASC)
+bool UStateHelper::IsIdle(const AActor* Target)
 {
-	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Idle);
+	if (const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(Target))
+	{
+		return BaseCharacter->GetCurrentState() == ECharacterState::Idle;
+	}
+	
+	return false;
 }
 
-bool UStateHelper::IsDamaged(const UAbilitySystemComponent* ASC)
+bool UStateHelper::IsDamaged(const AActor* Target)
 {
-	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_Damaged);
+	if (const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(Target))
+	{
+		return BaseCharacter->GetCurrentState() == ECharacterState::Damaged;
+	}
+	
+	return false;
 }
 
 bool UStateHelper::IsZoomIn(const UAbilitySystemComponent* ASC)
 {
+	if (!ASC)
+	{
+		return false;
+	}
+	
 	return ASC->HasMatchingGameplayTag(AOSGameplayTags::Status_CloseHold);
 }
 
-bool UStateHelper::IsWaitForTurnBackWeapon(const UAbilitySystemComponent* ASC)
+bool UStateHelper::IsWaitForTurnBackWeapon(const AActor* Target)
 {
-	return ASC->HasMatchingGameplayTag(AOSGameplayTags::State_TurnBack);
+	if (const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(Target))
+	{
+		return BaseCharacter->GetCurrentState() == ECharacterState::WeaponTurnBack;
+	}
+	
+	return false;
 }
 
-void UStateHelper::ClearState(UAbilitySystemComponent* ASC)
+void UStateHelper::ClearState(AActor* Target)
 {
-	FGameplayTagContainer OwnedTags;
-	ASC->GetOwnedGameplayTags(OwnedTags);
-
-	// 상위 태그로 시작하는 모든 하위 태그를 찾아서 제거
-	for (const FGameplayTag& Tag : OwnedTags)
+	if (ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(Target))
 	{
-		if (Tag.MatchesTag(AOSGameplayTags::State))
-		{
-			AOSGameplayTags::RemoveGameplayTag(ASC, Tag);
-		}
+		BaseCharacter->SetCurrentState(ECharacterState::Idle);
 	}
-
-	AOSGameplayTags::SetGameplayTag(ASC, AOSGameplayTags::State_Idle, 1);
 }

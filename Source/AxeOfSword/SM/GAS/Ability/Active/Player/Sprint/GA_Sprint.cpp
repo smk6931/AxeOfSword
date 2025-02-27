@@ -1,11 +1,25 @@
 #include "GA_Sprint.h"
 
 #include "AbilitySystemComponent.h"
+#include "AxeOfSword/SM/Helper/StateHelper.h"
+
+bool UGA_Sprint::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
+                                    const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags,
+                                    FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	// TODO: 현재는 복귀 시지만 막는 전용 태그가 필요할 것 같다.
+	return !UStateHelper::IsWaitForTurnBackWeapon(GetAvatarActorFromActorInfo());
+}
 
 void UGA_Sprint::ActivateAbility(const FGameplayAbilitySpecHandle Handle
-	, const FGameplayAbilityActorInfo* ActorInfo
-	, const FGameplayAbilityActivationInfo ActivationInfo
-	, const FGameplayEventData* TriggerEventData)
+                                 , const FGameplayAbilityActorInfo* ActorInfo
+                                 , const FGameplayAbilityActivationInfo ActivationInfo
+                                 , const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 	if (BuffEffect)

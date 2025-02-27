@@ -16,7 +16,7 @@ public:
 	UPlayerCameraComponent();
 
 	void SetCameraOption(const FVector& MoveTo, const int8 Fov = 90);
-	void AddFov(const int8 NewFov);
+	void SetFov(const int8 NewFov);
 
 	void RollbackToFirstCameraOption();
 	

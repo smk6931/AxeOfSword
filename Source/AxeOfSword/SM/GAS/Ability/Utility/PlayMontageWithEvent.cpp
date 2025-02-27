@@ -35,6 +35,8 @@ void UPlayMontageWithEvent::Activate()
 	// 현재 Actor의 Animation Instance 정보 가져오기
 	if (UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance())
 	{
+		// 이전 Montage는 강제 종료 시켜버린다.
+		AbilitySystemComponent->CurrentMontageStop();
 		// GameplayTag에 대해서 ChangedEvent가 발생할 때의 Delegate 정보 자체를 EventHandle에 저장
 		EventHandle = AbilitySystemComponent->AddGameplayEventTagContainerDelegate(
 			EventTags

@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AxeOfSword/SM/Helper/UtilHelper.h"
+#include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "Components/ActorComponent.h"
 #include "EquipComponent.generated.h"
 
@@ -24,6 +25,13 @@ public:
 
 	void ToggleAttack(const bool IsAttack);
 
+	// 이 말이 즉 내가 손에 무기를 들고있는가를 의미한다.
+	// 맨손인가 아닌가에 대한 여부를 여기서 검증할 수 있음
+	UFUNCTION(BlueprintCallable)
+	bool IsMainWeaponOwner() const;
+
+TObjectPtr<UWeaponAnimation> GetMainWeaponAnimationData() const;
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -34,17 +42,20 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
 	TSubclassOf<ABaseWeapon> MainWeaponClass;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
-	TSubclassOf<ABaseWeapon> SubWeaponClass;
-	
 	UPROPERTY()
 	TObjectPtr<ABaseWeapon> MainWeapon;
 
-	UPROPERTY()
-	TObjectPtr<ABaseWeapon> SubWeapon;
-
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Animation", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UAnimMontage> ZoomMontage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Animation", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UWeaponAnimation> FistAnimation;
+
+	uint32 FistDamage = 10;
 
 	uint8 ComboIndex = 0;
+
+	UFUNCTION()
+	void OnFistAttack(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };

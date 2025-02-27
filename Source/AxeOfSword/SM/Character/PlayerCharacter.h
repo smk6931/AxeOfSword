@@ -23,6 +23,8 @@ public:
 
 	GETTER(TObjectPtr<UPlayerCameraComponent>, CameraComponent)
 	GETTER(TObjectPtr<USpringArmComponent>, SpringArm)
+	GETTER(FVector, MoveDirection)
+	GETTER_SETTER(TObjectPtr<APawn>, ExecutionTarget)
 
 protected:
 	virtual void BeginPlay() override;
@@ -32,6 +34,8 @@ protected:
 	virtual void OnHealthChanged(const FOnAttributeChangeData& Data) override;
 	
 private:
+	FVector MoveDirection;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input"
 		, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
@@ -53,4 +57,9 @@ private:
 
 	UFUNCTION()
 	void Look(const FInputActionValue& Value);
+
+	UPROPERTY()
+	TObjectPtr<APawn> ExecutionTarget;
+
+	void FindTarget();
 };

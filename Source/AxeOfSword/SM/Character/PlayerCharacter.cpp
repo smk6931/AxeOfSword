@@ -1,7 +1,9 @@
 ﻿#include "PlayerCharacter.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "AxeOfSword/Mk_Boss/RangeAttack/RangeMonster/RangeMonster.h"
 #include "AxeOfSword/SM/GAS/Attribute/BaseAttribute.h"
+#include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
 #include "AxeOfSword/SM/Player/AOSPlayerController.h"
 #include "AxeOfSword/SM/Player/AOSPlayerState.h"
 #include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
@@ -9,6 +11,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -93,7 +96,8 @@ void APlayerCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 {
 	const FVector2d InputVector = Value.Get<FVector2d>();
-
+	MoveDirection = { InputVector.X, InputVector.Y, 0 };
+	
 	const FRotator MoveRotation = {0, GetController()->GetControlRotation().Yaw, 0};
 	const FVector ForwardVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::X) * InputVector.X;
 	const FVector RightVector = FRotationMatrix(MoveRotation).GetUnitAxis(EAxis::Y) * InputVector.Y;
@@ -101,6 +105,8 @@ void APlayerCharacter::MoveTo(const FInputActionValue& Value)
 	const FVector MoveTo = ForwardVector + RightVector;
 
 	AddMovementInput(MoveTo, 1);
+	
+	FindTarget();
 }
 
 void APlayerCharacter::Look(const FInputActionValue& Value)
@@ -108,4 +114,21 @@ void APlayerCharacter::Look(const FInputActionValue& Value)
 	const FVector2d LookToValue = Value.Get<FVector2d>();
 	AddControllerYawInput(LookToValue.X);
 	AddControllerPitchInput(LookToValue.Y);
+
+	FindTarget();
+}
+
+void APlayerCharacter::FindTarget()
+{
+	const FVector MoveToVector = GetActorLocation() + GetControlRotation().Vector() * 100;
+
+	const TArray<AActor*> IgnoreActor;
+	FHitResult HitResult;
+	
+	if (UKismetSystemLibrary::CapsuleTraceSingle(GetWorld(),
+		GetActorLocation(), MoveToVector, 50, 50, TraceTypeQuery1,
+		false, IgnoreActor, EDrawDebugTrace::None, HitResult, true))
+	{
+		ExecutionTarget = Cast<APawn>(HitResult.GetActor());
+	}
 }

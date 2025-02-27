@@ -1,10 +1,8 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "HeavyAttackNotifyState.h"
+﻿#include "HeavyAttackNotifyState.h"
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
+#include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Helper/StateHelper.h"
 
@@ -20,8 +18,7 @@ void UHeavyAttackNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAni
 	}
 
 	UEquipComponent* EquipComponent = BaseCharacter->GetEquipComponent();
-	AOSGameplayTags::SwapGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
-		AOSGameplayTags::State_Attack, AOSGameplayTags::State_Attack_Ing);
+	BaseCharacter->SetCurrentState(ECharacterState::AttackIng);
 	EquipComponent->ToggleAttack(true);
 }
 
@@ -30,13 +27,11 @@ void UHeavyAttackNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp,
 {
 	Super::NotifyEnd(MeshComp, Animation, EventReference);
 	
-	const ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(MeshComp->GetOwner());
 	if (!IsValid(BaseCharacter))
 	{
 		return;
 	}
 	
-	UStateHelper::ClearState(BaseCharacter->GetAbilitySystemComponent());
-	AOSGameplayTags::RemoveGameplayTag(BaseCharacter->GetAbilitySystemComponent(),
-	AOSGameplayTags::Ability_Attack_Heavy);
+	UStateHelper::ClearState(BaseCharacter);
 }
