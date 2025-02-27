@@ -1,14 +1,31 @@
 ﻿#include "GA_Execution.h"
 
-#include "LevelSequencePlayer.h"
+#include "AT_PlayLevelSequence.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
-#include "AT_PlayLevelSequence.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+
+bool UGA_Execution::CanActivateAbility(const FGameplayAbilitySpecHandle Handle,
+	const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags,
+	const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
+{
+	if (!Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags))
+	{
+		return false;
+	}
+
+	const APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActorFromActorInfo());
+	if (!BaseCharacter)
+	{
+		return false;
+	}
+	
+	return IsValid(BaseCharacter->GetExecutionTarget());
+}
 
 void UGA_Execution::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo,
                                     const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)

@@ -32,6 +32,8 @@ public:
 
 	GETTER(TObjectPtr<UStaticMeshComponent>, WeaponMesh)
 
+	GETTER(int8, Damage);
+
 protected:
 	virtual void BeginPlay() override;
 

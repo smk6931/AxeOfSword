@@ -3,6 +3,7 @@
 #include "AbilitySystemComponent.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "AxeOfSword/SM/Weapon/LeviathanAxe.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UAT_LeviathanAxe_Throw* UAT_LeviathanAxe_Throw::InitialEvent(
@@ -70,6 +71,9 @@ void UAT_LeviathanAxe_Throw::OnHitThrown(const FHitResult& HitResult)
 	// Pawn 종류를 맞춘다면 다음 스킬 동작을 수행해준다.
 	if (HitResult.GetActor())
 	{
+		UGameplayStatics::ApplyDamage(HitResult.GetActor(), LeviathanAxe->GetDamage(),
+			HitResult.GetActor()->GetInstigatorController(), GetAvatarActor(), nullptr);
+		
 		FGameplayTagContainer CancelTagContainer;
         CancelTagContainer.AddTag(AOSGameplayTags::Skill_LeviathanAxe_Throw);
         AbilitySystemComponent->CancelAbilities(&CancelTagContainer);

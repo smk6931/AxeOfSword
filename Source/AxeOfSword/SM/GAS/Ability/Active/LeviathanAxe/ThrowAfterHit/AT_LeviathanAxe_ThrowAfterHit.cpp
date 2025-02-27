@@ -17,7 +17,6 @@ void UAT_LeviathanAxe_ThrowAfterHit::Activate()
 	Super::Activate();
 	
 	LeviathanAxe->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	LeviathanAxe->UpdateWeaponAttackable(false);
 	if (const APawn* Pawn = Cast<APawn>(LeviathanAxe->GetOwner()))
 	{ 
 		ThrowRotate = Pawn->GetController()->GetControlRotation();
