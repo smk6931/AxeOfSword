@@ -129,9 +129,6 @@ void APlayerCharacter::FindTarget()
 		GetActorLocation(), MoveToVector, 50, 50, TraceTypeQuery1,
 		false, IgnoreActor, EDrawDebugTrace::None, HitResult, true))
 	{
-		if (APawn* NewPawn = Cast<APawn>(HitResult.GetActor()))
-		{
-			ExecutionTarget = NewPawn;
-		}
+		ExecutionTarget = Cast<APawn>(HitResult.GetActor());
 	}
 }
