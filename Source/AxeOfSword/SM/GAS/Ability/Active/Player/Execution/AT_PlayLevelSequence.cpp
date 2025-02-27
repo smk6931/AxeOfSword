@@ -51,7 +51,7 @@ void UAT_PlayLevelSequence::Activate()
 
 	BaseCharacter->GetCharacterMovement()->DisableMovement();
 	
-	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw * -1, 0};
+	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw + 180, 0};
 
 	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 30 + GetAvatarActor()->GetActorLocation());
 	NewBoss->SetActorRotation(RotateTo);
