@@ -31,8 +31,7 @@ ABossMk::ABossMk()
 void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Hp = 300.f;
+	
 	UE_LOG(LogTemp, Display, TEXT("Hp%f"),Hp);
 
 	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());

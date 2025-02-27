@@ -39,7 +39,7 @@ public:
 	FVector Direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Hp;
+	float Hp = 300.f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
