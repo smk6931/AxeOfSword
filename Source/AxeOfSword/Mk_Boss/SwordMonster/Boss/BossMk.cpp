@@ -32,6 +32,9 @@ void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Hp = 200.f;
+	UE_LOG(LogTemp, Display, TEXT("Hp%f"),Hp);
+
 	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
@@ -71,18 +74,18 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
-void ABossMk::DamageAnimation()
-{
-	if (DamageMontage && GetMesh())
-	{
-		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-		if (AnimInstance)
-		{
-			AnimInstance->Montage_Play(DamageMontage);
-		}
-	}
-}
+//
+// void ABossMk::DamageAnimation()
+// {
+// 	if (DamageMontage && GetMesh())
+// 	{
+// 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+// 		if (AnimInstance)
+// 		{
+// 			AnimInstance->Montage_Play(DamageMontage);
+// 		}
+// 	}
+// }
 
 void ABossMk::DestroyBoss()
 {
@@ -99,17 +102,13 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 {
 	Hp -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
-	DamageAnimation();
 	BossAnim->animState = EEnemyState::idle;
-	BlueTakeDamage();
-
-	ExcutionGuage -= DamageAmount;
 	
 	if (Hp < 0)
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 0.5f, true);
 		// 1초 뒤에 DestroyBoss 함수 호출
-		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.5f, false);
+		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, true);
 	}
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

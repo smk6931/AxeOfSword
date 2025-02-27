@@ -30,9 +30,6 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Speed = 300.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* BossMesh;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
@@ -42,12 +39,8 @@ public:
 	FVector Direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Hp = 300.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ExcutionGuage = Hp *2/3;
-
-
+	float Hp;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
 
@@ -61,17 +54,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
-	UFUNCTION(BlueprintCallable)
-	void DamageAnimation();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UAnimMontage* DamageMontage;
+	// UFUNCTION(BlueprintCallable)
+	// void DamageAnimation();
+	//
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// UAnimMontage* DamageMontage;
 
 	void DestroyBoss();
 	void DestroyBossSword();
-	
-	UFUNCTION(BlueprintImplementableEvent)
-    void BlueTakeDamage();
 
 private:
 	FTimerHandle TimerHandle;
