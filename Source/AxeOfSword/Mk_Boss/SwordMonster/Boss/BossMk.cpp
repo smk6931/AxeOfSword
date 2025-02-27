@@ -9,11 +9,6 @@ class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	Hp = 100;
-
-	// UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
-
 	PrimaryActorTick.bCanEverTick = true;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
@@ -24,7 +19,6 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-	
 	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
 	// if (TempAnim.Succeeded())
 	// {
@@ -38,6 +32,9 @@ void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Hp = 200.f;
+	UE_LOG(LogTemp, Display, TEXT("Hp%f"),Hp);
+
 	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
@@ -49,7 +46,6 @@ void ABossMk::BeginPlay()
 	{
 		SwordRoot->IgnoreActorWhenMoving(this,true);
 	}
-	// SwordRoot->SetCollisionProfileName(TEXT("NoCollision"));  
 	if (BossSword)
 	{
 		// Sword를 손 소켓에 부착함
@@ -78,18 +74,18 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
-void ABossMk::DamageAnimation()
-{
-	if (DamageMontage && GetMesh())
-	{
-		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-		if (AnimInstance)
-		{
-			AnimInstance->Montage_Play(DamageMontage);
-		}
-	}
-}
+//
+// void ABossMk::DamageAnimation()
+// {
+// 	if (DamageMontage && GetMesh())
+// 	{
+// 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+// 		if (AnimInstance)
+// 		{
+// 			AnimInstance->Montage_Play(DamageMontage);
+// 		}
+// 	}
+// }
 
 void ABossMk::DestroyBoss()
 {
@@ -105,15 +101,14 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
                           class AController* EventInstigator, AActor* DamageCauser)
 {
 	Hp -= DamageAmount;
-	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%d"),Hp);
-	DamageAnimation();
+	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BossAnim->animState = EEnemyState::idle;
 	
 	if (Hp < 0)
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 1.0f, false);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 0.5f, true);
 		// 1초 뒤에 DestroyBoss 함수 호출
-		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.5f, false);
+		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, true);
 	}
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }

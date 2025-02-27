@@ -2,3 +2,8 @@
 
 
 #include "EndingUI.h"
+
+void UEndingUI::NativeConstruct()
+{
+	Super::NativeConstruct();
+}

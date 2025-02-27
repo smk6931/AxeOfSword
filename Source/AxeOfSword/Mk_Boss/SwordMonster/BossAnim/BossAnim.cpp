@@ -55,8 +55,12 @@ void UBossAnim::AnimNotify_AcEnd()
 // 대쉬 초반 공격
 void UBossAnim::AnimNotify_DashFir()
 {
-	FVector Right = BossMk->GetActorRightVector();
-	FVector Velocity = Right * 2500;
+	JumpDir = FMath::RandRange(-90, 90);
+	FRotator Rotation = FRotator(0.0f, JumpDir, 0.0f);
+
+	FVector Direction = Rotation.RotateVector(BossMk->GetActorForwardVector());
+	// FVector Right = BossMk->GetActorForwardVector();
+	FVector Velocity = Direction * 750;
 	BossMk->LaunchCharacter(Velocity, true,true);
 }
 

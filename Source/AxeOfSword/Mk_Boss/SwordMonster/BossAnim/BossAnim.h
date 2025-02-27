@@ -22,6 +22,9 @@ protected:
 public:
  //    UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	// class ABossMk* Boss;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+	float JumpDir;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UEnemyFSM* EnemyFsm;
