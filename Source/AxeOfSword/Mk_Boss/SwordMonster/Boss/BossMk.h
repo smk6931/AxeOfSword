@@ -42,7 +42,11 @@ public:
 	FVector Direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 Hp;
+	float Hp = 300.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ExcutionGuage = Hp *2/3;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
@@ -64,8 +68,10 @@ public:
 	UAnimMontage* DamageMontage;
 
 	void DestroyBoss();
-
 	void DestroyBossSword();
+	
+	UFUNCTION(BlueprintImplementableEvent)
+    void BlueTakeDamage();
 
 private:
 	FTimerHandle TimerHandle;

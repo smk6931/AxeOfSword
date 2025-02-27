@@ -9,11 +9,6 @@ class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	Hp = 100;
-
-	// UE_LOG(LogTemp, Display, TEXT("AnimInstance"));
-
 	PrimaryActorTick.bCanEverTick = true;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
@@ -24,7 +19,6 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-	
 	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
 	// if (TempAnim.Succeeded())
 	// {
@@ -49,7 +43,6 @@ void ABossMk::BeginPlay()
 	{
 		SwordRoot->IgnoreActorWhenMoving(this,true);
 	}
-	// SwordRoot->SetCollisionProfileName(TEXT("NoCollision"));  
 	if (BossSword)
 	{
 		// Sword를 손 소켓에 부착함
@@ -105,9 +98,12 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
                           class AController* EventInstigator, AActor* DamageCauser)
 {
 	Hp -= DamageAmount;
-	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%d"),Hp);
+	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	DamageAnimation();
 	BossAnim->animState = EEnemyState::idle;
+	BlueTakeDamage();
+
+	ExcutionGuage -= DamageAmount;
 	
 	if (Hp < 0)
 	{

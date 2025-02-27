@@ -28,6 +28,13 @@ public:
 	// Sets default values for this component's properties
 	URangeFSM();
 
+public:
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UUserWidget> WidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	class UUserWidget* WidgetInstance;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -63,6 +70,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
 	float RightSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Components")
+	float AttackRange;
 
 public:// 스킬
 	void Idle();

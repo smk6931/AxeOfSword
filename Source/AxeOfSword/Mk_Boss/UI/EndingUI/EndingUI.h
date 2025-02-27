@@ -13,4 +13,6 @@ UCLASS()
 class AXEOFSWORD_API UEndingUI : public UUserWidget
 {
 	GENERATED_BODY()
+
+	virtual void NativeConstruct() override;
 };

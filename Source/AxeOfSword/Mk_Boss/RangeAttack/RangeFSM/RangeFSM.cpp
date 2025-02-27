@@ -70,7 +70,7 @@ void URangeFSM::Avoid()
 	FVector dir = Player->GetActorLocation() - RangeMonster->GetActorLocation();
 	dir.Normalize();
 	FVector power = dir * 500.f;
-	power.Z = -500.f;
+	power.Z = -250.f;
 	RangeMonster->LaunchCharacter(-power,false,false);
 	Anim->PlayJumpBackFlip();
 	mState = ERangeFSMState::Idle;
@@ -122,11 +122,11 @@ void URangeFSM::ShockWave()
 	RadialForce->bImpulseVelChange = true;
 	RadialForce->FireImpulse();
 	
-	// auto pc = GetWorld()->GetFirstPlayerController();
-	// if (pc)
-	// {
-	// 	pc->PlayerCameraManager->StartCameraShake(RangeMonster->cameraShake);
-	// }
+	auto pc = GetWorld()->GetFirstPlayerController();
+	if (pc)
+	{
+		pc->PlayerCameraManager->StartCameraShake(RangeMonster->cameraShake);
+	}
 	
 	UGameplayStatics::ApplyRadialDamage(GetOwner(), DamageAmount, ImpulseOrigin, ImpulseRadius,
 		UDamageType::StaticClass(), OverlappingActors, GetOwner(), GetOwner()->GetInstigatorController(), true);
@@ -142,7 +142,7 @@ void URangeFSM::JumpMonster()
 	FVector dir = Player->GetActorLocation() - RangeMonster->GetActorLocation();
 	dir.Normalize();
 	FVector Power = Player->GetActorLocation() - RangeMonster->GetActorLocation() - dir * 300;
-	Power.Z = 700.f;
+	Power.Z = 550.f;
     
 	Anim->PlayJumpAnimation();
 	RangeMonster->LaunchCharacter(Power,false,false);
