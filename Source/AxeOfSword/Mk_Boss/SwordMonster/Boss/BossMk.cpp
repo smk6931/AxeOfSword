@@ -104,7 +104,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BossAnim->animState = EEnemyState::idle;
 	
-	if (Hp < 0)
+	if (Hp < 1)
 	{
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 0.5f, true);
 		// 1초 뒤에 DestroyBoss 함수 호출
