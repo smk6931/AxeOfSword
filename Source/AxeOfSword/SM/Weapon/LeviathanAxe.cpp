@@ -45,8 +45,6 @@ void ALeviathanAxe::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedComp
 	{
 		return;
 	}
-
-	UE_LOG(LogTemp, Display, TEXT("해위"))
 	
 	DamageStack = FMath::Min<uint8>(DamageStack + 1, MaxDamageStack);
 	
