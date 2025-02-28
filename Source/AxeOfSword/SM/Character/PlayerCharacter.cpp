@@ -9,8 +9,10 @@
 #include "AxeOfSword/SM/UI/HUD/PlayerHUD.h"
 #include "Component/PlayerCameraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "LegacyCameraShake.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -78,6 +80,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered
 																			, this, &ThisClass::Look);
 	}
+}
+
+float APlayerCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	AController* EventInstigator, AActor* DamageCauser)
+{
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)
+		->PlayerCameraManager->StartCameraShake(DefaultCameraShakeClass);
+	
+	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
 void APlayerCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)

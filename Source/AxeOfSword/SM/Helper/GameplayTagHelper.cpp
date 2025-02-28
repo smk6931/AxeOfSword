@@ -86,6 +86,7 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(Status_Sprint, "Status.Sprint", "현재 달리고 있는 상태를 의미함");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue, "GameplayCue", "GameplayCue 관련 최상위 트리 태그");
+	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move,
 	"GameplayCue.Character.Camera.Move", "플레이어 카메라 무빙에 영향을 주는 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_Attack0,
@@ -100,6 +101,22 @@ namespace AOSGameplayTags
 	"GameplayCue.Character.Camera.Move.Attack4", "기본 공격 전용 4번에서 실행하는 카메라 무빙");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Move_HeavyAttack,
 	"GameplayCue.Character.Camera.Move.HeavyAttack", "강공격 시 실행하는 카메라 무빙");
+	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake,
+	"GameplayCue.Character.Camera.Shake", "플레이어 카메라 쉐이킹에 영향을 주는 태그");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_Attack0,
+	"GameplayCue.Character.Camera.Shake.Attack0", "기본 공격 전용 Base가 되는 카메라 쉐이킹");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_Attack1,
+	"GameplayCue.Character.Camera.Shake.Attack1", "기본 공격 전용 1번에서 실행하는 카메라 쉐이킹");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_Attack2,
+	"GameplayCue.Character.Camera.Shake.Attack2", "기본 공격 전용 2번에서 실행하는 카메라 쉐이킹");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_Attack3,
+	"GameplayCue.Character.Camera.Shake.Attack3", "기본 공격 전용 3번에서 실행하는 카메라 쉐이킹");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_Attack4,
+	"GameplayCue.Character.Camera.Shake.Attack4", "기본 공격 전용 4번에서 실행하는 카메라 쉐이킹");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_HeavyAttack,
+	"GameplayCue.Character.Camera.Shake.HeavyAttack", "강공격 시 실행하는 카메라 쉐이킹");
+	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov,
 	"GameplayCue.Character.Camera.Fov", "카메라 줌 자체를 관리하기 위한 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov_ZoomIn,

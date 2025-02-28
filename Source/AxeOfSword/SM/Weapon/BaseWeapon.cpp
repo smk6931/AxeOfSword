@@ -1,5 +1,8 @@
 ﻿#include "BaseWeapon.h"
+
+#include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
+#include "AxeOfSword/SM/Manager/CameraCueManager.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -38,6 +41,11 @@ void ABaseWeapon::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedCompon
 	AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	const APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwner());
+	if (OtherActor->IsA(APawn::StaticClass()) && IsValid(Player))
+	{
+		FCameraCueManager::CastAttackCameraShakeByPlayerAttack(Player->GetAbilitySystemComponent(), Player);
+	}
 }
 
 void ABaseWeapon::UpdateWeaponAttackable(const bool IsEnable)
