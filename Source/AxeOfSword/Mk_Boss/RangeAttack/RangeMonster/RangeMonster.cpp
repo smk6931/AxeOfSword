@@ -46,7 +46,7 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Gauge is 0"));
+		GetWorld()->GetTimerManager().SetTimer(DeathTime,this,&ARangeMonster::DestroySelf,2,false);
 	}
 	if (HP > 0)
 	{
@@ -56,17 +56,13 @@ float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& D
 	UE_LOG(LogTemp, Display, TEXT("ARangeMonster::TakeDamage(),%f"), HP);
 	UpdateHpbarWidget();
 	
-	KnockBackDestPos = GetActorLocation()-GetActorForwardVector() * 100;
+	KnockBackDestPos = GetActorLocation()-GetActorForwardVector() * 40;
 	FVector from = GetActorLocation();
+	SetActorLocation(KnockBackDestPos);
+	
 	float p = 3 * GetWorld()->GetDeltaSeconds();
 	FVector updatePos = FMath::Lerp(from,updatePos,p);
-
-	// 넉벡위치와 현재 캐릭터 위치 출력
-	// FRotator rotFrom = GetActorRotation();
-	// FVector toward = -knockBackForce;
-	// FRotator rotTo = UKismetMathLibrary::MakeRotFromZX(FVector::UpVector, toward);
-	// FRotator destRot = FMath::Lerp(rotFrom,rotTo,p);
-	// me->SetActorRotation(destRot);
+	
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
@@ -82,4 +78,24 @@ void ARangeMonster::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ARangeMonster::DestroySelf()
+{
+	this->Destroy();
+}
 
+
+// 오버랩 이벤트로 맞은 지점 넉백 확인
+// if (OtherActor ) // 무기인지 확인
+// {
+// 	FVector HitLocation = SweepResult.ImpactPoint; // 충돌 지점
+// 	FVector KnockbackDirection = (GetActorLocation() - HitLocation).GetSafeNormal();
+// 	KnockbackDirection.Z = 0.0f; // 수직 방향 제거 (필요 시 수정 가능)
+//
+// 	float KnockbackStrength = 500.0f; // 넉백 강도
+// 	FVector KnockbackVelocity = KnockbackDirection * KnockbackStrength;
+//
+// 	if (UCharacterMovementComponent* MoveComp = GetCharacterMovement())
+// 	{
+// 		MoveComp->AddImpulse(KnockbackVelocity, true);
+// 	}
+// }

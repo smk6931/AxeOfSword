@@ -31,8 +31,7 @@ ABossMk::ABossMk()
 void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Hp = 200.f;
+	
 	UE_LOG(LogTemp, Display, TEXT("Hp%f"),Hp);
 
 	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());
@@ -59,33 +58,12 @@ void ABossMk::BeginPlay()
 void ABossMk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	// if (BossSword->SwordCapsule->IsCollisionEnabled())
-	// {
-	// 	UE_LOG(LogTemp, Display, TEXT("Capsule Collision is Enabled"));
-	// }
-	// else
-	// {
-	// 	UE_LOG(LogTemp, Display, TEXT("Capsule Collision is Disabled"));
-	// }
 }
 // Called to bind functionality to input
 void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-//
-// void ABossMk::DamageAnimation()
-// {
-// 	if (DamageMontage && GetMesh())
-// 	{
-// 		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-// 		if (AnimInstance)
-// 		{
-// 			AnimInstance->Montage_Play(DamageMontage);
-// 		}
-// 	}
-// }
 
 void ABossMk::DiedImmediately()
 {
@@ -109,6 +87,8 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	Hp -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BossAnim->animState = EEnemyState::idle;
+	BlueTakeDamage();
+    DamageAnimation();
 	
 	if (Hp < 1)
 	{

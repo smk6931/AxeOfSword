@@ -20,8 +20,8 @@ protected:
 	virtual void NativeBeginPlay() override;
 	
 public:
- //    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	// class ABossMk* Boss;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ABossMk* Boss;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 	float JumpDir;

@@ -65,7 +65,11 @@ public:
 	// UPROPERTY(EditAnywhere,BlueprintReadOnly, Category = "Components")
 	// void RandLocationSpawn();
 
+	FTimerHandle DeathTime;
+
 public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateHpbarWidget();
+
+	void DestroySelf();
 };
