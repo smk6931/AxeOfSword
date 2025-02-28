@@ -5,6 +5,7 @@
 #include "InputActionValue.h"
 #include "PlayerCharacter.generated.h"
 
+class ULegacyCameraShake;
 class UPlayerCameraComponent;
 class USpringArmComponent;
 class UCameraComponent;
