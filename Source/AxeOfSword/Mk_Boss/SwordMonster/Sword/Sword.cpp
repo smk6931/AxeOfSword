@@ -59,7 +59,7 @@ void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 	{
 		UE_LOG(LogTemp, Display, TEXT("DamageApplied: %s"), *OtherActor->GetName());
 		UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),
-		OtherActor, nullptr);
+		this, nullptr);
 	}
 }
 
