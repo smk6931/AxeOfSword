@@ -7,7 +7,6 @@
 #include "GameFramework/Actor.h"
 #include "BaseWeapon.generated.h"
 
-class ULegacyCameraShake;
 class UWeaponAnimation;
 class UBoxComponent;
 class UAOSAbilitySystemComponent;
@@ -73,7 +72,4 @@ private:
 	// 그에 맞는 애니메이션 리스트를 부과해주는 것이 맞다.
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UWeaponAnimation> WeaponAnimationData;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Weapon", meta = (AllowPrivateAccess = true))
-	TSubclassOf<ULegacyCameraShake> AttackCameraShakeClass;
 };

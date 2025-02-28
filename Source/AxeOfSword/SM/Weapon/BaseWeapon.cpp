@@ -1,9 +1,8 @@
 ﻿#include "BaseWeapon.h"
 
-#include "LegacyCameraShake.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "AxeOfSword/SM/GAS/AOSAbilitySystemComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "AxeOfSword/SM/Manager/CameraCueManager.h"
 
 ABaseWeapon::ABaseWeapon()
 {
@@ -42,10 +41,10 @@ void ABaseWeapon::OnOverlapWeaponCollision(UPrimitiveComponent* OverlappedCompon
 	AActor* OtherActor, UPrimitiveComponent* OtherComp,
 	int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->IsA(APawn::StaticClass()) && GetOwner()->IsA(APlayerCharacter::StaticClass()))
+	const APlayerCharacter* Player = Cast<APlayerCharacter>(GetOwner());
+	if (OtherActor->IsA(APawn::StaticClass()) && IsValid(Player))
 	{
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)
-			->PlayerCameraManager->StartCameraShake(AttackCameraShakeClass);
+		FCameraCueManager::CastAttackCameraShakeByPlayerAttack(Player->GetAbilitySystemComponent(), Player);
 	}
 }
 
