@@ -32,18 +32,21 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void OnHealthChanged(const FOnAttributeChangeData& Data) override;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator, AActor* DamageCauser) override;
 	
 private:
 	FVector MoveDirection;
 	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Input"
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Options|Input"
 		, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Options|Input", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> MoveInputAction;
 	
-	UPROPERTY(EditAnywhere, Category = "Input", meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = "Options|Input", meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UInputAction> LookInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, meta = (AllowPrivateAccess = "true"))
@@ -62,4 +65,7 @@ private:
 	TObjectPtr<APawn> ExecutionTarget;
 
 	void FindTarget();
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Camera", meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<ULegacyCameraShake> DefaultCameraShakeClass;
 };
