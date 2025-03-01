@@ -12,13 +12,9 @@ enum class EEnemyState : uint8
 	idle UMETA(DisplayName = "Idlestate"),
 	Move,
 	Attack,
-	JumpAttack,
 	RgAttack,
 	TrippleAttack,
 	Dash,
-	Damage,
-	Die,
-	UnKnown
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -42,7 +38,7 @@ public:
 	EEnemyState mState = EEnemyState::idle;
 	
 	UPROPERTY(EditAnywhere, Category=FSM)
-	float AttackTime = 2;
+	float AttackTime = 1.2f;
 	float IdleDelayTime = 1.5;
 	float CurrentTime = 0;
 	float AttackRange = 150;
@@ -50,14 +46,10 @@ public:
 	void IdleState();
 	void MoveState();
 	
-	void JumpAttack();
+	void AttackState();
 	void RgAttack();
 	void TripleAttack();
 	void Dash();
-	
-	void AttackState();
-	void DamageState();
-	void DieState();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
@@ -69,7 +61,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class UBossAnim* Anim;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
-	class ASword* Sword;
-		
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
+	// class ASword* Sword;
 };

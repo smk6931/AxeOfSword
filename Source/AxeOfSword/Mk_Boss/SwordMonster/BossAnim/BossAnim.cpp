@@ -28,8 +28,7 @@ void UBossAnim::AnimNotify_AaEnd()
 {
 	
 	FString stateStr = UEnum::GetValueAsString(animState);
-
-	if (animState == EEnemyState::JumpAttack)
+	if (animState == EEnemyState::Attack)
 	{
 		animState = EEnemyState::RgAttack;
 	}
@@ -37,6 +36,8 @@ void UBossAnim::AnimNotify_AaEnd()
 	{
 		animState = EEnemyState::Move;
 	}
+
+	// animState = EEnemyState::RgAttack;
 	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 

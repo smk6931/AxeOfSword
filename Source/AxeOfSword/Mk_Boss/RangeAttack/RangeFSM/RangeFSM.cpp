@@ -40,9 +40,9 @@ void URangeFSM::Avoid()
 	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::Avoid"));
 	FVector dir = Player->GetActorLocation() - RangeMonster->GetActorLocation();
 	dir.Normalize();
-	FVector power = dir * 500.f;
-	power.Z = -250.f;
-	RangeMonster->LaunchCharacter(-power,false,false);
+	FVector power = -dir * 750.f;
+	power.Z = 250.f;
+	RangeMonster->LaunchCharacter(power,false,false);
 	Anim->PlayJumpBackFlip();
 	mState = ERangeFSMState::Idle;
 	Anim->animState = ERangeFSMState::Idle;
@@ -58,7 +58,7 @@ void URangeFSM::AiMove()
 {
 	UE_LOG(LogTemp, Warning, TEXT("RangeFSM::AIMove"));
 	//플레이어 위치
-    FVector Destination = RangeMonster->GetActorLocation();
+    FVector Destination = Player->GetActorLocation();
 	FVector Direction = Destination - RangeMonster->GetActorLocation();
 
 	float RandomAngle = FMath::RandRange(0.0f,2.0f * PI);

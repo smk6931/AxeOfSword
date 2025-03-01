@@ -32,6 +32,8 @@ ASword::ASword()
 		SwordMesh->SetRelativeScale3D(FVector(0.4,0.4,0.4));
 		// 콜리전 비활성화한다
 		SwordMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		// 검이 보이는것을 끈다
+		SwordMesh->SetVisibility(false);
 	}
 	// 스워드 캡슐 콜리전을 비활성화 한다 - 공격했을시만 활성화 시키기 위해서
 	SwordCapsule->SetGenerateOverlapEvents(false);
@@ -45,6 +47,7 @@ void ASword::BeginPlay()
 	// 웨폰캡슐의 OnComponent의 오버랩 이벤트가 실행되었을떄 OnMyBeginOverlap을 실행시킨다 
 	SwordCapsule->OnComponentBeginOverlap.AddDynamic(this, &ASword::OnMyBeginOverlap);
 	BossMk = Cast<ABossMk>(GetOwner());
+	SwordMesh->SetHiddenInGame(true);
 }
 
 void ASword::Tick(float DeltaTime)
