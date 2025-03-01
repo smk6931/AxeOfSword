@@ -75,7 +75,7 @@ void UEnemyFSM::IdleState()
 
 void UEnemyFSM::MoveState()
 {
-	UE_LOG(LogTemp, Warning, TEXT("MoveState"));
+	// UE_LOG(LogTemp, Warning, TEXT("MoveState"));
 	Boss->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 
 	//상대와 나의 방향 구하기
@@ -109,7 +109,7 @@ void UEnemyFSM::MoveState()
 void UEnemyFSM::AttackState()
 {
 	
-	UE_LOG(LogTemp, Warning, TEXT("AttackState"));
+	// UE_LOG(LogTemp, Warning, TEXT("AttackState"));
 	// 상대방으로 향하는 보스의 방향을 구한다
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	Direction.Normalize();
@@ -133,20 +133,20 @@ void UEnemyFSM::AttackState()
 void UEnemyFSM::RgAttack()
 {
 	
-	UE_LOG(LogTemp, Warning, TEXT("RgAttack"));
+	// UE_LOG(LogTemp, Warning, TEXT("RgAttack"));
 	mState = Anim->animState;
 }
 
 void UEnemyFSM::TripleAttack()
 {
 	
-	UE_LOG(LogTemp, Warning, TEXT("TrippleAttack"));
+	// UE_LOG(LogTemp, Warning, TEXT("TrippleAttack"));
 	mState = Anim->animState;
 }
 
 void UEnemyFSM::Dash()
 {
 	
-	UE_LOG(LogTemp, Warning, TEXT("DashState"));
+	// UE_LOG(LogTemp, Warning, TEXT("DashState"));
 	mState = Anim->animState;
 }
