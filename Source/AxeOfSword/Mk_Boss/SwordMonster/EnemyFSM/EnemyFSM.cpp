@@ -113,8 +113,8 @@ void UEnemyFSM::AttackState()
 	}
 	else
 	{
-		mState = EEnemyState::JumpAttack;
-		Anim->animState = mState;
+		mState = EEnemyState::RgAttack;
+		// Anim->animState = mState;
 	}
 }
 
