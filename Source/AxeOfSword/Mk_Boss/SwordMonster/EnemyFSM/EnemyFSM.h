@@ -16,9 +16,6 @@ enum class EEnemyState : uint8
 	RgAttack,
 	TrippleAttack,
 	Dash,
-	Damage,
-	Die,
-	UnKnown
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -49,15 +46,12 @@ public:
 	
 	void IdleState();
 	void MoveState();
-	
+
+	void AttackState();
 	void JumpAttack();
 	void RgAttack();
 	void TripleAttack();
 	void Dash();
-	
-	void AttackState();
-	void DamageState();
-	void DieState();
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)

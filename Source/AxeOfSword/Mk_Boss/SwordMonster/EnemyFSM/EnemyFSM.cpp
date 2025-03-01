@@ -42,7 +42,9 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	case EEnemyState::Move:
 		MoveState();
 		break;
-		
+	case EEnemyState::Attack:
+		AttackState();
+		break;
 	case EEnemyState::JumpAttack:
 		JumpAttack();
 		break;
@@ -54,16 +56,6 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		break;
 	case EEnemyState::Dash:
 		Dash();
-		break;
-		
-	case EEnemyState::Damage:
-		DamageState();
-		break;
-	case EEnemyState::Attack:
-		AttackState();
-		break;
-	case EEnemyState::Die:
-		DieState();
 		break;
 	}
 }
@@ -84,6 +76,7 @@ void UEnemyFSM::IdleState()
 
 void UEnemyFSM::MoveState()
 {
+	UE_LOG(LogTemp, Warning, TEXT("MoveState"));
 	//상대와 나의 방향 구하기
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	//적과 나의 거리를 구한다
@@ -103,6 +96,8 @@ void UEnemyFSM::MoveState()
 
 void UEnemyFSM::AttackState()
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("AttackState"));
 	// 상대방으로 향하는 보스의 방향을 구한다
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	Direction.Normalize();
@@ -125,32 +120,28 @@ void UEnemyFSM::AttackState()
 
 void UEnemyFSM::JumpAttack()
 {
+	UE_LOG(LogTemp, Warning, TEXT("JumpAttack"));
 	mState = Anim->animState;
 }
 
 
 void UEnemyFSM::RgAttack()
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("RgAttack"));
 	mState = Anim->animState;
 }
 
 void UEnemyFSM::TripleAttack()
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("TrippleAttack"));
 	mState = Anim->animState;
 }
 
 void UEnemyFSM::Dash()
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("DashState"));
 	mState = Anim->animState;
 }
-
-void UEnemyFSM::DamageState()
-{
-	
-}
-
-void UEnemyFSM::DieState()
-{
-	
-}
-

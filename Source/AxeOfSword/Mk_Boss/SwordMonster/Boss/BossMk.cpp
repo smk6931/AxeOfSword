@@ -86,10 +86,12 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 {
 	Hp -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
-	BossAnim->animState = EEnemyState::idle;
 	BlueTakeDamage();
-    DamageAnimation();
-	
+	// BossAnim->animState = EEnemyState::idle;
+	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
+	{
+		DamageAnimation();
+	}
 	if (Hp < 1)
 	{
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 0.5f, true);
