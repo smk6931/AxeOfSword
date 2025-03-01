@@ -10,10 +10,6 @@
 void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	
-	// EnemyFsm과 Mstate를 동기화 한다
-	// animState = EnemyFsm->mState;
-	// EnemyFsm->mState = animState;
 }
 
 void UBossAnim::NativeBeginPlay()
@@ -32,7 +28,6 @@ void UBossAnim::AnimNotify_AaEnd()
 {
 	
 	FString stateStr = UEnum::GetValueAsString(animState);
-
 	if (animState == EEnemyState::Attack)
 	{
 		animState = EEnemyState::RgAttack;
@@ -41,6 +36,8 @@ void UBossAnim::AnimNotify_AaEnd()
 	{
 		animState = EEnemyState::Move;
 	}
+
+	// animState = EEnemyState::RgAttack;
 	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
