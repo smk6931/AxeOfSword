@@ -84,13 +84,20 @@ void ABossMk::DestroyBossSword()
 float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
                           class AController* EventInstigator, AActor* DamageCauser)
 {
+	if (Fsm->mState == EEnemyState::Move)
+	{
+		Fsm->mState = EEnemyState::idle;
+		BossAnim->animState = EEnemyState::idle;
+	}
 	Hp -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
-	// BossAnim->animState = EEnemyState::idle;
+    
+	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{
 		DamageAnimation();
+		BossAnim->animState = EEnemyState::idle;
 	}
 	if (Hp < 1)
 	{

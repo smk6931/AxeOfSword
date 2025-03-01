@@ -10,6 +10,10 @@
 void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	
+	// EnemyFsm과 Mstate를 동기화 한다
+	// animState = EnemyFsm->mState;
+	// EnemyFsm->mState = animState;
 }
 
 void UBossAnim::NativeBeginPlay()

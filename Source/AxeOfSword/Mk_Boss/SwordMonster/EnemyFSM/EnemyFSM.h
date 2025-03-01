@@ -65,5 +65,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class ASword* Sword;
-		
 };

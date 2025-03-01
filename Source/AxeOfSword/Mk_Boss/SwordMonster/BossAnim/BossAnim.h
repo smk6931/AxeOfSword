@@ -38,8 +38,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	EEnemyState animState;
 	
-	// void ToggleSwordCollision(bool IsEnabled);
-	
 	UFUNCTION()
 	void AnimNotify_AaFir();
 	
