@@ -20,11 +20,11 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
-	// if (TempAnim.Succeeded())
-	// {
-	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-	// }
-	// AttackDamage = 20.f;
+                           	//	// if (TempAnim.Succeeded())
+                           	//	// {
+                           	//	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+                           	//	// }
+                           	//	// AttackDamage = 20.f;
 }
 
 // Called when the game starts or when spawned
