@@ -68,7 +68,7 @@ void UBossAnim::AnimNotify_DashFir()
 void UBossAnim::AnimNotify_DashEnd()
 {
 	animState = EEnemyState::idle;
-	BossMk->Fsm->mState = animState;
+	BossMk->Fsm->mState = animState;  
 }
 
 void UBossAnim::PrintViewPort()
