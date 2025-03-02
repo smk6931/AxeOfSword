@@ -5,7 +5,6 @@
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystem.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -115,4 +114,3 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	BlueTakeDamage();
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
-
