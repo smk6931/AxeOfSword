@@ -40,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Hp = 300.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ExcutionGuage = Hp*2/3;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
@@ -58,6 +61,9 @@ public:
 	void DestroyBossSword();
 
 	void DiedImmediately();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttackStay();
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueTakeDamage();

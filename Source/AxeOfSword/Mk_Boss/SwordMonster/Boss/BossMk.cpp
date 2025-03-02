@@ -4,11 +4,13 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 
 class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
+	Fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("Fsm"));
 	PrimaryActorTick.bCanEverTick = true;
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
@@ -20,11 +22,10 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
-                           	//	// if (TempAnim.Succeeded())
-                           	//	// {
-                           	//	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-                           	//	// }
-                           	//	// AttackDamage = 20.f;
+	// if (TempAnim.Succeeded())
+	// {
+	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	// }
 }
 
 // Called when the game starts or when spawned
@@ -90,6 +91,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		BossAnim->animState = EEnemyState::idle;
 	}
 	Hp -= DamageAmount;
+	ExcutionGuage -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
     

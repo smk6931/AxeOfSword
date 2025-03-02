@@ -45,6 +45,14 @@ public:
 	
 	void IdleState();
 	void MoveState();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttackStayFsm();
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool Walk = true;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	bool AttackStay = true;
 	
 	void AttackState();
 	void RgAttack();

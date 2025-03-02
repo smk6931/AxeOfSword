@@ -17,6 +17,7 @@ void UBossAnim::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	BossMk = Cast<ABossMk>(GetOwningActor());
+	EnemyFsm = Cast<UEnemyFSM>(BossMk->Fsm);
 }
 
 void UBossAnim::AnimNotify_AaFir()
