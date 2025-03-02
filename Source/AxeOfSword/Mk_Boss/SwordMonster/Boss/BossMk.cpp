@@ -97,7 +97,6 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	ExcutionGuage -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
-	// AttackVfx();
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{

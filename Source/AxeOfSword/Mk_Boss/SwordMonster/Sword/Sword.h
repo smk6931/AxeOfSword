@@ -40,11 +40,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=VFX)
 	UParticleSystem* SwordAttackVfx;
 
-	// UPROPERTY(EditAnywhere)
-	// class USoundBase* SwordAttackSFX;
-
-	// void AttackVfx();
-
 	float ApplyDamage = 10;
 
 	FTimerHandle TimerHandle;
@@ -53,4 +48,9 @@ public:
 	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	// UPROPERTY(EditAnywhere)
+	// class USoundBase* SwordAttackSFX;
+
+	// void AttackVfx();
 };

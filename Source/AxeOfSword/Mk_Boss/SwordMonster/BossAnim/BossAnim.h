@@ -14,10 +14,7 @@ UCLASS()
 class AXEOFSWORD_API UBossAnim : public UAnimInstance
 {
 	GENERATED_BODY()
-	
-public:
-	UBossAnim();
-	
+
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void NativeBeginPlay() override;
@@ -57,6 +54,4 @@ public:
 	void AnimNotify_DashEnd();
 
 	FTimerHandle TimerHandleA;
-
-	void PrintViewPort();
 };

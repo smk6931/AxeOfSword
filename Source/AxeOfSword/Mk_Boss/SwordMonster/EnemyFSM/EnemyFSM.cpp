@@ -91,18 +91,13 @@ void UEnemyFSM::MoveState()
 	{
 		Boss->AddMovementInput(Direction);
 		Walk = true;
-		// AttackStay = false;
-		UE_LOG(LogTemp, Warning, TEXT("Walk: %s, AttackStay: %s"),
-			Walk ? TEXT("true") : TEXT("false"), AttackStay ? TEXT("true") : TEXT("false"));
+		AttackStay = false;
 	}
 	//적과의 거리가 공격 거리보다 작아졌을때
 	if (AttackRange>Distance)
 	{
 		Walk = false;
-		// AttackStay = true;
-		
-		UE_LOG(LogTemp, Warning, TEXT("Walk: %s, AttackStay: %s"),
-			Walk ? TEXT("true") : TEXT("false"), AttackStay ? TEXT("true") : TEXT("false"));
+		AttackStay = true;
 		
 		CurrentTime += GetWorld()->DeltaTimeSeconds;
 		if (CurrentTime > AttackTime)

@@ -64,11 +64,6 @@ public:
 	void DestroyBossSword();
 
 	void DiedImmediately();
-
-	// void AttackVfx();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void AttackStay();
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueTakeDamage();
@@ -81,4 +76,6 @@ private:
 	FTimerHandle TimerHandleB;
 
 	float AttackDamage;
+
+	// void AttackVfx();
 };
