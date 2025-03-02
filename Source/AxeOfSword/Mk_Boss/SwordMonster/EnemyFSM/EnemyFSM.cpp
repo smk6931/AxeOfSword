@@ -90,21 +90,26 @@ void UEnemyFSM::MoveState()
 	if (Distance > AttackRange)
 	{
 		Boss->AddMovementInput(Direction);
+		Walk = true;
+		AttackStay = false;
 	}
 	//적과의 거리가 공격 거리보다 작아졌을때
 	if (AttackRange>Distance)
 	{
-		mState = EEnemyState::Attack;
-		Anim->animState = mState;
-		// CurrentTime += GetWorld()->DeltaTimeSeconds;
-		// if (CurrentTime > AttackTime)
-		// {
-		// 	mState = EEnemyState::Attack;
-		// 	Anim->animState = mState;
-		// 	CurrentTime = 0;
-		// }
+		// Boss->AttackStay();
+		Walk = false;
+		AttackStay = true;
+		
+		CurrentTime += GetWorld()->DeltaTimeSeconds;
+		if (CurrentTime > AttackTime)
+		{
+			mState = EEnemyState::Attack;
+			Anim->animState = mState;
+			CurrentTime = 0;
+		}
 	}
 }
+
 
 void UEnemyFSM::AttackState()
 {
@@ -146,7 +151,6 @@ void UEnemyFSM::TripleAttack()
 
 void UEnemyFSM::Dash()
 {
-	
 	// UE_LOG(LogTemp, Warning, TEXT("DashState"));
 	mState = Anim->animState;
 }

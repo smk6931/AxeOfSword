@@ -40,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Hp = 300.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ExcutionGuage = Hp*2/3;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
@@ -54,10 +57,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
+	UParticleSystem* MonsterAttackVFX;
+
 	void DestroyBoss();
 	void DestroyBossSword();
 
 	void DiedImmediately();
+
+	void AttackVfx();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void AttackStay();
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueTakeDamage();

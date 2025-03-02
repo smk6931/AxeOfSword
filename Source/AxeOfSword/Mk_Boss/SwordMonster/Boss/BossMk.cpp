@@ -4,12 +4,17 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystem.h"
 
 class UBossHpWidget;
 // Sets default values
 ABossMk::ABossMk()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	Fsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("Fsm"));
 	
 	ConstructorHelpers::FObjectFinder<USkeletalMesh>TempBossMesh(
 		TEXT("'/Game/Characters/Mannequins/Meshes/SKM_Quinn.SKM_Quinn'"));
@@ -20,11 +25,10 @@ ABossMk::ABossMk()
 			FRotator(0,-90,0));
 	}
 	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
-                           	//	// if (TempAnim.Succeeded())
-                           	//	// {
-                           	//	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-                           	//	// }
-                           	//	// AttackDamage = 20.f;
+	// if (TempAnim.Succeeded())
+	// {
+	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
+	// }
 }
 
 // Called when the game starts or when spawned
@@ -90,9 +94,10 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		BossAnim->animState = EEnemyState::idle;
 	}
 	Hp -= DamageAmount;
+	ExcutionGuage -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
-    
+	AttackVfx();
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{
@@ -106,5 +111,15 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, true);
 	}
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+}
+
+void ABossMk::AttackVfx()
+{
+	check(MonsterAttackVFX);
+	if (MonsterAttackVFX)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("VFX"));
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MonsterAttackVFX, GetActorLocation());
+	}
 }
 

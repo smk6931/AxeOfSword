@@ -17,6 +17,7 @@ void UBossAnim::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	BossMk = Cast<ABossMk>(GetOwningActor());
+	EnemyFsm = Cast<UEnemyFSM>(BossMk->Fsm);
 }
 
 void UBossAnim::AnimNotify_AaFir()
@@ -68,7 +69,7 @@ void UBossAnim::AnimNotify_DashFir()
 void UBossAnim::AnimNotify_DashEnd()
 {
 	animState = EEnemyState::idle;
-	BossMk->Fsm->mState = animState;
+	BossMk->Fsm->mState = animState;  
 }
 
 void UBossAnim::PrintViewPort()
