@@ -57,10 +57,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
+	UParticleSystem* MonsterAttackVFX;
+
 	void DestroyBoss();
 	void DestroyBossSword();
 
 	void DiedImmediately();
+
+	void AttackVfx();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AttackStay();
