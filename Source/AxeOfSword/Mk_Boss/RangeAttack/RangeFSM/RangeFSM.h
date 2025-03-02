@@ -83,6 +83,7 @@ public:// 스킬
 	void Destroy();
 	void TimerDestroy();
 
+	void AiMoveToVector();
 	void SwitchState();
 	void SetActorRot();
 
@@ -91,5 +92,4 @@ public:
 	FTimerHandle ShockTimer;
 	FTimerHandle BackJumpTimer;
 	FTimerHandle StateSwitchTimer;
-	
 };

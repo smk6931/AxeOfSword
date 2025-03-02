@@ -14,15 +14,15 @@ UCLASS()
 class AXEOFSWORD_API UBossAnim : public UAnimInstance
 {
 	GENERATED_BODY()
-
+	
+public:
+	UBossAnim();
+	
 protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 	virtual void NativeBeginPlay() override;
 	
 public:
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ABossMk* Boss;
-	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 	float JumpDir;
 

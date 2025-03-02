@@ -7,6 +7,11 @@
 #include "Components/CapsuleComponent.h"
 
 
+UBossAnim::UBossAnim()
+{
+	EnemyFsm = CreateDefaultSubobject<UEnemyFSM>(TEXT("EnemyFsm"));
+}
+
 void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
@@ -17,7 +22,6 @@ void UBossAnim::NativeBeginPlay()
 	Super::NativeBeginPlay();
 
 	BossMk = Cast<ABossMk>(GetOwningActor());
-	EnemyFsm = Cast<UEnemyFSM>(BossMk->Fsm);
 }
 
 void UBossAnim::AnimNotify_AaFir()
@@ -62,7 +66,7 @@ void UBossAnim::AnimNotify_DashFir()
 
 	FVector Direction = Rotation.RotateVector(BossMk->GetActorForwardVector());
 	// FVector Right = BossMk->GetActorForwardVector();
-	FVector Velocity = Direction * 750;
+	FVector Velocity = Direction * 1200;
 	BossMk->LaunchCharacter(Velocity, true,true);
 }
 
@@ -71,12 +75,12 @@ void UBossAnim::AnimNotify_DashEnd()
 	animState = EEnemyState::idle;
 	BossMk->Fsm->mState = animState;  
 }
-
-void UBossAnim::PrintViewPort()
-{
-	if (GEngine)
-	{
-		FString StateMessage = FString::Printf(TEXT("Current Animation State: %s"),animState);
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, StateMessage);
-	}
-}
+//
+// void UBossAnim::PrintViewPort()
+// {
+// 	if (GEngine)
+// 	{
+// 		FString StateMessage = FString::Printf(TEXT("Current Animation State: %s"),animState);
+// 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, StateMessage);
+// 	}
+// }

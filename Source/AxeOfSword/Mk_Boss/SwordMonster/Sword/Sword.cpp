@@ -63,6 +63,23 @@ void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* 
 		UE_LOG(LogTemp, Display, TEXT("DamageApplied: %s"), *OtherActor->GetName());
 		UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),
 		this, nullptr);
+
+		UE_LOG(LogTemp, Display, TEXT("DamageApplied %f,%f,%f"), SweepResult.ImpactPoint.X,SweepResult.ImpactPoint.Y,SweepResult.ImpactPoint.Z);
+		// VfxLocation = OtherActor->GetActorLocation();
+		// AttackVfx();
+		// UGameplayStatics::PlaySound2D(GetWorld(),SwordAttackSFX);
 	}
 }
+
+
+//어택 이펙트
+// void ASword::AttackVfx()
+// {
+// 	check(SwordAttackVfx)
+// 	if (SwordAttackVfx)
+// 	{
+// 		UE_LOG(LogTemp,Warning,TEXT("VFX"));
+// 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SwordAttackVfx, VfxLocation);
+// 	}
+// }
 

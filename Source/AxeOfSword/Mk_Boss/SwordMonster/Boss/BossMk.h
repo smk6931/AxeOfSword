@@ -65,7 +65,7 @@ public:
 
 	void DiedImmediately();
 
-	void AttackVfx();
+	// void AttackVfx();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void AttackStay();

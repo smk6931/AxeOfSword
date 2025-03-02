@@ -33,6 +33,7 @@ void URangeFSM::TickComponent(float DeltaTime, ELevelTick TickType,
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	SetActorRot();
+	AiMoveToVector();
 }
 
 void URangeFSM::Avoid()
@@ -68,23 +69,7 @@ void URangeFSM::AiMove()
 	FVector Dir = Direction.GetSafeNormal();
 	//플레이어와 나와의 거리
 	FVector FinalDestiantion = Destination - Offset;
-
-	//Velocity 구하기
-	FVector Velocity = RangeMonster->GetVelocity();
-	//전방벡터 구하기
-	FVector ForwardVector = RangeMonster->GetActorForwardVector();
-	//오른쪽벡터구하기
-	FVector RightVector = RangeMonster->GetActorRightVector();
-	//내적에서 전방, 측면 속도 구하기
-	ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
-	RightSpeed = FVector::DotProduct(Velocity, RightVector);
-	//전방, 측면속도 0 ~ 100 값 조절하기
-	ForwardSpeed = FMath::Clamp(ForwardSpeed, -100.0f, 100.0f);
-	RightSpeed = FMath::Clamp(RightSpeed, -100.0f, 100.0f);
 	
-	Anim->Vertical = ForwardSpeed;
-	Anim->Horizontal = RightSpeed;
-
 	// FVector dir = Player->GetActorLocation()-RangeMonster->GetActorLocation();
 	// dir.Normalize();
 	// Player(dir.Rotation());
@@ -157,6 +142,28 @@ void URangeFSM::Destroy()
 	UE_LOG(LogTemp, Warning, TEXT("RangeMonster::Destroy"));
 	// RangeMonster->Destroy();
 }
+
+
+void URangeFSM::AiMoveToVector()
+{
+	//Velocity 구하기
+	FVector Velocity = RangeMonster->GetVelocity();
+	//전방벡터 구하기
+	FVector ForwardVector = RangeMonster->GetActorForwardVector();
+	//오른쪽벡터구하기
+	FVector RightVector = RangeMonster->GetActorRightVector();
+	//내적에서 전방, 측면 속도 구하기
+	ForwardSpeed = FVector::DotProduct(Velocity, ForwardVector);
+	RightSpeed = FVector::DotProduct(Velocity, RightVector);
+	//전방, 측면속도 0 ~ 100 값 조절하기
+	ForwardSpeed = FMath::Clamp(ForwardSpeed, -100.0f, 100.0f);
+	RightSpeed = FMath::Clamp(RightSpeed, -100.0f, 100.0f);
+	
+	Anim->Vertical = ForwardSpeed;
+	Anim->Horizontal = RightSpeed;
+	// UE_LOG(LogTemp, Warning, TEXT("ForwardSpeed : %f, Velocity : %f,%f,%f"), Anim->Vertical, Velocity.X, Velocity.Y, Velocity.Z);
+}
+
 
 void URangeFSM::SwitchState()
 {

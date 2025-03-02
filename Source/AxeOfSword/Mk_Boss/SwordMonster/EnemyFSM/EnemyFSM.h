@@ -41,13 +41,10 @@ public:
 	float AttackTime = 1.2f;
 	float IdleDelayTime = 1.5;
 	float CurrentTime = 0;
-	float AttackRange = 150;
+	float AttackRange = 250.0f;
 	
 	void IdleState();
 	void MoveState();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void AttackStayFsm();
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool Walk = true;

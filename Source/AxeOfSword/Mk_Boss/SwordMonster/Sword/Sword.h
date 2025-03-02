@@ -34,6 +34,17 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class ABossMk* BossMk;
 
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	FVector VfxLocation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=VFX)
+	UParticleSystem* SwordAttackVfx;
+
+	// UPROPERTY(EditAnywhere)
+	// class USoundBase* SwordAttackSFX;
+
+	// void AttackVfx();
+
 	float ApplyDamage = 10;
 
 	FTimerHandle TimerHandle;

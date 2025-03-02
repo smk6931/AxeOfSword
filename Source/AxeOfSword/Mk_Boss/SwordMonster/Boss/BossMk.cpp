@@ -97,7 +97,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	ExcutionGuage -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
-	AttackVfx();
+	// AttackVfx();
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{
@@ -113,13 +113,13 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
 
-void ABossMk::AttackVfx()
-{
-	check(MonsterAttackVFX);
-	if (MonsterAttackVFX)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("VFX"));
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MonsterAttackVFX, GetActorLocation());
-	}
-}
+// void ABossMk::AttackVfx()
+// {
+// 	check(MonsterAttackVFX);
+// 	if (MonsterAttackVFX)
+// 	{
+// 		UE_LOG(LogTemp,Warning,TEXT("VFX"));
+// 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MonsterAttackVFX, GetActorLocation());
+// 	}
+// }
 
