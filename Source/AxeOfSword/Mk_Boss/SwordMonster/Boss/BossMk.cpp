@@ -5,7 +5,6 @@
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystem.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -91,7 +90,6 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	ExcutionGuage -= DamageAmount;
 	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
 	BlueTakeDamage();
-	AttackVfx();
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{
@@ -106,14 +104,3 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	}
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 }
-
-void ABossMk::AttackVfx()
-{
-	check(MonsterAttackVFX);
-	if (MonsterAttackVFX)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("VFX"));
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MonsterAttackVFX, GetActorLocation());
-	}
-}
-
