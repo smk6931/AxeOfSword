@@ -10,6 +10,10 @@
 void UBossAnim::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+	if (EnemyFsm)
+	{
+		animState = EnemyFsm->mState;
+	}
 }
 
 void UBossAnim::NativeBeginPlay()
@@ -29,27 +33,28 @@ void UBossAnim::AnimNotify_AaEnd()
 {
 	
 	FString stateStr = UEnum::GetValueAsString(animState);
-	if (animState == EEnemyState::Attack)
+	if (EnemyFsm->mState == EEnemyState::Attack)
 	{
-		animState = EEnemyState::RgAttack;
+		EnemyFsm->mState = EEnemyState::RgAttack;
 	}
 	else
 	{
-		animState = EEnemyState::Move;
+		EnemyFsm->mState = EEnemyState::Move;
 	}
+
 	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
 void UBossAnim::AnimNotify_AbEnd()
 {
-	animState = EEnemyState::TrippleAttack;
+	EnemyFsm->mState = EEnemyState::TrippleAttack;
 
 	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 
 void UBossAnim::AnimNotify_AcEnd()
 {
-	animState = EEnemyState::Dash;
+	EnemyFsm->mState = EEnemyState::Dash;
 	BossMk->BossSword->SwordCapsule->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 }
 // 대쉬 초반 공격
@@ -65,6 +70,14 @@ void UBossAnim::AnimNotify_DashFir()
 
 void UBossAnim::AnimNotify_DashEnd()
 {
-	animState = EEnemyState::idle;
-	BossMk->Fsm->mState = animState;  
+	EnemyFsm->mState = EEnemyState::idle;
+}
+
+void UBossAnim::PrintViewPort()
+{
+	// if (GEngine)
+	// {
+	// 	FString StateMessage = FString::Printf(TEXT("Current Animation State: %s"),animState);
+	// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, StateMessage);
+	// }
 }

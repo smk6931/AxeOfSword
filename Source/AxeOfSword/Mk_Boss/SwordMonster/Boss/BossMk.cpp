@@ -4,7 +4,6 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
-#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
 
@@ -24,11 +23,6 @@ ABossMk::ABossMk()
 		GetMesh()->SetRelativeLocationAndRotation(FVector(0,0,-90),
 			FRotator(0,-90,0));
 	}
-	// ConstructorHelpers::FClassFinder<UAnimInstance> TempAnim(TEXT("'/Game/Boss_MK/Animation/ABP_BossQuin.ABP_BossQuin'"));
-	// if (TempAnim.Succeeded())
-	// {
-	// 	GetMesh()->SetAnimInstanceClass(TempAnim.Class);
-	// }
 }
 
 // Called when the game starts or when spawned
