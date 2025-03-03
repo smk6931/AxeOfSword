@@ -70,10 +70,6 @@ void URangeFSM::AiMove()
 	//플레이어와 나와의 거리
 	FVector FinalDestiantion = Destination - Offset;
 	
-	// FVector dir = Player->GetActorLocation()-RangeMonster->GetActorLocation();
-	// dir.Normalize();
-	// Player(dir.Rotation());
-	
 	Ai->MoveToLocation(FinalDestiantion - Dir * 800);
 	
 	Anim->animState = ERangeFSMState::AiMove;
@@ -102,9 +98,7 @@ void URangeFSM::ShockWave()
 	
 	UGameplayStatics::ApplyRadialDamage(GetOwner(), DamageAmount, ImpulseOrigin, ImpulseRadius,
 		UDamageType::StaticClass(), OverlappingActors, GetOwner(), GetOwner()->GetInstigatorController(), true);
-
-	// DrawDebugSphere(GetWorld(),RadialForce->GetComponentLocation(), 1000, 16, FColor::Red, true, 1.0f);
-	// DrawDebugSphere(GetWorld(),RangeMonster->GetActorLocation(), 1000, 16, FColor::Red, true, 1.0f);
+	
     mState = ERangeFSMState::Avoid;
 }
 

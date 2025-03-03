@@ -38,9 +38,12 @@ public:
 	EEnemyState mState = EEnemyState::idle;
 	
 	UPROPERTY(EditAnywhere, Category=FSM)
+	//공격 딜레이타임
 	float AttackTime = 1.2f;
+	//Idle 딜레이타임
 	float IdleDelayTime = 1.5;
 	float CurrentTime = 0;
+	//공격범위
 	float AttackRange = 250.0f;
 	
 	void IdleState();
@@ -50,7 +53,8 @@ public:
 	bool Walk = true;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	bool AttackStay = true;
-	
+
+	// 첫번쨰 / 두번째 / 세번째 / 피하기
 	void AttackState();
 	void RgAttack();
 	void TripleAttack();
@@ -65,7 +69,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class UBossAnim* Anim;
-
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
-	// class ASword* Sword;
 };

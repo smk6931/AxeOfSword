@@ -40,19 +40,28 @@ void ARangeMonster::BeginPlay()
 float ARangeMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 	class AController* EventInstigator, AActor* DamageCauser)
 {
-	if (ExecutionGauge > 0)
-	{
-		ExecutionGauge -= DamageAmount;
-	}
-	else
-	{
-		GetWorld()->GetTimerManager().SetTimer(DeathTime,this,&ARangeMonster::DestroySelf,2,false);
-	}
+	// if (ExecutionGauge > 0)
+	// {
+	// 	ExecutionGauge -= DamageAmount;
+	// }
 	if (HP > 0)
 	{
 		HP -= DamageAmount;
+		if (HP < 1)
+		{
+			HP = 0;
+			RangeAnim -> PlayStuckDamage();
+		}
 	}
-	RangeAnim -> PlayStuckDamage();
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(RangeFSM->StateSwitchTimer);
+		UE_LOG(LogTemp, Warning, TEXT("타이머가 정지되었습니다!"));
+		
+		UE_LOG(LogTemp,Warning,TEXT("RangeMonsterDie!!!"));
+		RangeAnim->PlayDieAnimation();
+		GetWorld()->GetTimerManager().SetTimer(DeathTime,this,&ARangeMonster::DestroySelf,2,false);
+	}
 	UE_LOG(LogTemp, Display, TEXT("ARangeMonster::TakeDamage(),%f"), HP);
 	UpdateHpbarWidget();
 	
@@ -82,20 +91,3 @@ void ARangeMonster::DestroySelf()
 {
 	this->Destroy();
 }
-
-
-// 오버랩 이벤트로 맞은 지점 넉백 확인
-// if (OtherActor ) // 무기인지 확인
-// {
-// 	FVector HitLocation = SweepResult.ImpactPoint; // 충돌 지점
-// 	FVector KnockbackDirection = (GetActorLocation() - HitLocation).GetSafeNormal();
-// 	KnockbackDirection.Z = 0.0f; // 수직 방향 제거 (필요 시 수정 가능)
-//
-// 	float KnockbackStrength = 500.0f; // 넉백 강도
-// 	FVector KnockbackVelocity = KnockbackDirection * KnockbackStrength;
-//
-// 	if (UCharacterMovementComponent* MoveComp = GetCharacterMovement())
-// 	{
-// 		MoveComp->AddImpulse(KnockbackVelocity, true);
-// 	}
-// }

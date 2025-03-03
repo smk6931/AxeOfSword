@@ -29,6 +29,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category="Animation")
 	void PlayJumpBackFlip();
 
+	UFUNCTION(BlueprintImplementableEvent, Category="Animation")
+	void PlayDieAnimation();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Animation")
 	class ARangeMonster* RangeMonster;
 
