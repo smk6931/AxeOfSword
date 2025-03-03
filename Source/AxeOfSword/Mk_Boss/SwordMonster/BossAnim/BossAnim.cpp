@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "BossAnim.h"
 #include "TimerManager.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
@@ -71,13 +69,4 @@ void UBossAnim::AnimNotify_DashFir()
 void UBossAnim::AnimNotify_DashEnd()
 {
 	EnemyFsm->mState = EEnemyState::idle;
-}
-
-void UBossAnim::PrintViewPort()
-{
-	// if (GEngine)
-	// {
-	// 	FString StateMessage = FString::Printf(TEXT("Current Animation State: %s"),animState);
-	// 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, StateMessage);
-	// }
 }
