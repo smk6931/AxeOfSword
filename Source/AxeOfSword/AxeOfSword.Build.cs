@@ -11,7 +11,7 @@ public class AxeOfSword : ModuleRules
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine",
 			"InputCore", "EnhancedInput", "UMG", "GameplayAbilities", "GameplayTags", "GameplayTasks",
 			"EngineCameras","NavigationSystem", "AIModule",  "MovieScene", "LevelSequence",
-			"MovieSceneTracks" });
+			"MovieSceneTracks", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 	}
