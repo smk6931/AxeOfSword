@@ -1,12 +1,9 @@
 ﻿#include "AT_PlayLevelSequence.h"
 #include "LevelSequenceActor.h"
 #include "LevelSequencePlayer.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
-#include "AxeOfSword/Mk_Boss/SwordMonster/BossAnim/BossAnim.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 UAT_PlayLevelSequence* UAT_PlayLevelSequence::InitialEvent(UGameplayAbility* Ability, ULevelSequence* LevelSequence)
 {
@@ -33,12 +30,21 @@ void UAT_PlayLevelSequence::Activate()
 		return;
 	}
 
-	ACharacter* NewBoss = Cast<ACharacter>(BaseCharacter->GetExecutionTarget());
+	ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget());
 	if (!NewBoss)
 	{
 		EndTask();
 		return;
 	}
+
+	if (NewBoss->Hp <= 0)
+	{
+		EndTask();
+		return;
+	}
+
+	NewBoss->GetMesh()->GetAnimInstance()->StopAllMontages(false);
+	NewBoss->Fsm->mState = EEnemyState::Undefined;
 	
 	FMovieSceneSequencePlaybackSettings PlaybackSettings;
 	PlaybackSettings.bAutoPlay = true;

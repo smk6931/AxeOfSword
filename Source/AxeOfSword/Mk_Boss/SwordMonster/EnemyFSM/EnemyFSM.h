@@ -15,6 +15,7 @@ enum class EEnemyState : uint8
 	RgAttack,
 	TrippleAttack,
 	Dash,
+	Undefined,
 };
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))

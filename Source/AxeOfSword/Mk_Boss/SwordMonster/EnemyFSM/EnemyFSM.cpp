@@ -69,7 +69,6 @@ void UEnemyFSM::IdleState()
 	{
 		mState = EEnemyState::Move;
 		CurrentTime = 0;
-		Anim->animState = mState;
 	}
 }
 
@@ -103,7 +102,6 @@ void UEnemyFSM::MoveState()
 		if (CurrentTime > AttackTime)
 		{
 			mState = EEnemyState::Attack;
-			Anim->animState = mState;
 			CurrentTime = 0;
 		}
 	}
@@ -125,29 +123,23 @@ void UEnemyFSM::AttackState()
 	if (AttackRange < Distance)
 	{
 		mState = EEnemyState::idle;
-		Anim->animState = mState;
 	}
 	else
 	{
 		mState = EEnemyState::RgAttack;
-		// Anim->animState = mState;
 	}
 }
 
 void UEnemyFSM::RgAttack()
 {
-	// UE_LOG(LogTemp, Warning, TEXT("RgAttack"));
-	mState = Anim->animState;
+	
 }
 
 void UEnemyFSM::TripleAttack()
 {
-	// UE_LOG(LogTemp, Warning, TEXT("TrippleAttack"));
-	mState = Anim->animState;
+	
 }
 
 void UEnemyFSM::Dash()
 {
-	// UE_LOG(LogTemp, Warning, TEXT("DashState"));
-	mState = Anim->animState;
 }

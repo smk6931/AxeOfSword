@@ -117,6 +117,11 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_HeavyAttack,
 	"GameplayCue.Character.Camera.Shake.HeavyAttack", "강공격 시 실행하는 카메라 쉐이킹");
 	
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_SoundLoop,
+	"GameplayCue.Leviathan.SoundLoop", "지속되는 Sound를 실행시키는 Cue");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_SoundLoop_Throw,
+	"GameplayCue.Leviathan.SoundLoop.Throw", "도끼를 던질 시 발생하는 사운드 실행시키는 Cue Tag");
+	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov,
 	"GameplayCue.Character.Camera.Fov", "카메라 줌 자체를 관리하기 위한 태그");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov_ZoomIn,
@@ -125,7 +130,4 @@ namespace AOSGameplayTags
 	"GameplayCue.Leviathan.Shake", "레비아탄 도끼가 회전해서 돌아오기 전 살짝 덜컥거리는 스킬");
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_TurnBack,
 	"GameplayCue.Leviathan.TurnBack", "레비아탄 도끼가 회전해서 돌아올 때의 Visual 처리 기능");
-	
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Sound_Leviathan_Throw,
-	"GameplayCue.Sound.Leviathan.Throw", "레비아탄 도끼 던질 때 나오는 사운드 Cue");
 }
