@@ -24,7 +24,7 @@ UEnemyFSM::UEnemyFSM()
 void UEnemyFSM::BeginPlay()
 {
 	Super::BeginPlay();
-
+    // 몬스터, 플레이어, 몬스터애니메이션 캐스팅
 	Boss = Cast<ABossMk>(GetOwner());
 	Player = Cast<APlayerCharacter>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	Anim = Cast<UBossAnim>(Boss->GetMesh()->GetAnimInstance());
@@ -96,7 +96,6 @@ void UEnemyFSM::MoveState()
 	//적과의 거리가 공격 거리보다 작아졌을때
 	if (AttackRange>Distance)
 	{
-		// Boss->AttackStay();
 		Walk = false;
 		AttackStay = true;
 		
@@ -137,14 +136,12 @@ void UEnemyFSM::AttackState()
 
 void UEnemyFSM::RgAttack()
 {
-	
 	// UE_LOG(LogTemp, Warning, TEXT("RgAttack"));
 	mState = Anim->animState;
 }
 
 void UEnemyFSM::TripleAttack()
 {
-	
 	// UE_LOG(LogTemp, Warning, TEXT("TrippleAttack"));
 	mState = Anim->animState;
 }

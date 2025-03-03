@@ -36,8 +36,6 @@ void ABossMk::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	UE_LOG(LogTemp, Display, TEXT("Hp%f"),Hp);
-
 	BossAnim = Cast<UBossAnim>(GetMesh()->GetAnimInstance());
 
 	FTransform SocketTransform = GetMesh()->GetSocketTransform(TEXT("hand_rSocket"), ERelativeTransformSpace::RTS_World);
@@ -47,6 +45,7 @@ void ABossMk::BeginPlay()
 	UPrimitiveComponent* SwordRoot = Cast<UPrimitiveComponent>(BossSword->GetRootComponent());
 	if (SwordRoot != nullptr)
 	{
+		//스워드 루트의 액터가 움직일시 충돌을 소유액터와 무시하고싶다 =
 		SwordRoot->IgnoreActorWhenMoving(this,true);
 	}
 	if (BossSword)
@@ -68,7 +67,7 @@ void ABossMk::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
-
+// 몬스터, 칼 삭제 
 void ABossMk::DiedImmediately()
 {
 	DestroyBossSword();
@@ -89,37 +88,37 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
                           class AController* EventInstigator, AActor* DamageCauser)
 {
 	if (Fsm->mState == EEnemyState::Move)
-	{
+	{   // Ilde로 전환
 		Fsm->mState = EEnemyState::idle;
 		BossAnim->animState = EEnemyState::idle;
 	}
 	Hp -= DamageAmount;
-	ExcutionGuage -= DamageAmount;
-	UE_LOG(LogTemp, Warning, TEXT("BossMk::HP%f"),Hp);
-	BlueTakeDamage();
-	AttackVfx();
+	if (ExcutionGuage > 0)
+	{   
+		ExcutionGuage -= DamageAmount;
+	}
+	else
+	{
+		ExcutionGuage = 0;
+	}
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
-	{
+	{   //스워드 캡슐의 콜리전이 비활성화 되어있을때 오버랩 이벤트 발생시 데미지 애니메이션 실행
 		DamageAnimation();
+		//Idle 상태로 전환
 		BossAnim->animState = EEnemyState::idle;
 	}
 	if (Hp < 1)
 	{
+		//몬스터 사망
+		Hp = 0;
+		PlayDieAnimation();
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ABossMk::DestroyBossSword, 0.5f, true);
 		// 1초 뒤에 DestroyBoss 함수 호출
-		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 1.0f, true);
+		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 2.2f, true);
 	}
+	// HpBar업데이트
+	BlueTakeDamage();
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-}
-
-void ABossMk::AttackVfx()
-{
-	check(MonsterAttackVFX);
-	if (MonsterAttackVFX)
-	{
-		UE_LOG(LogTemp,Warning,TEXT("VFX"));
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), MonsterAttackVFX, GetActorLocation());
-	}
 }
 

@@ -32,18 +32,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	USkeletalMeshComponent* BossMesh;
 
+	//보스 전용 칼
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	TSubclassOf<class ASword> SwordFactory;
-
+    
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector Direction;
-
+    //믄스터 Hp
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Hp = 300.f;
-
+    //처형게이지 = Hp * 2 / 3
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ExcutionGuage = Hp*2/3;
-	
+	//애니메이션 Fsm
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	UEnemyFSM* Fsm;
 
@@ -53,26 +54,22 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	UBossAnim* BossAnim;
-
+   
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
 	EEnemyState animState;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=FSM)
-	UParticleSystem* MonsterAttackVFX;
-
+	//보스와 칼을 삭제
 	void DestroyBoss();
 	void DestroyBossSword();
 
 	void DiedImmediately();
-
-	void AttackVfx();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void AttackStay();
-	
+    // 죽음 애니메이션 호출
+    UFUNCTION(BlueprintImplementableEvent)
+	void PlayDieAnimation();
+	// HpBarWidget 업데이트
 	UFUNCTION(BlueprintImplementableEvent)
 	void BlueTakeDamage();
-
+	// 피격데미지 애니메이션 호출
 	UFUNCTION(BlueprintImplementableEvent)
 	void DamageAnimation();
 

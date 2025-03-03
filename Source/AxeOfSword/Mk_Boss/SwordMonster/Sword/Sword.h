@@ -34,12 +34,18 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	class ABossMk* BossMk;
 
+	// 플레이어 가하는 데미지
 	float ApplyDamage = 10;
 
 	FTimerHandle TimerHandle;
-	
+	// 충돌이벤트
 	UFUNCTION()
 	void OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	// UPROPERTY(EditAnywhere)
+	// class USoundBase* SwordAttackSFX;
+
+	// void AttackVfx();
 };

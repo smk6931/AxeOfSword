@@ -46,7 +46,9 @@ void ASword::BeginPlay()
 	Super::BeginPlay();
 	// 웨폰캡슐의 OnComponent의 오버랩 이벤트가 실행되었을떄 OnMyBeginOverlap을 실행시킨다 
 	SwordCapsule->OnComponentBeginOverlap.AddDynamic(this, &ASword::OnMyBeginOverlap);
+	// 칼의 주인에게 캐스팅 한다 
 	BossMk = Cast<ABossMk>(GetOwner());
+	// 스워드 메시를 숨긴다 
 	SwordMesh->SetHiddenInGame(true);
 }
 
@@ -57,12 +59,15 @@ void ASword::Tick(float DeltaTime)
 
 void ASword::OnMyBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                               UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
+{   // 충돌된 객체가 자기자신이 아닐때
 	if (OtherActor != BossMk && OtherActor != GetOwner()) 
 	{
 		UE_LOG(LogTemp, Display, TEXT("DamageApplied: %s"), *OtherActor->GetName());
+		// 데미지를 주겠다
 		UGameplayStatics::ApplyDamage(OtherActor, ApplyDamage, OtherActor->GetInstigatorController(),
 		this, nullptr);
+
+		UE_LOG(LogTemp, Display, TEXT("DamageApplied %f,%f,%f"), SweepResult.ImpactPoint.X,SweepResult.ImpactPoint.Y,SweepResult.ImpactPoint.Z);
 	}
 }
 
