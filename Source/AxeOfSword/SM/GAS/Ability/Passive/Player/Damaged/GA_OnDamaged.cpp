@@ -60,10 +60,12 @@ void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	this, NAME_None, DamagedMontage,
 		FGameplayTagContainer()
 	);
+	
 	AT_DamagedAnim->OnBlendOut.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
 	AT_DamagedAnim->OnCancelled.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
 	AT_DamagedAnim->OnCompleted.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
 	AT_DamagedAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
+	
 	AT_DamagedAnim->ReadyForActivation();
 }
 

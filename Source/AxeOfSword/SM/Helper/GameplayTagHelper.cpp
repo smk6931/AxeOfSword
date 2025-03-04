@@ -117,10 +117,10 @@ namespace AOSGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Shake_HeavyAttack,
 	"GameplayCue.Character.Camera.Shake.HeavyAttack", "강공격 시 실행하는 카메라 쉐이킹");
 	
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_SoundLoop,
-	"GameplayCue.Leviathan.SoundLoop", "지속되는 Sound를 실행시키는 Cue");
-	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_SoundLoop_Throw,
-	"GameplayCue.Leviathan.SoundLoop.Throw", "도끼를 던질 시 발생하는 사운드 실행시키는 Cue Tag");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_Sound,
+	"GameplayCue.Leviathan.Sound", "Sound를 실행시키는 Cue");
+	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Leviathan_Sound_TurnBack_End,
+	"GameplayCue.Leviathan.Sound.TurnBack.End", "도끼 회수 완료할 때 발생하는 사운드 이펙트");
 	
 	UE_DEFINE_GAMEPLAY_TAG_COMMENT(GameplayCue_Character_Camera_Fov,
 	"GameplayCue.Character.Camera.Fov", "카메라 줌 자체를 관리하기 위한 태그");

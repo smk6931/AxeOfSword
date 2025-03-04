@@ -2,6 +2,9 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 ALeviathanAxe::ALeviathanAxe()
@@ -27,6 +30,14 @@ void ALeviathanAxe::BeginPlay()
 		this, &ThisClass::OnOverlapWeaponCollision);
 
 	InitialWeaponMeshTransform = GetWeaponMesh()->GetRelativeTransform();
+	
+	AudioComponent = UGameplayStatics::SpawnSoundAttached(ThrowLoopSound, GetRootComponent());
+	AudioComponent->Stop();
+
+	AttackTrailFXComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(AttackTrailFXSystem,
+		GetWeaponMesh(), FName("WeaponTrail"), FVector::ZeroVector, FRotator::ZeroRotator,
+		 EAttachLocation::Type::KeepRelativeOffset, false);
+	AttackTrailFXComponent->Deactivate();
 }
 
 void ALeviathanAxe::Throw()
@@ -73,4 +84,32 @@ void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
 void ALeviathanAxe::OnHitStopEnd()
 {
 	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+}
+
+void ALeviathanAxe::SetPlayThrowSound(const bool IsEnable) const
+{
+	if (!AudioComponent)
+	{
+		return;
+	}
+	
+	if (IsEnable)
+	{
+		AudioComponent->Play();
+	} else
+	{
+		AudioComponent->Stop();
+	}
+}
+
+void ALeviathanAxe::SetPlayEffect(const bool IsEnable) const
+{
+	if (IsEnable)
+	{
+		AttackTrailFXComponent->Activate();
+	}
+	else
+	{
+		AttackTrailFXComponent->Deactivate();
+	}
 }

@@ -5,6 +5,8 @@
 #include "AxeOfSword/SM/Helper/EnumHelper.h"
 #include "LeviathanAxe.generated.h"
 
+class UNiagaraSystem;
+class UNiagaraComponent;
 enum class ELeviathanAxeState : uint8;
 
 UCLASS()
@@ -20,6 +22,10 @@ public:
 	GETTER_SETTER(ELeviathanAxeState, AxeStatus)
 	GETTER(TObjectPtr<USceneComponent>, WeaponPivot)
 	GETTER(FTransform, InitialWeaponMeshTransform)
+
+	void SetPlayThrowSound(const bool IsEnable) const;
+
+	void SetPlayEffect(const bool IsEnable) const;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -36,9 +42,21 @@ protected:
 private:
 	ELeviathanAxeState AxeStatus = ELeviathanAxeState::Idle;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Option|Leviathan",
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Sound", meta = (AllowPrivateAccess = true))
+	TObjectPtr<USoundBase> ThrowLoopSound;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera",
 		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UNiagaraSystem> AttackTrailFXSystem;
+
+	UPROPERTY()
+	TObjectPtr<UNiagaraComponent> AttackTrailFXComponent;
+	
+	UPROPERTY()
+	TObjectPtr<UAudioComponent> AudioComponent;
 	
 	float GravityStack;
 	

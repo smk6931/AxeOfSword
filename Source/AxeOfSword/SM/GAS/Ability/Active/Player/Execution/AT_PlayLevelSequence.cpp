@@ -60,7 +60,7 @@ void UAT_PlayLevelSequence::Activate()
 	const FRotator RotateTo = {0, BaseCharacter->GetControlRotation().Yaw + 180, 0};
 
 	NewBoss->SetActorEnableCollision(false);
-	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 30 + GetAvatarActor()->GetActorLocation());
+	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 80 + GetAvatarActor()->GetActorLocation());
 	NewBoss->SetActorRotation(RotateTo);
 	
 	LevelSequenceActor->AddBindingByTag(FName(TEXT("Player")), GetAvatarActor());

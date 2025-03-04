@@ -1,6 +1,5 @@
 ﻿#include "GA_HeavyAttack.h"
 
-#include "AxeOfSword/SM/Weapon/BaseWeapon.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Character/Component/EquipComponent.h"
 #include "AxeOfSword/SM/Data/WeaponAnimation.h"
