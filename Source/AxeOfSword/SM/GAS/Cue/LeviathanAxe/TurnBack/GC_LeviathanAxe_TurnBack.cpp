@@ -66,6 +66,7 @@ void AGC_LeviathanAxe_TurnBack::InitializeWeapon()
 	TargetWeapon->SetActorRotation(NewMoveToSet);
 	TargetWeapon->GetWeaponMesh()->SetRelativeLocation(FVector::ZeroVector);
 	TargetWeapon->GetWeaponMesh()->SetRelativeRotation(FRotator::ZeroRotator);
+	TargetWeapon->SetPlayThrowSound(true);
 }
 
 void AGC_LeviathanAxe_TurnBack::OnTurnBackCallback(FVector Output)
@@ -116,6 +117,10 @@ void AGC_LeviathanAxe_TurnBack::OnTurnBackEnd() const
 	TargetWeapon->GetWeaponMesh()->SetRelativeTransform(TargetWeapon->GetInitialWeaponMeshTransform());
 	TargetWeapon->AttachToComponent(TargetCharacter->GetMesh(),
 		FAttachmentTransformRules::SnapToTargetNotIncludingScale, "WeaponSocket");
+	
+	TargetWeapon->SetPlayThrowSound(false);
+	TargetWeapon->GetAbilitySystemComponent()->ExecuteGameplayCue(
+		AOSGameplayTags::GameplayCue_Leviathan_Sound_TurnBack_End);
 
 	FGameplayTagContainer TagContainer;
 	TagContainer.AddTag(AOSGameplayTags::Ability_TurnBack);
