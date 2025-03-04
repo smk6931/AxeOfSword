@@ -4,6 +4,8 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 UAT_PlayLevelSequence* UAT_PlayLevelSequence::InitialEvent(UGameplayAbility* Ability, ULevelSequence* LevelSequence)
 {
@@ -17,7 +19,7 @@ void UAT_PlayLevelSequence::Activate()
 {
 	Super::Activate();
 
-	const APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActor());
+	APlayerCharacter* BaseCharacter = Cast<APlayerCharacter>(GetAvatarActor());
 	if (!BaseCharacter)
 	{
 		EndTask();
@@ -29,6 +31,9 @@ void UAT_PlayLevelSequence::Activate()
 		EndTask();
 		return;
 	}
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PC->DisableInput(PC);
 
 	ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget());
 	if (!NewBoss)
@@ -63,7 +68,7 @@ void UAT_PlayLevelSequence::Activate()
 	NewBoss->SetActorLocation(BaseCharacter->GetActorForwardVector() * 80 + GetAvatarActor()->GetActorLocation());
 	NewBoss->SetActorRotation(RotateTo);
 	
-	LevelSequenceActor->AddBindingByTag(FName(TEXT("Player")), GetAvatarActor());
+	LevelSequenceActor->AddBindingByTag(FName(TEXT("Player")), BaseCharacter);
 	LevelSequenceActor->AddBindingByTag(FName(TEXT("Enemy")), NewBoss);
 	
 	LevelSequenceActor->SetActorTransform(GetAvatarActor()->GetTransform());
@@ -79,5 +84,8 @@ void UAT_PlayLevelSequence::ExternalConfirm(bool bEndTask)
 
 void UAT_PlayLevelSequence::OnFinish()
 {
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PC->EnableInput(PC);
+	
 	OnCinematicEndNotify.Broadcast();
 }

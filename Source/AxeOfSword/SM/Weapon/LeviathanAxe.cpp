@@ -4,6 +4,8 @@
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -68,22 +70,35 @@ void ALeviathanAxe::OnHitDamage(AActor* TargetActor)
 		Damage, GetOwner()->GetInstigatorController(),
 		GetOwner(), UDamageType::StaticClass());
 
-	// 데미지에 따른 공격력 수치 조정
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(),
-		FMath::Clamp(Damage / 250, 0.05, 0.1));
+	SetCustomDilationInRange(300);
+}
 
-	float HitStopValue = static_cast<float>(Damage) / 10000 - DamageStack * 0.0001;
+void ALeviathanAxe::SetCustomDilationInRange(const float Range)
+{
+	TArray<AActor*> IgnoreActor;
 	
-	// 주의사항: GlobalTimeDilation에 따라 Timeout의 시간도 늘어난다.
-	GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
+	UKismetSystemLibrary::SphereTraceMulti(GetWorld(), GetOwner()->GetActorLocation(),
+		GetOwner()->GetActorLocation(), Range,TraceTypeQuery1,
+		false, IgnoreActor, EDrawDebugTrace::None, HitStopHitResults, true);
+
+	GetOwner()->CustomTimeDilation = FMath::Clamp(Damage / 250, 0.05, 0.1);
+	
+	for (FHitResult HitResult : HitStopHitResults)
+	{
+		HitResult.GetActor()->CustomTimeDilation = FMath::Clamp(Damage / 250, 0.05, 0.1);
+		GetWorld()->GetTimerManager().SetTimer(EndHitStopTimerHandle,
 		FTimerDelegate::CreateUObject(this, &ThisClass::OnHitStopEnd),
-		FMath::Clamp(HitStopValue
-			, 0.001, 0.01), false);
+		0.05, false);
+	}
 }
 
 void ALeviathanAxe::OnHitStopEnd()
 {
-	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1);
+	GetOwner()->CustomTimeDilation = 1;
+	for (FHitResult HitStopHitResult : HitStopHitResults)
+	{
+		HitStopHitResult.GetActor()->CustomTimeDilation = 1;
+	}
 }
 
 void ALeviathanAxe::SetPlayThrowSound(const bool IsEnable) const

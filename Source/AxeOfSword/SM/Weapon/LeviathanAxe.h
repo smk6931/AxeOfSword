@@ -49,7 +49,7 @@ private:
 		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Effect", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UNiagaraSystem> AttackTrailFXSystem;
 
 	UPROPERTY()
@@ -65,7 +65,12 @@ private:
 	FTransform InitialWeaponMeshTransform;
 	
 	void OnHitDamage(AActor* TargetActor);
+
+	// TODO: 원래는 공통 유틸 함수로 들어가야 하는 부분
+	void SetCustomDilationInRange(const float Range);
 	
 	UFUNCTION()
 	void OnHitStopEnd();
+
+	TArray<FHitResult> HitStopHitResults;
 };
