@@ -61,6 +61,8 @@ public:
 	void TripleAttack();
 	void Dash();
 
+	void DrawDebugCircleAroundPlayer();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FSM)
 	class ABossMk* Boss;
@@ -70,4 +72,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
 	class UBossAnim* Anim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
+	float Distance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
+	float AttackDistance = 1000.0f;
 };

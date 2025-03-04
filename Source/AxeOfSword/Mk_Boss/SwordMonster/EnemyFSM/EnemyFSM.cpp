@@ -34,6 +34,8 @@ void UEnemyFSM::BeginPlay()
 void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// 공격 사정거리 표시
+	// DrawDebugCircleAroundPlayer();
 	
 	// 현재 상태값 출력
 	switch (mState)
@@ -81,16 +83,23 @@ void UEnemyFSM::MoveState()
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	Direction.Z = 0.f;
 	//적과 나의 거리를 구한다
-	float Distance = Direction.Size();
+	Distance = Direction.Size();
 	
 	Direction.Normalize();
 	Boss->SetActorRotation(Direction.Rotation());
 	//적과의 거리가 공격범위보다 클 떄 적에게 이동한다
 	if (Distance > AttackRange)
 	{
-		Boss->AddMovementInput(Direction);
-		Walk = true;
-		AttackStay = false;
+		if (Distance < AttackDistance)
+		{
+			Boss->AddMovementInput(Direction);
+			Walk = true;
+			AttackStay = false;
+		}
+		else
+		{
+			mState = EEnemyState::idle;
+		}
 	}
 	//적과의 거리가 공격 거리보다 작아졌을때
 	if (AttackRange>Distance)
@@ -116,7 +125,7 @@ void UEnemyFSM::AttackState()
 	FVector Direction = Player->GetActorLocation() - Boss->GetActorLocation();
 	Direction.Normalize();
 	
-	float Distance = FVector::Dist(Boss->GetActorLocation(), Player->GetActorLocation());
+	Distance = FVector::Dist(Boss->GetActorLocation(), Player->GetActorLocation());
 	
 	// 거리가 공격 범위보다 커졌을때
 	// 이동 상태로 전환한다
@@ -142,4 +151,31 @@ void UEnemyFSM::TripleAttack()
 
 void UEnemyFSM::Dash()
 {
+}
+
+void UEnemyFSM::DrawDebugCircleAroundPlayer()
+{
+FVector PlayerLocation = Boss->GetActorLocation();
+	float Radius = AttackDistance; // 500m
+	FColor Color = FColor::Red;
+	int32 Segments = 30;
+	float Duration = 5.0f; // 5초 동안 표시
+
+	// XY 평면에서 원을 보이게 하기 위해 (X, Y, Z 회전) 적용
+	FRotator Rotation = FRotator(0, 0, 0);
+
+	DrawDebugCircle(
+		GetWorld(),
+		PlayerLocation,
+		Radius,
+		Segments,
+		Color,
+		false,
+		Duration,
+		0,
+		5.0f,  // 선 두께
+		FVector(1, 0, 0), // X축 기준 방향
+		FVector(0, 1, 0), // Y축 기준 방향
+		false
+	);
 }
