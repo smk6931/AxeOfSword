@@ -2,6 +2,8 @@
 
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -31,6 +33,11 @@ void ALeviathanAxe::BeginPlay()
 	
 	AudioComponent = UGameplayStatics::SpawnSoundAttached(ThrowLoopSound, GetRootComponent());
 	AudioComponent->Stop();
+
+	AttackTrailFXComponent = UNiagaraFunctionLibrary::SpawnSystemAttached(AttackTrailFXSystem,
+		GetWeaponMesh(), FName("WeaponTrail"), FVector::ZeroVector, FRotator::ZeroRotator,
+		 EAttachLocation::Type::KeepRelativeOffset, false);
+	AttackTrailFXComponent->Deactivate();
 }
 
 void ALeviathanAxe::Throw()
@@ -92,5 +99,17 @@ void ALeviathanAxe::SetPlayThrowSound(const bool IsEnable) const
 	} else
 	{
 		AudioComponent->Stop();
+	}
+}
+
+void ALeviathanAxe::SetPlayEffect(const bool IsEnable) const
+{
+	if (IsEnable)
+	{
+		AttackTrailFXComponent->Activate();
+	}
+	else
+	{
+		AttackTrailFXComponent->Deactivate();
 	}
 }

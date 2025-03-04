@@ -24,6 +24,8 @@ public:
 	GETTER(FTransform, InitialWeaponMeshTransform)
 
 	void SetPlayThrowSound(const bool IsEnable) const;
+
+	void SetPlayEffect(const bool IsEnable) const;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -43,12 +45,18 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Sound", meta = (AllowPrivateAccess = true))
 	TObjectPtr<USoundBase> ThrowLoopSound;
 	
-	UPROPERTY()
-	TObjectPtr<UAudioComponent> AudioComponent;
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan",
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera",
 		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera", meta = (AllowPrivateAccess = true))
+	TObjectPtr<UNiagaraSystem> AttackTrailFXSystem;
+
+	UPROPERTY()
+	TObjectPtr<UNiagaraComponent> AttackTrailFXComponent;
+	
+	UPROPERTY()
+	TObjectPtr<UAudioComponent> AudioComponent;
 	
 	float GravityStack;
 	
