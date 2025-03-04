@@ -69,7 +69,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount
 
 void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& Data)
 {
-	if (Data.NewValue == 0)
+	if (Data.NewValue <= 0)
 	{
 		AbilitySystemComponent->CancelAllAbilities();
 		return;
