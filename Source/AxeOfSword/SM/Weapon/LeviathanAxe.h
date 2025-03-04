@@ -49,12 +49,6 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan",
 		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Effect", meta = (AllowPrivateAccess = true))
-	TObjectPtr<UNiagaraSystem> AttackTrailSystem;
-
-	UPROPERTY()
-	TObjectPtr<UNiagaraComponent> AttackTrailComponent;
 	
 	float GravityStack;
 	

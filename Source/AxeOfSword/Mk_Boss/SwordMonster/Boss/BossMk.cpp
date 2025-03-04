@@ -4,7 +4,6 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -94,10 +93,15 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	{
 		ExcutionGuage = 0;
 	}
+
+	// 데미지 받을 시 뒤로 밀려나는 넉백 기능 강제 구현
+	LaunchCharacter(DamageCauser->GetActorForwardVector() * 750,
+		true, true);
 	
 	if (BossSword->SwordCapsule->GetCollisionEnabled() == ECollisionEnabled::Type::NoCollision)
 	{   //스워드 캡슐의 콜리전이 비활성화 되어있을때 오버랩 이벤트 발생시 데미지 애니메이션 실행
 		DamageAnimation();
+		
 		//Idle 상태로 전환
 		BossAnim->animState = EEnemyState::idle;
 	}

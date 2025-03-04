@@ -65,6 +65,7 @@ void UGA_OnDamaged::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 	AT_DamagedAnim->OnCancelled.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
 	AT_DamagedAnim->OnCompleted.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
 	AT_DamagedAnim->OnInterrupted.AddDynamic(this, &ThisClass::OnDamagedBlendOut);
+	
 	AT_DamagedAnim->ReadyForActivation();
 }
 
@@ -77,7 +78,6 @@ void UGA_OnDamaged::EndAbility(const FGameplayAbilitySpecHandle Handle, const FG
 
 void UGA_OnDamaged::OnDamagedBlendOut(FGameplayTag EventTag, FGameplayEventData EventData)
 {
-	UE_LOG(LogTemp, Display, TEXT("깨끗하게"))
 	UStateHelper::ClearState(GetAvatarActorFromActorInfo());
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, false, false);
 }

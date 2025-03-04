@@ -1,7 +1,5 @@
 ﻿#include "LeviathanAxe.h"
 
-#include "NiagaraFunctionLibrary.h"
-#include "NiagaraComponent.h"
 #include "AxeOfSword/SM/Character/BaseCharacter.h"
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "Components/AudioComponent.h"
@@ -33,11 +31,6 @@ void ALeviathanAxe::BeginPlay()
 	
 	AudioComponent = UGameplayStatics::SpawnSoundAttached(ThrowLoopSound, GetRootComponent());
 	AudioComponent->Stop();
-
-	AttackTrailComponent = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(),
-		AttackTrailSystem, GetWeaponMesh()->GetSocketLocation("WeaponTrail"), GetWeaponMesh()->GetSocketRotation("WeaponTrail"));
-
-	AttackTrailComponent->Activate();
 }
 
 void ALeviathanAxe::Throw()
