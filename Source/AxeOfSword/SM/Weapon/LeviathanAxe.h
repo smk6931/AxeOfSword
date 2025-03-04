@@ -49,7 +49,7 @@ private:
 		meta = (AllowPrivateAccess = true))
 	TSubclassOf<UCameraShakeBase> TurnBackEndCameraShake;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Camera", meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditDefaultsOnly, Category = "Options|Leviathan|Effect", meta = (AllowPrivateAccess = true))
 	TObjectPtr<UNiagaraSystem> AttackTrailFXSystem;
 
 	UPROPERTY()

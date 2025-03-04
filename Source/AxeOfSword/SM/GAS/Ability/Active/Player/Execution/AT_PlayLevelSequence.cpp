@@ -4,6 +4,7 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Boss/BossMk.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 UAT_PlayLevelSequence* UAT_PlayLevelSequence::InitialEvent(UGameplayAbility* Ability, ULevelSequence* LevelSequence)
 {
@@ -29,6 +30,9 @@ void UAT_PlayLevelSequence::Activate()
 		EndTask();
 		return;
 	}
+
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PC->DisableInput(PC);
 
 	ABossMk* NewBoss = Cast<ABossMk>(BaseCharacter->GetExecutionTarget());
 	if (!NewBoss)
@@ -79,5 +83,8 @@ void UAT_PlayLevelSequence::ExternalConfirm(bool bEndTask)
 
 void UAT_PlayLevelSequence::OnFinish()
 {
+	APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	PC->EnableInput(PC);
+	
 	OnCinematicEndNotify.Broadcast();
 }
