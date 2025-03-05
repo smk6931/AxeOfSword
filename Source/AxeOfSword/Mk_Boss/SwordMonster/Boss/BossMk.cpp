@@ -95,7 +95,8 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		ExcutionGuage = 0;
 	}
 
-	UGameplayStatics::PlaySound2D(GetWorld(), HitSound, 0.8, 0.9, 0, nullptr, this);
+	UGameplayStatics::PlaySound2D(GetWorld(), HitSound,
+		0.8, 0.8, 0, nullptr, this);
 
 	// 데미지 받을 시 뒤로 밀려나는 넉백 기능 강제 구현
 	LaunchCharacter(DamageCauser->GetActorForwardVector() * 750,
@@ -108,6 +109,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		//Idle 상태로 전환
 		BossAnim->animState = EEnemyState::idle;
 	}
+	
 	if (Hp < 1)
 	{
 		//몬스터 사망
@@ -117,6 +119,7 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 		// 1초 뒤에 DestroyBoss 함수 호출
 		GetWorldTimerManager().SetTimer(TimerHandleB, this, &ABossMk::DestroyBoss, 2.2f, true);
 	}
+	
 	// HpBar업데이트
 	BlueTakeDamage();
 	return Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
