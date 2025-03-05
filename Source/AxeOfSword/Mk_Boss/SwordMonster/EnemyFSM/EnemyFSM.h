@@ -77,5 +77,5 @@ public:
 	float Distance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category = FSM)
-	float AttackDistance = 1000.0f;
+	float AttackDistance = 2000.0f;
 };

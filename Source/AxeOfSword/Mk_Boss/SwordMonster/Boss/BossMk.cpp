@@ -4,6 +4,7 @@
 #include "AxeOfSword/Mk_Boss/SwordMonster/Sword/Sword.h"
 #include "AxeOfSword/SM/Character/PlayerCharacter.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 class UBossHpWidget;
 // Sets default values
@@ -93,6 +94,8 @@ float ABossMk::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageE
 	{
 		ExcutionGuage = 0;
 	}
+
+	UGameplayStatics::PlaySound2D(GetWorld(), HitSound, 0.8, 0.9, 0, nullptr, this);
 
 	// 데미지 받을 시 뒤로 밀려나는 넉백 기능 강제 구현
 	LaunchCharacter(DamageCauser->GetActorForwardVector() * 750,

@@ -4,8 +4,6 @@
 #include "AxeOfSword/SM/Helper/GameplayTagHelper.h"
 #include "NiagaraFunctionLibrary.h"
 #include "NiagaraComponent.h"
-#include "AxeOfSword/SM/Character/PlayerCharacter.h"
-#include "AxeOfSword/SM/Character/Component/PlayerCameraComponent.h"
 #include "Components/AudioComponent.h"
 #include "Kismet/GameplayStatics.h"
 

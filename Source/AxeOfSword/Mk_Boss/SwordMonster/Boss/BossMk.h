@@ -78,4 +78,7 @@ private:
 	FTimerHandle TimerHandleB;
 
 	float AttackDamage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Options", meta = (AllowPrivateAccess = true))
+	TObjectPtr<USoundBase> HitSound;
 };
